@@ -1,5 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/lanluo/Documents/GitHub/algorithms_data_structures/media/videos/algorithms_data_structures/720p30/partial_movie_files/CircleToSquare/2016333726_98860935_223132457.mp4'
-file 'file:/Users/lanluo/Documents/GitHub/algorithms_data_structures/media/videos/algorithms_data_structures/720p30/partial_movie_files/CircleToSquare/543634251_1733944848_549256993.mp4'
-file 'file:/Users/lanluo/Documents/GitHub/algorithms_data_structures/media/videos/algorithms_data_structures/720p30/partial_movie_files/CircleToSquare/543634251_1194258686_3314600553.mp4'
-file 'file:/Users/lanluo/Documents/GitHub/algorithms_data_structures/media/videos/algorithms_data_structures/720p30/partial_movie_files/CircleToSquare/543634251_1733944848_2792448896.mp4'
