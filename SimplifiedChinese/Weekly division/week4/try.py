@@ -74,6 +74,7 @@ S = eval(input())
 print(func(S))
 '''
 #************
+'''
 def func(mylist):
     dict = {}
     for key in mylist:
@@ -92,3 +93,20 @@ def func(mylist):
     
 mylist = eval(input())
 print(func(mylist))
+
+'''
+
+from pythonds.basic.queue import Queue
+def hotPotato(namlist,num):
+    simqueue = Queue()
+    for name in namlist:
+        simqueue.enqueue(name)#先排队；6个人这里的话，是从0号到5号
+    
+    while simqueue.size() > 1:
+        for i in range(num-1):#这0到num-2个人保住了,合计num-1个人;num可以比namlist的size大
+            simqueue.enqueue(simqueue.dequeue())
+        print(simqueue.dequeue())#弹出标号为num-1的人，实际喊的是num，令其永不入队
+    
+    return simqueue.dequeue()#返回最后剩谁
+
+print(hotPotato(["bill","david","susan","jane","kent","brad"],7))
