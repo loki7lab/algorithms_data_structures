@@ -94,7 +94,6 @@ def func(mylist):
 mylist = eval(input())
 print(func(mylist))
 
-'''
 
 from pythonds.basic.queue import Queue
 def hotPotato(namlist,num):
@@ -110,3 +109,36 @@ def hotPotato(namlist,num):
     return simqueue.dequeue()#返回最后剩谁
 
 print(hotPotato(["bill","david","susan","jane","kent","brad"],7))
+
+'''
+
+from pythonds.basic.queue import Queue
+import random
+
+#打印机类
+class Print:
+    def __init__(self,ppm):
+        self.pageRate = ppm
+        self.currentTask = None
+        self.timeRemaining = 0
+
+    def tick(self):
+        if self.currentTask != None:#不能用while,不然在这里就把任务干完了，没模拟时间流逝
+            self.timeRemaining -= 1
+            if self.timeRemaining <= 0:
+                self.currentTask = None
+
+    def busy(self):
+        if self.currentTask != None:
+            return True
+        else:
+            return False
+    
+    def startNext(self,newTask):
+        self.currentTask = newTask
+        self.timeRemaining = newTask.getpages()*60/self.pageRate#可以直接让任务为秒流逝吗
+
+#生成任务类
+class Task:
+    def __init__(self):
+        pass
