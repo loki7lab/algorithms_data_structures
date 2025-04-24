@@ -136,9 +136,52 @@ class Print:
     
     def startNext(self,newTask):
         self.currentTask = newTask
-        self.timeRemaining = newTask.getpages()*60/self.pageRate#可以直接让任务为秒流逝吗
+        self.timeRemaining = newTask.getPages()*60/self.pageRate#可以直接让任务为秒流逝吗
 
-#生成任务类
+#任务本身情况
 class Task:
-    def __init__(self):
-        pass
+    def __init__(self,time):
+        #生成时间戳
+        self.timestamp = time
+        #生成打印页数
+        self.pages = random.randrange(1,21)
+
+    def getStamp(self):
+        return self.timestamp
+    
+    def getPages(self):
+        return self.pages
+    
+    def waitTime(self,currentTime):
+        return currentTime - self.getStamp()
+
+#触发任务的概率
+def newPrintTask():
+    num = random.randrange(1,181)
+    if num == 180:
+        return True
+    else:
+        return False
+
+#开启模拟
+def simulation(numSeconds,pagesPerMinute):
+    labPrinter = Print(pagesPerMinute)
+    printQueue = Queue()
+    waitingTimes = []
+
+    for currentSecond in range(numSeconds):
+        if newPrintTask():
+            task = Task(currentSecond)
+            printQueue.enqueue(task)
+        if not labPrinter.busy() and not printQueue.isEmpty():
+            nextTask = printQueue.dequeue()
+            waitingTimes.append(nextTask.waitTime(currentSecond))
+            labPrinter.startNext(nextTask)
+        labPrinter.tick()
+
+    averageWait = sum(waitingTimes)/len(waitingTimes)
+    print("average wait %6.2f secs %3d tasks remaining." %(averageWait,printQueue.size()))
+
+
+for i in range(10):
+    simulation(3600,5)
