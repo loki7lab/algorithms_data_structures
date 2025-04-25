@@ -112,6 +112,38 @@ print(hotPotato(["bill","david","susan","jane","kent","brad"],7))
 
 '''
 
-from pythonds.basic.queue import Queue
-import random
+from pythonds.basic.deque import Deque
+'''
+class Deque:
+    def __init__(self):
+        self.items = []
+    
+    def addFront(self,item):#O(1)
+        self.items.append(item)
+    
+    def removeFront(self):#O(1)
+        return self.items.pop()
 
+    def addRear(self,item):#O(n)
+        self.items.insert(0,item)
+    
+    def removeRear(self):#O(n)
+        return self.items.pop(0)
+    
+    def isEmpty(self):
+        return self.items == []
+    def size(self):
+        return len(self.items)
+'''
+def palchecker(aString):
+    chardeque = Deque()
+    for ch in aString:
+        chardeque.addRear(ch)
+    stillEqual = True
+    while chardeque.size() > 1 and stillEqual:
+        first = chardeque.removeFront()
+        last = chardeque.removeRear()
+        stillEqual = (first == last)
+    return stillEqual
+
+print(palchecker("lsdkjfskf"))
