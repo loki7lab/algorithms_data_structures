@@ -136,6 +136,7 @@ class Maze:
             columnsInMaze = len(rowList)
 '''
 #***************括号匹配*********************
+'''
 def match(s, n=0):
     if s:
         if s[0] == '(':
@@ -147,3 +148,28 @@ def match(s, n=0):
         return match(s[1:], n)
     else:
         return n == 0
+''' 
+
+
+#**********************************************
+#数列求和
+"""
+def listSum(numList):
+    if len(numList) == 1:
+        return numList[0]
+    else:
+        return numList[0]+listSum(numList[1:])
+print(listSum([1,3,5,7,9]))
+"""
+
+#-------------------------------------------
+#进制转换
+def toStr(n,base):
+    convertString = "0123456789ABCDEF"
+    if n < base:
+        return convertString[n]#查表
+    else:
+        a = toStr(n//base,base)
+        b = convertString[n%base]
+        return a + b
+print(toStr(1453,16))
