@@ -1,0 +1,1046 @@
+{
+    "cells": [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "[Thought for the week] This week introduces dynamic programming through further study of recursive algorithms\n",
+                "* :: 408 Introduction of the concept of partition strategy\n",
+                "* :: 409 Introduction to optimization problems, and greedy strategies for solving optimization problems\n",
+                "* :: 410 Zeroing problem [recursive version]\n",
+                "* :: 411 Zeroing [dynamic programming version]\n",
+                "\n",
+                "Note that the above is one problem covered in two sections (one solution takes up one section), and the following is two solutions to one problem covered in one section\n",
+                "\n",
+                "* :: 412 Dynamic programming/recursive solution to the 0/1 knapsack problem\n",
+                "* :: 413 Summary of the two weeks"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**Table of contents**<a id='toc0_'></a>    \n",
+                "- [408 Partitioning strategy](#toc1_)\n",
+                "  - [1. Partitioning strategy: divide and conquer] (#toc1_1_)\n",
+                "  - [2. Recursive algorithms and partitioning strategies](#toc1_2_)\n",
+                "- [409 Optimization problems and greedy strategies](#toc2_)\n",
+                "  - [1. Optimization issues] (#toc2_1_)\n",
+                "  - [2. Greedy strategy [try to solve as large a part of the problem as possible each time](#toc2_2_)\n",
+                "- [410 Zeroing problem [recursive version]](#toc3_)\n",
+                "- [411 Zeroing Problem [Dynamic Programming Version] (#toc4_)\n",
+                "- [412 0/1 knapsack problem [solved from two perspectives: recursion and dynamic programming] (#toc5_)\n",
+                "\n",
+                "<!-- vscode-jupyter-toc-config\n",
+                "\tnumbering=false\n",
+                "\tanchor=true\n",
+                "\tflat=false\n",
+                "\tminLevel=1\n",
+                "\tmaxLevel=6\n",
+                "\t/vscode-jupyter-toc-config -->\n",
+                "<!-- THIS CELL WILL BE REPLACED ON TOC UPDATE. DO NOT WRITE YOUR TEXT IN THIS CELL -->"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc1_'></a>[408 Partitioning strategy](#toc0_)\n",
+                "## <a id='toc1_1_'></a> [1. Partition strategy: divide and conquer](#toc0_)\n",
+                "This strategy can be used when faced with a large and complex problem:\n",
+                "* :: Division of the problem into smaller-scale components\n",
+                "* :: Solve each small-scale partial problem and summarize the results to obtain a solution to the original problem\n",
+                "\n",
+                "To wit:"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/408.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc1_2_'></a>[2. Recursive Algorithms and Partitioning Strategies](#toc0_)\n",
+                "\n",
+                "* Recursive algorithms are a type of partitioning strategy [recursive algorithms need to invoke themselves], as evidenced by:\n",
+                "    * :: Problem-solving relies on a number of downsized problems\n",
+                "    * :: Aggregate to obtain a solution to the original problem\n",
+                "* Partitioning strategies have a wide range of applications [and are mostly solved with recursive algorithms]:\n",
+                "    * :: Sorting\n",
+                "    * :: Finding\n",
+                "    * :: Traversal\n",
+                "    * :: Valuation, etc."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc2_'></a>[409 Optimization problems and greedy strategies](#toc0_)\n",
+                "This section focuses on:\n",
+                "* :: What is the optimization problem?\n",
+                "* :: What is the greedy strategy?"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc2_1_'></a> [1. Optimization problem](#toc0_)\n",
+                "Many algorithms in computer science are designed to find an optimal solution to some problem, typically the problem of **Redeeming the minimum number of coins**:.\n",
+                "\n",
+                "Suppose you program a vending machine manufacturer to require vending machines to find the minimum number of coins to give to customers each time.\n",
+                "\n",
+                "For example, if a customer puts in a $1 bill and buys ȼ37, and wants to find ȼ63, the minimum quantity is: 2 quarters (ȼ25), 1 dime (ȼ10), and 3 pennies ( ȼ1), for a total of 6 pieces.\n",
+                "\n",
+                "How do you figure that?"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "$\\implies$\n",
+                "\n",
+                "## <a id='toc2_2_'></a> [2. Greedy strategy [try to solve the largest possible part of the problem each time]](#toc0_)\n",
+                "\n",
+                "* :: Start with the largest denomination of coins and use as many of the largest denomination as possible\n",
+                "* :: If there is a balance, go to the next largest denomination of coins, also using as many values of this side as possible, until penny (ȼ1)\n",
+                "\n",
+                "That is, the **most** number of **most** large denomination coins at a time to **most** quickly reduce the change denomination\n",
+                "\n",
+                "But! This strategy flips under special circumstances\n",
+                "\n",
+                "Just because $\\implies$ is optimal at each step does not mean the result is optimal"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Supplement:\n",
+                "\n",
+                "The greedy strategy is guaranteed to obtain the conditions (which need to be satisfied simultaneously) for an optimal solution:\n",
+                "* :: Greedy choice property: The globally optimal solution of a problem can be reached by a series of locally optimal (greedy) choices. This means that after a locally optimal choice is made, the remaining subproblems can be solved independently and this choice will not be overridden by later choices.\n",
+                "* :: Optimal substructure: The optimal solution of a problem contains the optimal solutions of its subproblems. That is, the optimal solution of the original problem can be constructed from the optimal solutions of the subproblems (a property also required for dynamic programming).\n",
+                "\n",
+                "If a problem satisfies only the optimal substructure but not the greedy selection property, then the greedy strategy is not guaranteed to yield an optimal solution (it may yield a suboptimal solution) and other methods such as dynamic programming are usually required (e.g., the classic 0-1 knapsack problem)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Calculate normal case change using greedy algorithm\n",
+                "lis = [1,5,20,50]\n",
+                "def change(lis,num):\n",
+                "    changelis = []\n",
+                "    for i in lis[::-1]:# Traverse the list in back-to-front order, suitable for small scale, suitable for large scale data with reversed(lis)\n",
+                "        a = num // i\n",
+                "        num = num % i\n",
+                "        changelis.append(a)\n",
+                "    return changelis\n",
+                "print(change(lis,63))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc3_'></a>[410 Zeroing problem [recursive version]](#toc0_)\n",
+                "\n",
+                "Use the idea of a recursive algorithm to analyze\n",
+                "\n",
+                "1. Basic closing conditions:\n",
+                "* :: Change that needs to be exchanged in a denomination exactly equal to a coin of some kind, i.e., 1 coin will do the trick\n",
+                "* :: When the remaining amount is less than 0: indicates that the current selection is invalid and returns a special flag (e.g., Infinity or -1)\n",
+                "\n",
+                "Optimization Note: Added boundary condition for amount less than 0 to ensure that all valid paths are terminated\n",
+                "\n",
+                "2. Scale Down & Call Yourself\n",
+                "* :: Iterate over each coin: for each available denomination ``coin``.\n",
+                "* :: Downsizing: calculating the sub-issue amount ``amount - coin`''\n",
+                "* :: Call itself: recursively solve ``minCoins(amount - coin)``.\n",
+                "* :: Combine results: take the minimum of all paths ``min(1 + recursive result)``.\n",
+                "\n",
+                "Please note:\n",
+                "* :: Recursive calls aimed at obtaining subproblem solutions\n",
+                "* :: Emphasize the results consolidation logic\n",
+                "* Calculations to swipe the entire coin system with every step, and tons of double-counting, extremely! Its! Low! Efficient!"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMC(coinValueList,change):\n",
+                "    minCoins = change #Assume maximum coin case\n",
+                "    # Exclusion of readily available situations [basic end condition]\n",
+                "    if change in coinValueList:\n",
+                "        minCoins = 1\n",
+                "    else:\n",
+                "        for c in coinValueList:\n",
+                "            if c <= change:# Remove coin denomination larger than balance\n",
+                "                numCoins = 1 + recMC(coinValueList,change - c) \n",
+                "                if numCoins < minCoins:\n",
+                "                    minCoins = numCoins\n",
+                "    return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(recMC([1,5,10,25],63))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "A lot of double counting occurs, which can be optimized\n",
+                "\n",
+                "$\\implies$ Record the data of counted denominations.\n",
+                "\n",
+                "<img src=\"./img/410.png\">"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMCB(coinValueList,change,knownResult):\n",
+                "    #knownResult = {}# You can't do that, or you'll create a new dictionary every time you recurse.\n",
+                "    #TeachingPlans actually use lists, which is also pretty good\n",
+                "    \n",
+                "    minCoins = change\n",
+                "    if change in coinValueList:\n",
+                "        knownResult[change] = 1 # record the optimal solution; in this case it's not a one-shot deal either\n",
+                "        return 1# this can not be commented, will reduce the readability [why not return on the spot, but also rely on the following elif]; also more than one conditional judgment\n",
+                "    elif knownResult[change] > 0:\n",
+                "        return knownResult[change]\n",
+                "    else:\n",
+                "        for i in [c for c in coinValueList if c <= change]:\n",
+                "            numCoins = 1 + recMCB(coinValueList, change - i,knownResult)\n",
+                "            if numCoins < minCoins:\n",
+                "                minCoins = numCoins\n",
+                "                knownResult[change] = minCoins\n",
+                "    return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(recMCB([1,5,10,25],63,[0]*64))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Further optimizing the code, there are"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMCB(coinValueList, change, knownResult):\n",
+                "    # Boundary condition: return 0 if amount is 0\n",
+                "    if change == 0:\n",
+                "        return 0\n",
+                "        \n",
+                "    # 1. Direct hit on the face value of the coin\n",
+                "    if change in coinValueList:\n",
+                "        knownResult[change] = 1 # record the optimal solution\n",
+                "        return 1 # Must be returned!\n",
+                "    \n",
+                "    # 2. Hit memos\n",
+                "    elif knownResult[change] > 0:\n",
+                "        return knownResult[change]\n",
+                "    \n",
+                "    # 3. recursive calculations required\n",
+                "    else:\n",
+                "        minCoins = change\n",
+                "        # Use generator expressions more efficiently\n",
+                "        for coin in (c for c in coinValueList if c <= change):\n",
+                "            numCoins = 1 + recMCB(coinValueList, change - coin, knownResult)\n",
+                "            if numCoins < minCoins:\n",
+                "                minCoins = numCoins\n",
+                "                knownResult[change] = minCoins # 更新备忘录\n",
+                "        return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "coins = [1, 5, 10, 25]\n",
+                "memo = [0]*64\n",
+                "print(recMCB(coins, 36, memo)) # 输出：3 (25+10+1)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Using dictionary data for caching, there are"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMCC(coinValueList, change, knownResult):\n",
+                "    # Boundary condition: return 0 if amount is 0\n",
+                "    if change == 0:\n",
+                "        knownResult[0] = 0 # Record the solution for the amount 0\n",
+                "        return 0\n",
+                "    \n",
+                "    # Check if the memo has results\n",
+                "    if change in knownResult:\n",
+                "        return knownResult[change]\n",
+                "    \n",
+                "    # Direct hits on the face value of coins\n",
+                "    if change in coinValueList:\n",
+                "        knownResult[change] = 1 # record the optimal solution\n",
+                "        return 1\n",
+                "    \n",
+                "    # Recursive computation part\n",
+                "    minCoins = change # You can use float('inf') to handle the case where the coin system does not contain a 1\n",
+                "    \n",
+                "    # Use generator expressions to optimize memory\n",
+                "    for coin in (c for c in coinValueList if c <= change):\n",
+                "        # Recursive calls to compute subproblems\n",
+                "        numCoins = 1 + recMCC(coinValueList, change - coin, knownResult)\n",
+                "        \n",
+                "        # Update the minimum number of coins\n",
+                "        if numCoins < minCoins:\n",
+                "            minCoins = numCoins\n",
+                "    \n",
+                "    # Record results to memo\n",
+                "    knownResult[change] = minCoins\n",
+                "    return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Initialization memo (dictionary)\n",
+                "memo = {}\n",
+                "\n",
+                "# List of coin denominations\n",
+                "coins = [1, 5, 10, 25]\n",
+                "\n",
+                "# Test different change amounts\n",
+                "print(recMCC(coins, 6, memo)) # 输出：2 (5+1)\n",
+                "print(recMCC(coins, 11, memo)) # 输出：2 (10+1)\n",
+                "print(recMCC(coins, 26, memo)) # 输出：2 (25+1)\n",
+                "print(recMCC(coins, 31, memo)) # 输出：3 (25+5+1)\n",
+                "\n",
+                "# View the contents of the memo\n",
+                "#print(memo)\n",
+                "\n",
+                "#The result of 63 in 21 cents change is also correct."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: The above is a top-down approach.\n",
+                "* :: But it's not quite dynamic programming, it's called memoization/function value caching.\n",
+                "* :: The three main features of DP: optimal substructure, overlapping subproblems, and state transfer equations. In particular, the point of overlapping subproblems is the key judgment basis for recursively changing the DP\n",
+                "\n",
+                "\"Recursion with memos is a transition from \"figuring out what to do\" to \"efficient problem solving\", and is top-down dynamic programming, not full DP. it is a bridge between recursive thinking and dynamic programming implementations. It is a bridge between recursive thinking and dynamic programming implementation."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "| Types | Realization | Explanation\n",
+                "| ---- | ----------- | --------------- |\n",
+                "| top-down | recursion + memo | \"Recursion with memos\" |\n",
+                "| bottom-up | for loop + table | Fill in answers from smallest to largest in array/table |"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc4_'></a>[411 Finding Zero Problem [Dynamic Planning Version](#toc0_)\n",
+                "Dynamic programming algorithms use a more structured approach to obtain a solution to the problem\n",
+                "* :: The dynamic programming algorithm for change exchange starts with the simplest optimal solution of \"1 cent change\" and progressively adds to it until we have the number of change we need [bottom-up].\n",
+                "* :: In the process of incremental change, try to keep each incremental penny optimal, until the number of change is solved and the optimal solution is obtained naturally.\n",
+                "\n",
+                "Please note:\n",
+                "* :: The key to the ability of the recursive process to preserve the optimal solution is that it relies on the simple computation of the optimal solution for fewer dollars, which has already been obtained [overlapping subproblems]\n",
+                "* :: Necessary conditions for an optimization problem to be solvable by a dynamic programming strategy: optimal solution of the entire large problem, containing subproblems of smaller problems [optimal substructure]\n",
+                "\n",
+                "A necessary condition for $\\implies$ DP is: \"overlapping subproblems + optimal substructure\"\n",
+                "\n",
+                "1. Overlapping Subproblems:\n",
+                "   \n",
+                "   The same answers to subproblems are used over and over again when solving large problems, so that repeated computations are avoided by caching (memoization or table storage)\n",
+                "\n",
+                "2. Optimal Substructure:\n",
+                "   The fact that the optimal solution of a large problem can be obtained recursively from the optimal solutions of its subproblems is a fundamental guarantee that the dynamic programming algorithm will work correctly.\n",
+                "\n",
+                "** DP excels when it can be disassembled and reused ** [how important it is for DP to have a table to check]\n",
+                "\n",
+                "This diagram in the 410 recursion can also be referenced again\n",
+                "\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/411.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Here is the difference between real dynamic planning and recursion. The essence of dynamic programming is table lookup [reuse], and the essence of recursion is calling itself"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "First create a table for dynamic planning\n",
+                "\n",
+                "<img src=\"./img/411_1.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Checking the table, there are\n",
+                "\n",
+                "<img src=\"./img/411_2.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The algorithm is complete and the implementation begins!"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def dpMakeChange(coinValueList,change,minCoins):\n",
+                "    for cents in range(change + 1):# tabulate and predict the amount of change that may be needed for each\n",
+                "        # Records corresponding to the maximum number of coins\n",
+                "        coinCount = cents\n",
+                "        for j in [c for c in coinValueList if c <= cents]:# Determine each denomination of change that will be used\n",
+                "            if coinCount > 1 + minCoins[cents - j]:# Compare and calculate for each change denomination in the table.\n",
+                "                coinCount = 1 + minCoins[cents - j]# count, compare & update each time\n",
+                "        minCoins[cents] = coinCount#结果进表\n",
+                "    return minCoins[change]"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "dpMakeChange([1,5,10,21,25],63,[0]*64)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Think about how to optimize the code. Is it possible to return coin combinations?\n",
+                "\n",
+                "It is possible. Just keep track of the value of the chosen coin while generating the list of optimal solutions."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 1,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def dpMakeChange(coinValueList,change,minCoins,coinsUsed):\n",
+                "    minCoins[0] = 0\n",
+                "    for cents in range(change + 1):\n",
+                "        coinCount = cents\n",
+                "        newCoin = 1\n",
+                "        for j in [c for c in coinValueList if c <= cents]:\n",
+                "            if minCoins[cents - j] + 1 < coinCount:\n",
+                "                coinCount = minCoins[cents - j] + 1\n",
+                "                newCoin = j\n",
+                "        minCoins[cents] = coinCount\n",
+                "        coinsUsed[cents] = newCoin#Only one coin was necessarily added at each step\n",
+                "    return minCoins[change]\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 2,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def printCoins(coinsUsed,change):\n",
+                "    coin = change\n",
+                "    while coin > 0:\n",
+                "        thisCoin = coinsUsed[coin]\n",
+                "        print(thisCoin)\n",
+                "        coin = coin - thisCoin"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 3,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "Minimum number of coins: 3\n",
+                        "Coin combination.\n",
+                        "21\n",
+                        "21\n",
+                        "21\n"
+                    ]
+                }
+            ],
+            "source": [
+                "amnt = 63\n",
+                "clist = [1,5,10,21,25]\n",
+                "coinsUsed = [0]*(amnt+1) # store coin face value\n",
+                "coinsCount = [0]*(amnt+1) # number of coins stored\n",
+                "\n",
+                "# Perform calculations\n",
+                "min_coins = dpMakeChange(clist, amnt, coinsCount, coinsUsed)\n",
+                "print(f \"Minimum number of coins: {min_coins}\") # should output 3\n",
+                "\n",
+                "# Retrospective coin combinations\n",
+                "print(\"Coin combination:\")\n",
+                "printCoins(coinsUsed, amnt) # 应输出 21,21,21"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "In this problem, both the recursion with memoization and the DP algorithm are based on optimal substructures (the solution for each amount depends on the subproblem solution)\n",
+                "\n",
+                "That is, using the state transfer equation\n",
+                "\n",
+                "$$minCoins[i] = min(minCoins[i], minCoins[i - coin] + 1)$$"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The most important ideas of DP are\n",
+                "* :: Start with the simplest case and reach the cycle of required change [lesson endorsed bottom-up]\n",
+                "* :: Each step relies on the previous optimal solution to obtain the optimal solution for the current step until the answer is obtained\n",
+                "\n",
+                "Note that all DPs can be rewritten as memoized recursion, but recursion is not necessarily DP-optimizable"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "AI proposes an alternative perspective of understanding, rather than just recognizing bottom-up\n",
+                "\n",
+                "* Recursion + memoization = top-down DP: start with a big problem, break it down into smaller problems, solve recursively and cache results\n",
+                "* Iteration + DP table = bottom-up DP: start with a small problem, iteratively solve it and progressively build a solution to a large problem\n",
+                "\n",
+                "Both are efficient implementations of dynamic programming, and both utilize the core idea of \"storing subproblem solutions to avoid repeated computations\". The choice depends on the specific problem and personal preference. Top-down is more \"natural\" and bottom-up is usually more efficient (especially after spatial optimization).\n",
+                "\n",
+                "Many problems can be realized in both ways; the Fibonacci series, the knapsack problem, and the longest common subsequence are classic examples. Understanding both perspectives is essential to mastering dynamic programming"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc5_'></a>[412 0/1 knapsack problem [solved from two perspectives: recursion and dynamic programming](#toc0_)\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/2.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Greedy strategies obviously don't work anymore, so let's tackle it from a dynamic programming perspective first\n",
+                "\n",
+                "Mathematically, it might as well be treated as solving for the optimal solution of the function, then the design function has:\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/3.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* The state transfer formula is based on the previous consideration, i.e., whether the ith piece is added or not after completion of i-1. It may be equal to $m(i-1,W)$ because the ith piece is not added and the weight is unchanged; it may be equal to $m(i-1,W - W_i) + v_i$ because the left side of the plus sign is the value of the previous step, and the right side is the value of this step. This is the function that describes the constraints (item condition, weight) in which the value at hand is maximized\n",
+                "* Why is $w_i > W$ not added? Because this function describes the case where the overall combined weight does not exceed W, and if it does, it will never be added.\n",
+                "* i is not the item number, but the first i, which can be changed.\n",
+                "* :: Ideal for bottom-to-top thinking"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Listed in the table are\n",
+                "\n",
+                "Note that each cell has a dependency on the one to the left or the one above it.\n",
+                "\n",
+                "<img src=\"./img/4.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Example: $m(5,5)$ recursive formula\n",
+                "\n",
+                "* With $i = 5$, the weight is 9, which exceeds the limit of $W= 5$ and is definitely not chosen, so it is equal to $m(4,5)$ [this item is overweight, and throwing away all the others won't choose it].\n",
+                "* At $m(4,5)$, the weight of piece 4 is 5, which is not over the limit, so piece 4 can go to choice [yes, or no] which is equal to $max(m(3,5),m(3,0)+8)$. The former is not choosing this thing, the latter is what to dump the backpack into in the previous step if you want to choose this thing\n",
+                "\n",
+                "\n",
+                "Theoretical description is done, start realizing"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 2,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]#None is used for placeholder\n",
+                "\n",
+                "max_w = 20"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 3,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "\"\"\"\"\n",
+                "dp\n",
+                "\n",
+                "\"\"\"\n",
+                "# Tab.\n",
+                "m = {(i,w):0 for i in range(len(tr)) for w in range(max_w + 1)}# Interesting initialization writeup; this thing is actually the value function; key is the tuple\n",
+                "\n",
+                "# table\n",
+                "for i in range(len(tr)):\n",
+                "    for w in range(max_w + 1):\n",
+                "        if i == 0 or w == 0:# It doesn't matter if you don't judge it, after all, it's 0 when you generate the table\n",
+                "            m[(i,w)] = 0\n",
+                "        elif tr[i]['w'] > w:# the ith piece is overweight then\n",
+                "            m[(i,w)] = m[(i-1,w)]\n",
+                "        else:\n",
+                "            m[(i,w)] = max(m[(i-1,w)],m[(i-1,w-tr[i]['w'])]+tr[i]['v'])"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 4,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n",
+                        "i: 5, w: 20\n"
+                    ]
+                }
+            ],
+            "source": [
+                "max_value = max(m.values())\n",
+                "print(max_value)\n",
+                "# Get all keys that have reached their maximum value (there may be more than one)\n",
+                "max_keys = [key for key, value in m.items() if value == max_value]\n",
+                "\n",
+                "# Iterate over and output i and w for each maximal key\n",
+                "for (i, w) in max_keys:\n",
+                "    print(f\"i: {i}, w: {w}\")"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 5,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n"
+                    ]
+                }
+            ],
+            "source": [
+                "#dp\n",
+                "#without function\n",
+                "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]\n",
+                "\n",
+                "max_w = 20\n",
+                "\n",
+                "m = {(i,w):0 for i in range(len(tr))\n",
+                "                for w in range(max_w + 1)}\n",
+                "#print(m.items())\n",
+                "for i in range(1,len(tr)):\n",
+                "    for w in range(1,max_w + 1):\n",
+                "        if tr[i]['w'] > w:\n",
+                "            m[(i,w)] = m[(i-1,w)]\n",
+                "        else:\n",
+                "            m[(i,w)] = max(\n",
+                "                m[(i-1,w)],\n",
+                "                m[(i-1,w-tr[i]['w'])] + tr[i]['v']\n",
+                "            )\n",
+                "\n",
+                "print(m[(len(tr)-1,max_w)])# This is necessarily the largest, very cleverly"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Now get the recursion out of the way, the gist of it is:\n",
+                "* :: Basic closure\n",
+                "* :: Downsizing [simply kicked off the list, backwards]\n",
+                "* :: Calling itself\n",
+                "\n",
+                "That is, for each step you choose, look at what you did in the previous step. This is the top-to-bottom idea\n",
+                "\n",
+                "Remember that recursion must go back to the origin!"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 6,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n"
+                    ]
+                }
+            ],
+            "source": [
+                "def knapsack(i, w):# denotes the maximum value that can be obtained when the remaining capacity of the knapsack is w and the selection is made from items 1~i.\n",
+                "    if i == 0 or w == 0:\n",
+                "        return 0\n",
+                "    if tr[i]['w'] > w:\n",
+                "        return knapsack(i-1, w)\n",
+                "    else:\n",
+                "        return max(knapsack(i-1, w), knapsack(i-1, w - tr[i]['w']) + tr[i]['v'])\n",
+                "\n",
+                "# Example calls\n",
+                "print(knapsack(len(tr) - 1, 20)) # Output maximum value\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Plus the memo, then there:"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 9,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "17\n"
+                    ]
+                }
+            ],
+            "source": [
+                "# Assume that tr is a list representing the weight and value of each item as:\n",
+                "# tr = [{'w': 2, 'v': 3}, {'w': 3, 'v': 4}, {'w': 4, 'v': 5}, {'w': 5, 'v': 8}]\n",
+                "\n",
+                "# Create a memo dictionary\n",
+                "memo = {}\n",
+                "\n",
+                "def knapsack(i, w):\n",
+                "    # Check if it's been calculated in the memo\n",
+                "    if (i, w) in memo:\n",
+                "        return memo[(i, w)]\n",
+                "    \n",
+                "    # Basic information\n",
+                "    if i == 0 or w == 0:\n",
+                "        res = 0\n",
+                "    elif tr[i]['w'] > w:\n",
+                "        res = knapsack(i - 1, w)\n",
+                "    else:\n",
+                "        res = max(knapsack(i - 1, w),\n",
+                "                  knapsack(i - 1, w - tr[i]['w']) + tr[i]['v'])\n",
+                "    \n",
+                "    # Access to memos\n",
+                "    memo[(i, w)] = res\n",
+                "    return res\n",
+                "\n",
+                "# List of example items\n",
+                "tr = [{'w': 2, 'v': 3}, {'w': 3, 'v': 4}, {'w': 4, 'v': 5}, {'w': 5, 'v': 8}]\n",
+                "\n",
+                "# Example call: backpack capacity is 20, consider items 0~3\n",
+                "print(knapsack(len(tr) - 1, 20)) # Output max value\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n"
+                    ]
+                }
+            ],
+            "source": [
+                "# Classroom code, recursion + memes\n",
+                "# The focus of the backpack problem is on which items to pick, not on the order of the items, so an unordered way of describing the items doesn't interfere with the recursion result either\n",
+                "# The previous entry can be understood as the initial tr order is upset and it doesn't affect the final result\n",
+                "tr = {(2,3),(3,4),(4,8),(5,8),(9,10)}#This thing is a collection of tuples, which are unordered, and rely on the tuple description, not the serial number.\n",
+                "max_w = 20\n",
+                "\n",
+                "m = {}# set\n",
+                "\n",
+                "def thief(tr,w):#tr is handled with backwards, w is the maximum loaded weight\n",
+                "    if tr == set() or w == 0:# Basic end condition\n",
+                "        m[(tuple(tr),w)] = 0#dictionary fill in\n",
+                "        #(tuple(tr),w) is a tuple, immutable type, and thus satisfies the requirement of a dictionary key\n",
+                "        return 0#0 is returned here\n",
+                "    \n",
+                "    elif (tuple(tr),w) in m:#Check if there is this key in the dictionary\n",
+                "        return m[(tuple(tr),w)]# return value if any\n",
+                "    \n",
+                "    else:\n",
+                "        vmax = 0#forwards handles the value function\n",
+                "        for t in tr:# kicks off items already selected, even though the set is not in order\n",
+                "            if t[0] <= w:# t[0] is the weight, t[1] is the value\n",
+                "                v = thief(tr - {t},w - t[0]) + t[1] #w is updated here because of the recursive call\n",
+                "                #v describes: what else to put in it\n",
+                "                vmax = max(vmax,v)\n",
+                "        m[(tuple(tr),w)] = vmax\n",
+                "        return vmax\n",
+                "print(thief(tr,max_w))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "9\n",
+                        "2\n",
+                        "3\n",
+                        "4\n",
+                        "5\n"
+                    ]
+                }
+            ],
+            "source": [
+                "tr = {(2,3),(3,4),(4,8),(5,8),(9,10)}\n",
+                "for t in tr:\n",
+                "    print(t[0])"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Assume the current state:\n",
+                "\n",
+                "* :: Set of items tr = {(3,4), (4,8)} (weight, value)\n",
+                "* :: Residual load w = 5\n",
+                "\n",
+                "Then the calculation process has\n",
+                "\n",
+                "1. Take item t = (3,4) (weight 3 ≤ 5, optional):\n",
+                "        Recursive computation subproblem: chief({(4,8)}, 5-3=2)\n",
+                "        Subproblem: weight limit 2, can only select (4,8)? But 4 > 2, can't choose → return 0\n",
+                "        v = 0 + 4 = 4\n",
+                "        更新 vmax = max(0, 4) = 4\n",
+                "\n",
+                "2. Take the item t = (4,8) (weight 4 ≤ 5, optional):\n",
+                "        Recursive computation subproblem: chief({(3,4)}, 5-4=1)\n",
+                "        Subproblem: weight limit 1, unable to pick (3,4) (3>1) → return 0\n",
+                "        v = 0 + 8 = 8\n",
+                "        Update vmax = max(4, 8) = 8\n",
+                "\n",
+                "So it finally returns vmax = 8 (choosing item (4,8) is the optimal solution)\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The function ``thief(tr, w)`` is iterated over each item t by the loop ``for t in tr``:\n",
+                "For each item t, if its weight ```t[0] <= w```, it recursively calculates the value after choosing t\n",
+                "```thief(tr - {t}, w - t[0]) + t[1]``` (i.e., remove t and reduce the weight).\n",
+                "Then, all possible choices are compared by vmax = max(vmax, v), keeping the maximum value.\n",
+                "This is equivalent to enumerating all subsets"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "10\n",
+                        "3\n",
+                        "4\n",
+                        "8\n",
+                        "8\n"
+                    ]
+                }
+            ],
+            "source": [
+                "for t in tr:\n",
+                "    print(t[1])"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]#None is used for placeholder\n",
+                "\n",
+                "max_w = 20"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#recursive writing plus memo\n",
+                "m = {}# switched with dp; meme\n",
+                "def thief(tr,w):#dp didn't define function\n",
+                "    if tr == set() or w==0:#前面\n",
+                "        m[tuple(tr)]"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "In some cases, recursion + memo can accomplish less computationally than dynamic programming. Because the latter is bottom-up, there will be some unnecessary computations"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 413 Recursion Summary\n",
+                "* :: Recursion can be considered in solving some self-similarity problems\n",
+                "* Three laws of recursive algorithms:\n",
+                "    * :: Basic closing conditions\n",
+                "    * :: Scale down. For example, in a sorting problem, you need to make the number of participants in the sorting smaller and smaller.\n",
+                "    * :: Calling itself\n",
+                "* :: In some cases, recursion can be used instead of iterative loops, i.e., without for or while.\n",
+                "* :: Recursive algorithms usually fit naturally with the formulation of the problem and the flow of thinking about it\n",
+                "* :: But recursion will not always be the most appropriate algorithm, and there is the potential for huge amounts of double-counting [top-down].\n",
+                "* :: The use of memoization/function value caching can reduce the number of\n",
+                "* :: If the optimal solution to a problem includes the optimal solution to the same problem on a smaller scale, it can be solved by dynamic programming\n",
+                "* :: Try the Fibonacci sequence."
+            ]
+        }
+    ],
+    "metadata": {
+        "kernelspec": {
+            "display_name": "base",
+            "language": "python",
+            "name": "python3"
+        },
+        "language_info": {
+            "codemirror_mode": {
+                "name": "ipython",
+                "version": 3
+            },
+            "file_extension": ".py",
+            "mimetype": "text/x-python",
+            "name": "python",
+            "nbconvert_exporter": "python",
+            "pygments_lexer": "ipython3",
+            "version": "3.12.7"
+        },
+        "orig_nbformat": 2
+    },
+    "nbformat": 4,
+    "nbformat_minor": 2
+}
