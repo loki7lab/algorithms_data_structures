@@ -1,2444 +1,2444 @@
 {
- "cells": [
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "\n",
-    "* 重复运算中，返回的结果是引用的重复\n",
-    "\n",
-    "\n",
-    "[各类关系说明的参考网址](https://www.cnblogs.com/dhm520/p/8423392.html)\n",
-    "\n",
-    "* **IS-A**：是一个，代表**继承**关系。 如果A is-a B，那么B就是A的父类。 一个类完全包含另一个类的所有属性及行为。\n",
-    "  例如PC机是计算机，工作站也是计算机，PC机和工作站是两种不同类型的计算机，但都继承了计算机的共同特性。is-a（英语：subsumption，包容）指的是在抽象（比如类或类型）之间体现的包容关系。\n",
-    "\n",
-    "* **HAS-A**：有一个，代表**从属**关系。如果A has a B，那么B就是A的组成部分。 同一种类的对象，可以通过它们的属性的不同值来区别。 \n",
-    "  例如一台PC机的操作系统是Windows，另一台PC机的操作系统是Linux。操作系统是PC机的一个成员变量，根据这一成员变量的不同值，可以区分不同的PC机对象。\n",
-    "\n",
-    "* **LIKE-A**：像一个，代表**组合**关系。 如果A like a B，那么B就是A的接口。 新类型有老类型的接口，但还包含其他函数，所以不能说它们完全相同。 \n",
-    "  例如一台手机可以说是一个微型计算机，但是手机拨打号码不是计算机具备的行为，所以手机继承了计算机的特性，同时需要实现通讯功能，而通讯功能需要作为单独接口，而不是计算机的行为。"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 1.3. what is computer science?"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Computer science is \n",
-    "* the study of problems, problem-solving and the solutions that come out of the problem-solving process.\n",
-    "* thought as the study of solutions, or rather, the study of solutions to problemsas well as the study of problems with no solutions.\n",
-    "* the study of problems that are and that are not computable, the study of existence and the nonexistence of algorithms.\n",
-    "* the study of abstraction. Abstraction allows us to view the problem and solution in such a way as to separate the so-called logical and physical perspectives."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Algorithm is \n",
-    "* a step-by-step list of instructions for solving any instance of the problem that might arise.\n",
-    "* **finite** processes that if followed will solve the problem.\n",
-    "* solution.\n",
-    "* considered independent from machine.\n",
-    "* describes the solution to a problem in terms of the data needed to represent the problem instance and the set of steps necessary to produce the intended result.(1.3.1.)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Computable \n",
-    "* describing problems and solutions.\n",
-    "* if an algorithm exists for solving it."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Someone could view computers from logical or user perspective, and functions are sometimes also reffered to as the interface.(port)The user of the abstraction, sometimes also called client, does not need to know the details as long as the user is aware of the way the interface works. \n",
-    "\n",
-    "While computer scientists, programmers, technology support staff, and system administrators must know the details of how operating systems work, how network protocols are configured, and how to code various scripts that control function. They must be able to control the low-level details that a user simply assumes."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "The interface is the way we as users communicate with the underlying complexities of the implementation. Consider the python math module as an example of procedural abstraction, who could be referred to as a black box view of a process. The interface could be simply described: \n",
-    "* the name of function\n",
-    "* what is needed(parameters)\n",
-    "* what will be returned\n",
-    "  \n",
-    "the details are hidden inside black box."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 1.3.1. What is programming?\n",
-    "Programming is the process of taking an algorithm and encoding it into anotion,a programming language,so that it can be executed by a computer.\n",
-    "\n",
-    "Programming languages must provide a notational way to represent both the process and the data. To this end, provide \n",
-    "* control constructs(sequential processing, selection for decision-making,iteration for repetitive control) \n",
-    "* data types, who give all these data items represented as strings of binary digits meaning.\n",
-    "\n",
-    "These low-level, build-in data types (sometimes called **_the primitive data types_**) provide the building blocks for algorithm development."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 1.3.2. Why study Data Structures and Absreact Data Type?\n",
-    "\n",
-    "An abstract data type, sometimes abbreviated ADT, is a logical description of how we view the data and the operations that are allowed without regard to how they will be implemented.\n",
-    "\n",
-    "$\\implies$ we are concerned only with what the data is representing and not with how it will eventually be constructed.\n",
-    "\n",
-    "\n",
-    "Data abstraction : using encapsulation for information hiding.\n",
-    "\n",
-    "An abstract data type,in short, ADT, can be used as the shell that user interacts with, which is a logical description of how we view the data and the operations that are allowed without regard to how they will be implemented.\n",
-    "\n",
-    "While **the implementation of an ADT,often referred to as a data structure**,will require that we provide a physical view of the data, using some collection of programming constructs, and primitive data types.\n",
-    "\n",
-    "With this inplementation-independent view of the data,users can remain focused on the problem-solving process,getting rid of details of the implementation(1.3.)."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 1.3.3. Why study algorithms?\n",
-    "By considering a number of different algorithms, we can begin to develop pattern recognition so that the next time a similar problem arises, we are better able to solve it.\n",
-    "\n",
-    "As we study algorithms, we can learn analysis techniques that allow us to compare and contrast solutions solely on their own characteristics, not the characteristics of the program or computer used to implement them."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 1.4. Review of basic python"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 1.4.1. Getting started with data\n",
-    "* Python supports the object-oriented, which means that Python condiders data to be the focal point of the problem-solving process. We define a **class** to describe what the data look like (the state) and what the data can do (the behavior).\n",
-    "* Classes are analogous to abstract data types because a user of a class only sees the state and the behavior of a data item.\n",
-    "* Data items are called **objects** in the object-oriented paradigm.\n",
-    "* An object is an instance of a class."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 1.4.1.1. Built-in Atomic data types\n",
-    "**numeric classes**\n",
-    "\n",
-    "* Python has 2 main built-in numeric classes, interger and floating point data types, called int and float.\n",
-    "* The standard arithmetic operations ```+```, ```-```, ```*```, ```/```, and ```**``` (exponentiation), can be used with parentheses, forcing the order of operations away from normal operator precedence.\n",
-    "* Other very useful operations are the remainder (modulo) operator, ```%```, and integer division, ```//```.\n",
-    "* When 2 intergers are divided, the result is a floating point.\n",
-    "* The integer division operator ```//``` returns the integer portion of the quotient by truncating any fractional part."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "6/3"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "3//6"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**bool class**\n",
-    "* The boolean data type is implemented as the Python bool class\n",
-    "* For repesenting truth values.\n",
-    "* The possible state values for a boolean object are **True** and **False**\n",
-    "* The standard boolean operators are ```and```, ```or```, ```not```.\n",
-    "* Boolean objects are also used as results for comparison operators such as equality ```==``` and greater than```>```.\n",
-    "* In addition, relational operators and logical operators can be combined together to form complex logical questions."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**Identifiers / Names**\n",
-    "* Identifiers are used in programming languages as names. \n",
-    "* In python, identifiers started with a letter or an underscore ```_```, and **case-sensitive**.\n",
-    "* Assignment statements ```=``` provide a way to associate a name with a value.\n",
-    "* The python variable is created when a name is used for the first time on the left-hand side of an assignment.\n",
-    "* A Python variable will hold a **_reference_** to a piece of data, not the data itself.\n",
-    "* In general, the right-hand side of the assignment statement is evaluated, and a reference to the resulting data object is \"assigned\" to the name on the left-hand side.\n",
-    "* The same variable can refer to many different types of data.\n",
-    "\n",
-    "key point :\n",
-    ">The assignment statement changes the reference being held by the variable, which is a **dynamic** characteristic of Python.\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "|name|assignment statement|value|\n",
-    "|:--:|:--:|:--:|\n",
-    "|The python variable is created when a name is used for the first time|$\\xLeftarrow {a\\ reference}$|evaluated|"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "#### 1.4.1.2. Built-in Collection Data types \n",
-    "\n",
-    "|method|ordered|mutable|\n",
-    "|:---:|:---:|:---:|\n",
-    "|list|Sequentially|Y|\n",
-    "|string|Sequentially|N|\n",
-    "|tuple|Sequentially|N|\n",
-    "|set|N|Y|\n",
-    "|dictionary|Insertion(from Python 3.7+)|Y|"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "$\\Longrightarrow$ \n",
-    "\n",
-    "**operations on any sequence in python**\n",
-    "|Name|Notion|\n",
-    "|----|----|\n",
-    "|indexing|[ ]|\n",
-    "|concatenation|\\+|\n",
-    "|repetition|\\*|\n",
-    "|membership|in|\n",
-    "|length|len|\n",
-    "|slicing|[ : ]|\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**List**\n",
-    "* is an ordered collection of zero or more **references**.\n",
-    "* is heterogeneous, meaning that the data objects need not all be from the same class and the collection can be assigned to a variable.\n",
-    "\n",
-    "tips:\n",
-    "> When Python evaluates a list, the list itself is returned. To remember the returned one for later processing, its reference needs to be assigned to a variable."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 32,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# List is written as comma-delimited values enclosed in square brackets.\n",
-    "l1 = []\n",
-    "l2 = list()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Operations for **list**\n",
-    "\n",
-    "* The slice operation,take myList[1:3] as example,returns a list of items starting with 2nd item,and not including the item indexed by 3"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# Lists could be quickly initialized by repetition.\n",
-    "myList = [0]*6\n",
-    "myList"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# The result is a repetition of references \n",
-    "myList = [1,2,3,4]\n",
-    "A = [myList] * 3\n",
-    "print(A)\n",
-    "print('**********************')\n",
-    "myList[2] = 45\n",
-    "print(A)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**Methods provided by list in python**\n",
-    "| Method | List Changed | Reference Changed | Returned |\n",
-    "|-----|:-----------:|:----------:|:--------:|\n",
-    "| alist.sort() | Y | N | None |\n",
-    "| sorted(alist) | N | N | Sorted List |\n",
-    "| alist.reverse() | Y | N | None |\n",
-    "| reversed(alist) | N | N | Iterator |\n",
-    "| alist.pop() | Y | N | Last Item |\n",
-    "| alist.pop(i) | Y | N | Item at ```i``` |\n",
-    "| del alist[i] | Y | N | None |\n",
-    "| alist.insert(i,item) | Y | N | None |\n",
-    "| alist.append(item) | Y | N | None |\n",
-    "| alist.index(item) | N | N | Index ```i``` |\n",
-    "| alist.count(item) | N | N | Integer |\n",
-    "| alist.remove(item) | Y | N | None |\n",
-    "|alist.clear()|Y|N|None|\n",
-    "|alist.extend(blist)|alist|N|None|\n",
-    "|alist + blist|N|N|New List|\n",
-    "\n",
-    "* It would be better to name the new list returned by ```sorted``` or```reversed```.\n",
-    "* There is another reference for the result of ```alist.extend(blist)```, while the alist could be used as the result of extention.\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "help(id)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# Return the identity of an object."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.sort())\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# Return the identity of an object."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(sorted(alist))\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.reverse())#through print None,the list still changed.\n",
-    "print(alist)\n",
-    "print(id(alist))#id did not changed"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(reversed(alist))#it creates something new.\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#hexadecimal\n",
-    "hex_add = f\"0x{id(alist):016X}\"# Automatically handles the uppercase conversion with X format specifier\n",
-    "print(hex_add)\n",
-    "#Python reversed() method returns an iterator that accesses the given sequence in the reverse order.\n",
-    "blist = reversed(alist)\n",
-    "print(blist)#It turns out to be a NEW reference."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(list(blist))# the returned item changed\n",
-    "print(id(list(blist)))#id changed\n",
-    "print(f\"0x{id(list(blist)):016X}\")# the returned Iterator also has different id from the list you make"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "$\\Longrightarrow$ So you should name the list returned by 'reversed'."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.pop())\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.pop(3))\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "del alist[2]"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.insert(6,'badApple'))\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.append(7))\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.index(3))\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.count(3))\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = [1,2,3,4,1,9,7,5,3]\n",
-    "id(alist)# renew"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.remove(3))\n",
-    "print(alist)#remove the first 3\n",
-    "print(id(alist))#not changed"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist.clear())\n",
-    "print(alist)\n",
-    "print(id(alist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = ['apple', 'banana', 'cherry']\n",
-    "blist = (1, 4, 5, 9)#tuple\n",
-    "\n",
-    "print(id(alist))\n",
-    "print(id(blist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#clist = alist.extend(blist)#there must be another id\n",
-    "print(alist.extend(blist))\n",
-    "print(id(alist.extend(blist)))#exrenf blist 2 times"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist)\n",
-    "print(id(alist))\n",
-    "print(blist)\n",
-    "print(id(blist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = ['apple', 'banana', 'cherry']\n",
-    "blist = [1, 4, 5, 9]\n",
-    "\n",
-    "print(id(alist))\n",
-    "print(id(blist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(alist + blist)\n",
-    "print(alist)\n",
-    "print(id(alist))\n",
-    "print(blist)\n",
-    "print(id(blist))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "alist = ['apple', 'banana', 'cherry']\n",
-    "blist = [1, 4, 5, 9]\n",
-    "\n",
-    "print(id(alist))\n",
-    "print(id(blist))\n",
-    "print(id(alist + blist))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "The dot notion is asking for an object to invoke a method. Even if it is integer."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "86"
-      ]
-     },
-     "execution_count": 1,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "(54).__add__(32)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "The another common python function conjunction with ```list``` is the ```range```, who produces a range object that represents a sequence of values."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "range(0, 10)\n",
-      "[5, 6, 7, 8, 9]\n",
-      "[1, 3, 5, 7, 9]\n"
-     ]
-    }
-   ],
-   "source": [
-    "print(range(0,10))\n",
-    "print(list(range(5,10)))\n",
-    "print(list(range(1,10,2)))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**String**\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "MyName = \"David\"\n",
-    "MyName[0] = 'x'"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 1.4. 元组【不可更改】\n",
-    "元组与序列一样，允许之前描述的任何操作"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "t1 = ()\n",
-    "t2 = tuple()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "元组 VS 列表\n",
-    "* 列表或元组都是异构的\n",
-    "* 下标从零开始，是连续的\n",
-    "* 加法与乘法运算\n",
-    "* len()\n",
-    "* 索引alis[n]或atuple[n]。得到的结果可以当作名字放在赋值语句的左边使用【元组不能重新赋值】，当然也可以放右边。\n",
-    "* 切片alist[start:end:step]；atuple[star:end:step]\n",
-    "* in\n",
-    "* index\n",
-    "* count\n",
-    "* sum\n",
-    "* min/max\n",
-    "\n",
-    "不同：\n",
-    "* 元组不可修改，列表具有可修改性\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {
-    "scrolled": true
-   },
-   "outputs": [],
-   "source": [
-    "MyTuple = (2,True,4.96)\n",
-    "MyTuple[1] = False"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Unordered collection\n",
-    "* set\n",
-    "* dictionary"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 2. 无序集合"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 2.1. 集合【不可更改】\n",
-    "\n",
-    "或者说集（set），是由零个或多个不可修改的Python数据对象组成的无序集合，不允许重复元素，是异构的\n",
-    "\n",
-    "但也支持前面的一些运算\n",
-    "\n",
-    "|方法名|用法|\n",
-    "|:--:|:--:|\n",
-    "|查询元素|in|\n",
-    "|长度|len|\n",
-    "|并集|aset \\| otherset|\n",
-    "|交集|aset&otherset|\n",
-    "|差集|aset - otherset|\n",
-    "|是否子集|aset <= otherset|\n",
-    "\n",
-    "set的特殊运算有\n",
-    "\n",
-    "|方法名|用法|\n",
-    "|:--:|:--:|\n",
-    "|并集|aset.union(otherset)|\n",
-    "|交集|aset.intersection(otherset)|\n",
-    "|差集|aset.difference(otherset)|\n",
-    "|是否子集|aset.issubset(otherset)|\n",
-    "|元素添加|aset.add(item)|\n",
-    "|元素移除|aset.remove(item)|\n",
-    "|随机删除|aset.pop()|\n",
-    "|元素全清|aset.clear()|"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 2.2. 字典【可更改】"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 字典是贴标签的数据。标签key和数据值value的对的集合称为字典\n",
-    "* 通过标签或关键字来索引数据，区别列表或元组通过连续整数来索引。\n",
-    "* 添加新值也是用键\n",
-    "* 是无序的。键的位置由散列决定\n",
-    "* 是可变类型，可以添加删除或者替换"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "student = {}\n",
-    "student = dict()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext = {'david':1410,\"brad\":1137}\n",
-    "phoneext"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext.keys()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext.values()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "list(phoneext.values())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext.items()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "list(phoneext.items())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext.get(\"kent\",\"no entry\")#如果没有，就返回no entry"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext['david']"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "phoneext.update(friends = [\"a\",\"b\"])\n",
-    "phoneext"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "数据项（item）\n",
-    "* 包括key和value，用冒号连接\n",
-    "* value没有顺序，可以是任意类型，甚至可以是字典\n",
-    "* 【key只能是不可变类型】：数值，字符串和元组。比如元组用来作为坐标，索引元素。"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "字典更新方案\n",
-    "\n",
-    "* 合并字典：同样的key覆盖，没有的key添加\n",
-    "\n",
-    "* 增长字典：\n",
-    "\n",
-    "1) ```dic[key]=value```\n",
-    "\n",
-    "2) ```dic.update(friends = [\"a\",\"b\"])```\n",
-    "\n",
-    "* 缩减字典:\n",
-    "  \n",
-    "1) ```del student['age']```\n",
-    "\n",
-    "2) ```student.pop('course')```\n",
-    "\n",
-    "3) ```student.popitem()```【随机删除并返回一个数据项，适合遍历字典】\n",
-    "\n",
-    "4)清空字典clear \n",
-    "\n",
-    "* 字典大小len\n",
-    "\n",
-    "* 标签索引\n",
-    "\n",
-    "1)```dict[key]```\n",
-    "\n",
-    "2)```student.get(key)```\n",
-    "\n",
-    "* keys函数返回字典中的所有标签\n",
-    "* values函数返回字典中的所有数据值\n",
-    "* items返回键值对的二元组数据项\n",
-    "* 判断是否存在标签：in操作\n",
-    "* 判断是否存在值：in + values操作"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "student.update(friends = [\"a\",\"b\"])#没有双引号！\n",
-    "#student.pop('friends')\n",
-    "print(student)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 2.3. 输入与输出\n",
-    "格式化字符串的方式如下"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(\"Hello\",\"World\",sep = \"***\")\n",
-    "print('Hello','World',end = '***')"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "aName = 'Lily'\n",
-    "age = 27\n",
-    "print(\"%s is %d years old.\"%(aName,age))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "格式化字符串可用的类型声明\n",
-    "\n",
-    "|字符|输出格式|\n",
-    "|:--:|:--|\n",
-    "|d,i|整数|\n",
-    "|u|无符号整数|\n",
-    "|f|m.dddd格式浮点数|\n",
-    "|e|m.dddde+/-xx格式浮点数|\n",
-    "|E|m.ddddE+/-xx格式浮点数|\n",
-    "|g|对指数小于-4或大于5的使用%e，否则%f|\n",
-    "|c|单个字符|\n",
-    "|s|字符串或者任意可通过str转为字符串的python对象|\n",
-    "|%|插入一个常量符号|"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "price = 24\n",
-    "item = \"banana\"\n",
-    "\n",
-    "print(\"The %+10s costs %5.2f cents.\"%(item,price))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "itemdict = {\"item\":\"banana\",\"cost\":24}\n",
-    "print(\"The %(item)s costs %(cost)7.1f cents.\"%itemdict)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 2.4. 控制结构\n",
-    "\n",
-    "算法中最重要的两个控制结构分别是：\n",
-    "\n",
-    "* **迭代**\n",
-    "\n",
-    "* **分支**\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 2.4.1. 迭代结构"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#使用while\n",
-    "counter = 1\n",
-    "while counter <= 5:\n",
-    "    print(\"Hello World!\")\n",
-    "    counter += 1\n",
-    "    print(counter)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# 使用for\n",
-    "for item in list(range(1,10,2)):\n",
-    "    print(item)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "wordlist = ['cat','dog','rabbit']\n",
-    "letterlist = list()\n",
-    "for aword in wordlist:\n",
-    "    for aletter in aword:\n",
-    "        letterlist.append(aletter)\n",
-    "\n",
-    "print(letterlist)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 2.4.2. 分支语句\n",
-    "支持嵌套，使用if end 或者elif关键字。但在使用elif时，最后的else仍然需要，用以处理所有分支条件都不满足的情况"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "score = 30\n",
-    "if score >= 90:\n",
-    "    print(\"A\")\n",
-    "elif score >= 80:\n",
-    "    print(\"B\")\n",
-    "elif score >= 70:\n",
-    "    print(\"C\")\n",
-    "elif score >= 60:\n",
-    "    print(\"D\")\n",
-    "else:\n",
-    "    print(\"F\")\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### 2.4.3. 列表解析式\n",
-    "\n",
-    "通过迭代结构或者分支结构来创建列表"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#复杂版\n",
-    "sqlist = []\n",
-    "for x in range(1,11):\n",
-    "    sqlist.append(x*x)\n",
-    "print(sqlist)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#简单版\n",
-    "sqlist = [x*x for x in range(1,11)]\n",
-    "print(sqlist)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#进阶版\n",
-    "sqlist = [x*x for x in range(1,11) if x%2 == 0]\n",
-    "print(sqlist)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 3. 异常处理\n",
-    "在编程时可能遇到以下类型的错误：\n",
-    "\n",
-    "* 语法错误。编译器报错\n",
-    "\n",
-    "* 逻辑错误。能执行但是返回了错误的结果。\n",
-    "\n",
-    "一些逻辑错误会导致运行时错误，进而导致程序终止运行。通常会把这些错误称为“异常”。程序员可在检测到程序执行有问题的情况下自行创建异常。"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#使用try语句处理被抛弃的异常\n",
-    "import math\n",
-    "anumber = int(input(\"please enter an integer\"))\n",
-    "try:\n",
-    "    print(math.sqrt(anumber))\n",
-    "except:\n",
-    "    print(\"Bad Value for square root.\")\n",
-    "    print(\"Using absolute value instead.\")\n",
-    "    print(math.sqrt(abs(anumber)))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#使用raise语句触发运行时异常\n",
-    "import math\n",
-    "anumber = 23\n",
-    "if anumber < 0:\n",
-    "    raise RuntimeError(\"you can't use a negative number.\")\n",
-    "else:\n",
-    "    print(math.sqrt(anumber))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 4. 定义函数\n",
-    "定义函数后，可以隐藏计算细节化简代码并能重复使用。\n",
-    "\n",
-    "定义函数需要一个函数名，一系列参数以及一个函数体。函数也可以显性返回一个值"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def squareroot(n):\n",
-    "    root = n/2\n",
-    "    for k in range(20):\n",
-    "        root = (1/2)*(root + (n/root))\n",
-    "    return root"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 5. 面向对象编程\n",
-    "\n",
-    "* 面向对象编程语言最强大的一项特性就是允许程序员（问题求解者）创建全新的类，以便对解决问题需要的数据进行建模\n",
-    "\n",
-    "* 之前已经使用了抽象数据类型来对数据对象的状态和行为进行逻辑描述\n",
-    "\n",
-    "* 通过构建能实现抽象数据类型的类，可以利用抽象过程，同时为真正在程序中运用抽象提供必要的细节\n",
-    "\n",
-    "* 可以每当需要实现抽象数据类型，就创建新类"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 5.1. 基本概念\n",
-    "Python中的所有事物都以对象存在。\n",
-    "* 对象即表示客观世界问题空间中的某个具体事物，又表示软件系统解空间中的基\n",
-    "* 对象 = 属性 + 方法\n",
-    "* 对象以id为标识，包含数据（属性），代码（方法），是一类具体事物的特殊实例"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "id(1)#查看对象"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "type(1)#查看对象所属的类"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "dir(1)#查看属性和方法"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "id(abs)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 对象是类的实例，是程序的基本单元\n",
-    "* 要创建一个新的对象，必须先定义一个类\n",
-    "* 同一类的对象具有相同的属性和方法，但属性值和id不同\n",
-    "* 对象可以有多个名称，但只有一个id\n",
-    "* 对象实现了属性和方法的封装，是一种数据抽象机制"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 引用形式：<对象名>.<属性名>\n",
-    "* 如果是单个的属性名，就可以当作一般的变量一样，用在赋值语句和表达式中\n",
-    "* 调用这个类的函数也很方便，记得带括号\n",
-    "* python是动态的语言，除了变量可以动态生成，对象也可以随时增加或删除属性或者方法。例如：<对象名>.<属性名> = 3.6\n",
-    "* 面向对象编程是程序设计范型，同时也是一种程序开发方法"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 5.2. 类的构建【重点】\n",
-    "\n",
-    "使用Fraction类当作案例\n",
-    "\n",
-    "要求：\n",
-    "\n",
-    "* 能针对分数加减乘除\n",
-    "\n",
-    "* 能用标准的斜线显示分数\n",
-    "\n",
-    "* 应返回结果的最简形式\n",
-    "\n",
-    "方案：\n",
-    "\n",
-    "* 提供一个类名\n",
-    "\n",
-    "* 提供一整套与函数定义语法类似的方法定义\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class Fraction:\n",
-    "    #定义构造方法\n",
-    "    def __init__(self,top,bottom):#self是指向对象本身的特殊参数，必须是第一个形式参数，且在调用方法时无需提供相应的实际参数\n",
-    "        #需要分子分母两部分的状态数据\n",
-    "        self.num = top\n",
-    "        self.den = bottom\n",
-    "\n",
-    "myfraction = Fraction(3,5)#创建类的实例\n",
-    "print(myfraction)#打印的是实际引用（地址本身）"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 构造方法定义了数据对象的创建方式\n",
-    "\n",
-    "* 要创建类的实例，必须调用构造方法。使用类名并且传入状态的实际值即可，不要直接调用```__init__```"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#打印本身而不是引用\n",
-    "class Fraction:\n",
-    "    def __init__(self,top,bottom):\n",
-    "        self.num = top\n",
-    "        self.den = bottom\n",
-    "\n",
-    "    def show(self):\n",
-    "        print(self.num,\"/\",self.den)#打印之前还要调用方法，不好用，想把python提供的方法重写\n",
-    "        \n",
-    "myfraction = Fraction(3,5)#创建类的实例\n",
-    "print(type(myfraction.show()))#<class 'NoneType'>\n",
-    "print(myfraction)#不用这个方法，那么打印的是实际引用（地址本身）"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "而python的所有类都提供了一套标准方法。可以看看将对象转化为字符串的方法```__str__```。该方法默认：像之前那样返回地址字符串。那就重写默认实现，或者说重新定义该方法的行为。下面这段代码很重要，说明在不同地方类别会改变\n",
-    "\n",
-    "**KEY**"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#重写原本的实现\n",
-    "#注意发生类别变动，在str部分是str，但打印的实例是自己定义的Fraction，直接展示变量则是实际引用\n",
-    "class Fraction:\n",
-    "    def __init__(self,top,bottom):\n",
-    "        self.num = top\n",
-    "        self.den = bottom\n",
-    "\n",
-    "    def __str__(self):\n",
-    "        print(type(str(self.num) + \"/\" + str(self.den)))#这里是<class 'str'>\n",
-    "        return str(self.num) + \"/\" + str(self.den)\n",
-    "        #return (self.num,\"/\",self.den)#语法错误，不能这么写，不然会报错__str__ returned non-string (type NoneType)\n",
-    "    \n",
-    "myfraction = Fraction(3,5)#创建类的实例\n",
-    "\n",
-    "print(myfraction)\n",
-    "\n",
-    "print(type(myfraction))#打印的数据类别是<class '__main__.Fraction'>\n",
-    "\n",
-    "myfraction#返回的是<__main__.Fraction at 0x256c2689850>实际引用（地址本身）；跟上一条的实例的地址不同"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#重写后的调用方式1\n",
-    "myfraction.__str__()#打印的是str"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#重写后的调用方式2\n",
-    "str(myfraction)#打印的是str"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "思考如何定义这个类的加法"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def __add__(self,otherfraction):#注意第二个参数的名字\n",
-    "    newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
-    "    newden = sel.den * otherfraction.den\n",
-    "    print(Fraction(newnum,newden))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#合并回原来的类定义\n",
-    "\n",
-    "class Fraction:\n",
-    "    def __init__(self,top,bottom):\n",
-    "        self.num = top\n",
-    "        self.den = bottom\n",
-    "\n",
-    "    def __str__(self):\n",
-    "        return str(self.num) + \"/\" + str(self.den)\n",
-    "\n",
-    "    def __add__(self,otherfraction):#注意第二个参数的名字\n",
-    "        newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
-    "        newden = self.den * otherfraction.den\n",
-    "        return(Fraction(newnum,newden))#这里如果用print,会导致最后一句的print出None\n",
-    "\n",
-    "myfra = Fraction(3,5)#创建类的实例\n",
-    "myfrb = Fraction(1,4)\n",
-    "print(myfra + myfrb)#使用其他分数测试，会导致结果未必是最简分数"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "想要计算最简分数，首先要使用辗转相除法（欧几里得算法）找m和n的最大公因数。举例而言，找105和252的最大公因数。252/105 = 2...42，那么这俩数的最大公因数也是42，105的最大公因数（剔除双方一致的部分，留下不一致的，才是影响最大公因数的重要因素）。这一算法的目的是缩小数字方便计算。\n",
-    "\n",
-    "继续进行同样的计算可以不断缩小这两个数直至余数为零。这时，所剩下的还没有变成零的数就是两数的最大公约数。有105/42 = 2...21，那么就是21跟42的最大公因数21\n",
-    "\n",
-    "由辗转相除法也可以推出，两数的最大公约数可以用两数的整数倍相加来表示（裴蜀定理），如$21 = 5\\times 42 + (-2) \\times 252$"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#计算最简分数\n",
-    "\n",
-    "def gcd(m,n):\n",
-    "    while m%n !=0:\n",
-    "        oldm = m\n",
-    "        oldn = n\n",
-    "        \n",
-    "        m = oldn#注意此处结尾是n，因为跟余数相比，原来的除数必然更大\n",
-    "        n = oldm%oldn#取余数\n",
-    "    return n\n",
-    "gcd(105,252)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "展开上方计算过程，注意这次的除数就是下次的被除数。gcd的两个参数无需按照大小来排列，因为\n",
-    "\n",
-    "【m = oldn 会更新除不动的】\n",
-    "\n",
-    "252%105 != 0\n",
-    "\n",
-    "oldm = 252\n",
-    "\n",
-    "oldn = 105\n",
-    "\n",
-    "m = 105\n",
-    "\n",
-    "n = 42\n",
-    "***\n",
-    "\n",
-    "105%42 != 0\n",
-    "\n",
-    "oldm = 105\n",
-    "\n",
-    "oldn = 42\n",
-    "\n",
-    "m = 42\n",
-    "\n",
-    "n = 21"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#改良版本add\n",
-    "def __add__(self,otherfraction):\n",
-    "    newnum = self.num * otherfraction.den + self.den * otherfraction.num\n",
-    "    newden = self.den * otherfraction.den\n",
-    "    common = gcd(newden,newnum)\n",
-    "    return Fraction(newnum/common,newden/common)#这里用单斜杠虽然可以除净，但会导致分子分母的数字带小数点"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#合并进类的定义\n",
-    "\n",
-    "class Fraction:\n",
-    "    def __init__(self,top,bottom):\n",
-    "        self.num = top\n",
-    "        self.den = bottom\n",
-    "\n",
-    "    def __str__(self):\n",
-    "        return str(self.num) + \"/\" + str(self.den)#记住写法\n",
-    "    \n",
-    "    def gcd(m,n):\n",
-    "        while m%n !=0:\n",
-    "            oldm = m\n",
-    "            oldn = n\n",
-    "            \n",
-    "            m = oldn\n",
-    "            n = oldm%oldn#取余数\n",
-    "        return n\n",
-    "\n",
-    "    def __add__(self,otherfraction):\n",
-    "        newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
-    "        newden = self.den * otherfraction.den\n",
-    "        common = gcd(newden,newnum)\n",
-    "        #return str(newnum//common) + '/' + str(newden//common)#这里得用双斜杠,这句返回的是str\n",
-    "        return Fraction(newnum//common,newden//common)#这里返回的是<class '__main__.Fraction'>\n",
-    "\n",
-    "myfra = Fraction(3,5)#创建类的实例\n",
-    "myfrb = Fraction(1,4)\n",
-    "print(type(myfra + myfrb))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "浅相等与深相等\n",
-    "\n",
-    "* 浅相等：同一个对象的引用才行\n",
-    "\n",
-    "* 深相等：数值一致即可\n",
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#重写__eq__方法\n",
-    "def __eq__(self,other):\n",
-    "    firstnum = self.num * other.den\n",
-    "    secondnum = self.den * other.num\n",
-    "    return firstnum == secondnum"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#重写__le__方法\n",
-    "def __le__(self,other):\n",
-    "    firstnum = self.num * other.den\n",
-    "    secondnum = self.den * other.num\n",
-    "    return firstnum < secondnum"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#类的完整实现\n",
-    "class Fraction:\n",
-    "    def __init__(self,top,bottom):\n",
-    "        self.num = top\n",
-    "        self.den = bottom\n",
-    "\n",
-    "    def __str__(self):\n",
-    "        return str(self.num) + \"/\" + str(self.den)#记住写法\n",
-    "    \n",
-    "    def gcd(m,n):\n",
-    "        while m%n !=0:\n",
-    "            oldm = m\n",
-    "            oldn = n\n",
-    "            \n",
-    "            m = oldn\n",
-    "            n = oldm%oldn#取余数\n",
-    "        return n\n",
-    "\n",
-    "    def __add__(self,otherfraction):\n",
-    "        newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
-    "        newden = self.den * otherfraction.den\n",
-    "        common = gcd(newden,newnum)\n",
-    "        #return str(newnum//common) + '/' + str(newden//common)#这里得用双斜杠,这句返回的是str\n",
-    "        return Fraction(newnum//common,newden//common)#这里返回的是<class '__main__.Fraction'>\n",
-    "    \n",
-    "    #重写__eq__方法\n",
-    "    def __eq__(self,other):\n",
-    "        firstnum = self.num * other.den\n",
-    "        secondnum = self.den * other.num\n",
-    "        return firstnum == secondnum\n",
-    "    \n",
-    "    def __le__(self,other):\n",
-    "        firstnum = self.num * other.den\n",
-    "        secondnum = self.den * other.num\n",
-    "        return firstnum < secondnum\n",
-    "    "
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 5.3. 类的继承【难点】\n",
-    "\n",
-    "继承使一个类与另一个类相关联。子类从父类继承特征，父类又叫超类\n",
-    "\n",
-    "通过将类组织成继承层次结构：\n",
-    "\n",
-    "* 面向对象编程语言使以前编写的代码能扩展到新的应用场景中\n",
-    "\n",
-    "* 能更好地理解各种关系，更高效地构建抽象表示\n",
-    "\n",
-    "使用电路来举例。与，或，非门的讲解略过\n",
-    "\n",
-    "思路：\n",
-    "\n",
-    "1. 最基础的逻辑门的通用特性：逻辑门的名字和输出\n",
-    "\n",
-    "2. 第一次继承的逻辑门的特性：有一个输入还是两个输入（也叫“引脚”，pin）\n",
-    "\n",
-    "3. 第二次继承的逻辑门的特性：按照具体的来写\n",
-    "\n",
-    "此外还需要能让用户获取逻辑门的标签，还要能进行逻辑计算"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#超类LogicGate\n",
-    "class LogicGate:\n",
-    "    def __init__(self,n):#n是标签名\n",
-    "        self.label = n\n",
-    "        self.output = None#初期是啥都没有\n",
-    "    def getLabel(self):\n",
-    "        return self.label#获取标签\n",
-    "    def getOutput(self):\n",
-    "        self.output = self.performGateLogic()#创建一个方法，并且没有实行细节，等继承后再具体写特定函数，方便代码复用\n",
-    "        return self.output"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "介绍继承常用的函数：[super](https://www.runoob.com/python/python-func-super.html)\n",
-    "\n",
-    "1. super() 函数是用于调用父类(超类)的一个方法。语法如下```super(type[, object-or-type])```前者是类。后者也是类，一般是self\n",
-    "2. Python3.x 和 Python2.x 的一个区别是: Python 3 可以使用直接使用```super().xxx``` 代替 ```super(Class, self).xxx ```\n",
-    "3. 子类的构造方法需先调用父类的构造方法，再初始化自己独有的数据\n",
-    "4. 示范代码"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class A:\n",
-    "     def add(self, x):\n",
-    "         y = x+1\n",
-    "         print(y)\n",
-    "class B(A):\n",
-    "    def add(self, x):#定义子类中的add函数，函数名，参数形式是一样的\n",
-    "        super().add(x)#从父类中的add函数而来\n",
-    "b = B()\n",
-    "b.add(2)  # 3"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#1个引脚（输入）的门\n",
-    "#继承！\n",
-    "class UnaryGate(LogicGate):\n",
-    "    def __init__(self,n):\n",
-    "        super().__init__(n)#继承了父类的init，和调用函数的书写方式一致\n",
-    "        self.pin = None\n",
-    "    def getPin(self):\n",
-    "        return int(input(\"Enter pin input for gate \" + self.getLabel() + \"-->\"))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#2个引脚的门\n",
-    "class BinaryGate(LogicGate):\n",
-    "    def __init__(self,n):\n",
-    "        super().__init__(n)\n",
-    "        self.pinA = None\n",
-    "        self.pinB = None\n",
-    "    \n",
-    "    def getPinA(self):\n",
-    "        return int(input(\"Enter pin A input for gate \" + self.getLabel() + \"-->\"))\n",
-    "\n",
-    "    def getPinB(self):\n",
-    "        return int(input(\"Enter pin B input for gate \" + self.getLabel() + \"-->\"))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "进一步地定义具体的类，只用添加布尔运算"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#和门\n",
-    "class AndGate(BinaryGate):\n",
-    "    def __init__(self,n):\n",
-    "        super().__init__(n)\n",
-    "    def performGateLogic(self):\n",
-    "        a = self.getPinA()\n",
-    "        b = self.getPinB()\n",
-    "        if a == 1 and b == 1:\n",
-    "            return 1\n",
-    "        elif a*b == 0:\n",
-    "            return 0\n",
-    "        else:\n",
-    "            return 'Error Input!'"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#创建对象！\n",
-    "g1 = AndGate(\"G1\")\n",
-    "g1.getOutput()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class NotGate(UnaryGate):\n",
-    "    def __init__(self,n):\n",
-    "        super().__init__(n)\n",
-    "    def performGateLogic(self):\n",
-    "        a = self.getPin()\n",
-    "        if a == 0:\n",
-    "            return 1\n",
-    "        elif a == 1:\n",
-    "            return 0\n",
-    "        else:\n",
-    "            return 'Error Input!'"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "g2 = NotGate(\"G2\")\n",
-    "g2.getOutput()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class OrGate(BinaryGate):\n",
-    "    def __init__(self,n):\n",
-    "        super().__init__(n)\n",
-    "    def performGateLogic(self):\n",
-    "        a = self.getPinA()\n",
-    "        b = self.getPinB()\n",
-    "        if a == 0 and b == 0 :\n",
-    "            return 0\n",
-    "        else:\n",
-    "            return 1"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "g3 = OrGate(\"g3\")\n",
-    "g3.getOutput()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "逻辑门创建完毕，现在需要把这些对象连接起来。前一个的输出是后一个的输入（数据值从这个门（fromgate）的输出“流向”另一个门(togate)的输入）。因此创建新的类Connector\n",
-    "\n",
-    "请注意，Connector并不在这些Gate的继承层次中，但它会使用该结构 ——— 每个Connector对象的两端都有个逻辑门\n",
-    "\n",
-    "这就是HAS-A关系：Connector对象的内部包含LogicGate类的实例，但不在继承层次结构中。Connector has a LogicGate\n",
-    "\n",
-    "在预先设计类时，区分IS-A(需要继承)，HAS-A（不需要继承）关系非常重要"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class Connector:\n",
-    "    def __init__(self,fgate,tgate):\n",
-    "        self.fromgate = fgate\n",
-    "        self.togate = tgate\n",
-    "        \n",
-    "        tgate.setNextPin(self)\n",
-    "        \n",
-    "    def getFrom(self):\n",
-    "        return self.fromgate\n",
-    "    \n",
-    "    def getTo(self):\n",
-    "        return self.togate"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "setNextPin可以看到是属于逻辑门的，需要添加进去，**使得每个togate能够选择适当的输入**。但在BinaryGate类中，有2个输入，不妨默认为选择pinA，不行才选pinB，如果还不行就无法连接逻辑门。\n",
-    "\n",
-    "==> 现在输入源有两种：\n",
-    "\n",
-    "* 来自外部\n",
-    "* 来自上一个逻辑门的输出\n",
-    "\n",
-    "用AndGate举例说明，有：\n",
-    "\n",
-    "1. 如果输入没有和任何逻辑门连接，那就要求用户输入\n",
-    "\n",
-    "2. 如果有连接，就访问该连接以便获取fromgate的输出\n",
-    "\n",
-    "3. 在第2步会触发fromgate的处理逻辑\n",
-    "\n",
-    "4. 该过程一直持续到获取影响最终输出值的每一个输入\n",
-    "\n",
-    "在某种意义上，该电路反向工作，以获取所需输入，再计算最后的结果"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#修改后的和门\n",
-    "class AndGate(BinaryGate):\n",
-    "    def __init__(self,n):\n",
-    "        super().__init__(n)\n",
-    "    def setNextPin(self,source):\n",
-    "        if self.pinA == None:\n",
-    "            self.pinA = source\n",
-    "        elif self.pinB == None:\n",
-    "            self.pinB == source\n",
-    "        else:\n",
-    "            raise RuntimeError(\"Error:No Empty Pins\")\n",
-    "    def performGateLogic(self):\n",
-    "        a = self.getPinA()\n",
-    "        b = self.getPinB()\n",
-    "        if a == 1 and b == 1:\n",
-    "            return 1\n",
-    "        elif a*b == 0:\n",
-    "            return 0\n",
-    "        else:\n",
-    "            return 'Error Input!'\n",
-    "    def getPinA(self):\n",
-    "        if self.pinA == None:\n",
-    "            return int(input(\"ENTER PIN A FOR GATE \" + \\\n",
-    "                         self.getLabel() + \"-->\"))\n",
-    "        else:\n",
-    "            return self.pinA.getFrom().getOutPut()# setNextPin将PinA设定为链接器source，所以可以调用getFrom()函数\n",
-    "    def getPinB(self):\n",
-    "        if self.pinB == None:\n",
-    "            return int(input(\"ENTER PIN B FOR GATE \" + \\\n",
-    "                         self.getLabel() + \"-->\"))\n",
-    "        else:\n",
-    "            return self.pinB.getFrom().getOutPut()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class OrGate(BinaryGate):\n",
-    "    def __init__(self, n) -> None:\n",
-    "        super().__init__(n)\n",
-    "    def performGateLogic(self):\n",
-    "        a = self.getPinA()\n",
-    "        b = self.getPinB()\n",
-    "        if a == 1 or b == 1:\n",
-    "            return 1 \n",
-    "        else:\n",
-    "            return 0\n",
-    "    def setNextPin(self,source):\n",
-    "        if self.pinA == None:\n",
-    "            self.pinA = source\n",
-    "        else:\n",
-    "            if self.pinB == None:\n",
-    "                self.pinB = source\n",
-    "            else:\n",
-    "                raise RuntimeError(\"Error:no empty pins\")\n",
-    "    def getPinA(self):\n",
-    "        if self.pinA == None:\n",
-    "            return int(input(\"ENTER PIN A FOR GATE \" + \\\n",
-    "                         self.getLabel() + \"-->\"))\n",
-    "        else:\n",
-    "            return self.pinA.getFrom().getOutPut()\n",
-    "    def getPinB(self):\n",
-    "        if self.pinB == None:\n",
-    "            return int(input(\"ENTER PIN B FOR GATE \" + \\\n",
-    "                         self.getLabel() + \"-->\"))\n",
-    "        else:\n",
-    "            return self.pinB.getFrom().getOutPut()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class NotGate(UnaryGate):\n",
-    "    def __init__(self, n) -> None:\n",
-    "        super().__init__(n)\n",
-    "    def performGateLogic(self):\n",
-    "        a = self.getPin()\n",
-    "        if a == 1 :\n",
-    "            return 0 \n",
-    "        else:\n",
-    "            return 1\n",
-    "    def setNextPin(self,source):\n",
-    "        if self.pin == None:\n",
-    "            self.pin = source#设定链接器\n",
-    "        else:\n",
-    "            raise RuntimeError(\"Error:no empty pins\")\n",
-    "    def getPin(self):\n",
-    "        if self.pin == None:\n",
-    "            return int(input(\"ENTER PIN FOR GATE\" + \\\n",
-    "                         self.getLabel() + \"-->\"))\n",
-    "        else:\n",
-    "            return self.pin.getFrom().getOutPut()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "******"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 【补充】"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 6. 类的定义与调用"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 6.1. 类的定义\n",
-    "* 类是对象的模板，封装了对应现实实体的性质和行为\n",
-    "* 实例对象是类的具体化\n",
-    "* 类是模具，对象是模具制造出来的零件\n",
-    "* 类的出现，为面向对象编程的三个最重要特性提供了实现手段：封装性，继承性，多态性【同一段代码可以处理不同的对象，甚至不同类型的对象】\n",
-    "* 自定义类，用大写字母开头。函数用小写字母。因为类和函数在使用的时候形式完全一致的\n",
-    "* 定义类：class<类名>:\n",
-    "* 类的初始化：\n",
-    "    class<类名>:\n",
-    "        def __init__(self,<参数表>):\n",
-    "* 类的函数里，第一个参数总是self。类方法中，self指这个对象实例自己\n",
-    "* 调用：<类名>(<参数>)\n",
-    "* 加法返回重新生成的力的对象"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 6.2. 类定义中的特殊方法"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 特殊方法也被称为魔术方法。在类定义中实现特殊方法，可以方便地使用python中的内置操作。\n",
-    "* 所有特殊方法以两个下划线开始和结束\n",
-    "* 对象构造器：__init__(sekf,[])\n",
-    "* 析构器：__del(self,[])"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "from os.path import join\n",
-    "class FileObject:\n",
-    "    def __init__(self,filepath = '~',filename = 'sample.txt') -> None:\n",
-    "        self.file = open(join(filepath,filename),'r4')\n",
-    "    def __del__(self):\n",
-    "        self.file.close()\n",
-    "        del self.file"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "from manim import *\n",
-    "\n",
-    "config.media_width = \"75%\"\n",
-    "config.verbosity = \"WARNING\""
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "%%manim -qm CircleToSquare\n",
-    "\n",
-    "class CircleToSquare(Scene):\n",
-    "    def construct(self):\n",
-    "        blue_circle = Circle(color=BLUE, fill_opacity=0.5)\n",
-    "        green_square = Square(color=GREEN, fill_opacity=0.8)\n",
-    "        self.play(Create(blue_circle))\n",
-    "        self.wait()\n",
-    "        \n",
-    "        self.play(Transform(blue_circle, green_square))\n",
-    "        self.wait()"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 算数操作符：\n",
-    "  1) __add__(self,other)\n",
-    "  2) __sub__(self,other)\n",
-    "  3) __mul__(self,other)\n",
-    "  4) __div__(self,other)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 反运算:自己self作为右操作数\n",
-    "  1) __radd__(self,other)\n",
-    "  2) __rsub__(self,other)\n",
-    "  3) __rmul__(self,other)\n",
-    "  4) __rdiv__(self,other)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 大小比较\n",
-    "1) __eq__(self,other)\n",
-    "2) __ne__(self,other)\n",
-    "3) __lt__(self,other):<\n",
-    "4) __gt__(self,other):>\n",
-    "5) __le__(self,other):<=\n",
-    "6) __ge__(self,other):>="
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 若特殊函数本身已经符合要求，那么只用把下划线__特殊方法__ = 特殊方法即可"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 字符串操作\n",
-    "  1) __str__(self)#自动转换为字符串\n",
-    "  2) __repr__(self)#对象的正式表达\n",
-    "  3) __len__(self)#返回元素个数"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 7. 自定义对象的排序"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## 7.1. 列表排序"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 列表方法sort()，按内容排序，改变原列表内容。\n",
-    "* 如都是数字，默认按升序排序\n",
-    "* 如元素都是字符串，会按字母表排序\n",
-    "* sorted()：返回排序好的，原列表内容不变\n",
-    "* 只有列表元素属于同一种类型时，sort()和sorted()才会正常工作。因为基于__lt__特殊方法：该方法应return True"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 8. 类的继承"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 继承方便了代码复用\n",
-    "* class <子类名>(<父类名>):\n",
-    "      def <重定义方法>(self,...):\n",
-    "* 这就是覆盖override\n",
-    "* 还可以添加父类中没有的方法和属性： "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class Car:\n",
-    "    def __init__(self,name) -> str:# -> type:不影响原本的类型\n",
-    "        self.name = name\n",
-    "        self.remain_mile = 0\n",
-    "\n",
-    "class GasCar(Car):\n",
-    "    def __init__(self, name,capacity) -> None:\n",
-    "        super().__init__(name)#父类初始化方法，只有名字\n",
-    "        #在__init__(name)里，只有Name被重新初始化是因为Car的初始化里只使用了name参数\n",
-    "        self.remain_mile = 70\n",
-    "        self.capacity = capacity#新添加方法\n",
-    "\n",
-    "a = Car('BMW')\n",
-    "print(type(a))\n",
-    "\n",
-    "b = GasCar('BMW',60)\n",
-    "print(b.remain_mile)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* self的作用：在类的内部，实例化过程中传入的所有数据都给这个变量\n",
-    "* 这个变量和类没有关系，是独立的一个实例变量\n",
-    "* self代表的是对象实例\n",
-    "* gcar.run(200.0)等价于GasCar.run(gcar,200.0)"
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "base",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.12.7"
-  },
-  "toc": {
-   "base_numbering": 1,
-   "nav_menu": {},
-   "number_sections": false,
-   "sideBar": false,
-   "skip_h1_title": false,
-   "title_cell": "Table of Contents",
-   "title_sidebar": "Contents",
-   "toc_cell": true,
-   "toc_position": {
-    "height": "392.4px",
-    "left": "120px",
-    "top": "110.525px",
-    "width": "266px"
-   },
-   "toc_section_display": true,
-   "toc_window_display": true
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 2
+    "cells": [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "\n",
+                "* :: Duplication operations in which the result returned is a duplication of references\n",
+                "\n",
+                "\n",
+                "[Web site references for relationship descriptions] (https://www.cnblogs.com/dhm520/p/8423392.html)\n",
+                "\n",
+                "* **IS-A**: is-a, representing an **inheritance** relationship. If A is-a B, then B is the parent class of A. A class completely contains all the attributes and behavior of another class.\n",
+                "  For example, a PC is a computer and a workstation is a computer; PCs and workstations are two different types of computers, but both inherit the common characteristics of computers. is-a (English: subsumption, inclusion) refers to the inclusive relationship embodied between abstractions (such as classes or types).\n",
+                "\n",
+                "* **HAS-A**: has a, representing a **subordinate** relationship. If A has a B, then B is a component of A. Objects of the same kind can be distinguished by the different values of their attributes.\n",
+                "  For example, one PC's operating system is Windows and another PC's operating system is Linux. operating system is a member variable of the PC, and different PC objects can be distinguished based on different values of this member variable.\n",
+                "\n",
+                "* **LIKE-A**: like one, representing a **combination** relationship. If A like a B, then B is an interface to A. The new type has the interface of the old type, but also contains other functions, so they cannot be said to be identical.\n",
+                "  For example, a cell phone can be said to be a microcomputer, but the phone dialing numbers is not a computer with the behavior, so the phone inherits the characteristics of the computer, and at the same time need to realize the communication function, which needs to be used as a separate interface, rather than the behavior of the computer."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 1.3. what is computer science?"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Computer science is \n",
+                "* the study of problems, problem-solving and the solutions that come out of the problem-solving process.\n",
+                "* thought as the study of solutions, or rather, the study of solutions to problemsas well as the study of problems with no solutions.\n",
+                "* the study of problems that are and that are not computable, the study of existence and the nonexistence of algorithms.\n",
+                "* the study of abstraction. Abstraction allows us to view the problem and solution in such a way as to separate the so-called logical and physical perspectives."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Algorithm is \n",
+                "* a step-by-step list of instructions for solving any instance of the problem that might arise.\n",
+                "* **finite** processes that if followed will solve the problem.\n",
+                "* solution.\n",
+                "* considered independent from machine.\n",
+                "* describes the solution to a problem in terms of the data needed to represent the problem instance and the set of steps necessary to produce the intended result.(1.3.1.)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Computable \n",
+                "* describing problems and solutions.\n",
+                "* if an algorithm exists for solving it."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Someone could view computers from logical or user perspective, and functions are sometimes also reffered to as the interface.(port)The user of the abstraction, sometimes also called client, does not need to know the details as long as the user is aware of the way the interface works. \n",
+                "\n",
+                "While computer scientists, programmers, technology support staff, and system administrators must know the details of how operating systems work, how network protocols are configured, and how to code various scripts that control function. They must be able to control the low-level details that a user simply assumes."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The interface is the way we as users communicate with the underlying complexities of the implementation. Consider the python math module as an example of procedural abstraction, who could be referred to as a black box view of a process. The interface could be simply described: \n",
+                "* the name of function\n",
+                "* what is needed(parameters)\n",
+                "* what will be returned\n",
+                "  \n",
+                "the details are hidden inside black box."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 1.3.1. What is programming?\n",
+                "Programming is the process of taking an algorithm and encoding it into anotion,a programming language,so that it can be executed by a computer.\n",
+                "\n",
+                "Programming languages must provide a notational way to represent both the process and the data. To this end, provide \n",
+                "* control constructs(sequential processing, selection for decision-making,iteration for repetitive control) \n",
+                "* data types, who give all these data items represented as strings of binary digits meaning.\n",
+                "\n",
+                "These low-level, build-in data types (sometimes called **_the primitive data types_**) provide the building blocks for algorithm development."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 1.3.2. Why study Data Structures and Absreact Data Type?\n",
+                "\n",
+                "An abstract data type, sometimes abbreviated ADT, is a logical description of how we view the data and the operations that are allowed without regard to how they will be implemented.\n",
+                "\n",
+                "$\\implies$ we are concerned only with what the data is representing and not with how it will eventually be constructed.\n",
+                "\n",
+                "\n",
+                "Data abstraction : using encapsulation for information hiding.\n",
+                "\n",
+                "An abstract data type,in short, ADT, can be used as the shell that user interacts with, which is a logical description of how we view the data and the operations that are allowed without regard to how they will be implemented.\n",
+                "\n",
+                "While **the implementation of an ADT,often referred to as a data structure**,will require that we provide a physical view of the data, using some collection of programming constructs, and primitive data types.\n",
+                "\n",
+                "With this inplementation-independent view of the data,users can remain focused on the problem-solving process,getting rid of details of the implementation(1.3.)."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 1.3.3. Why study algorithms?\n",
+                "By considering a number of different algorithms, we can begin to develop pattern recognition so that the next time a similar problem arises, we are better able to solve it.\n",
+                "\n",
+                "As we study algorithms, we can learn analysis techniques that allow us to compare and contrast solutions solely on their own characteristics, not the characteristics of the program or computer used to implement them."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 1.4. Review of basic python"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 1.4.1. Getting started with data\n",
+                "* Python supports the object-oriented, which means that Python condiders data to be the focal point of the problem-solving process. We define a **class** to describe what the data look like (the state) and what the data can do (the behavior).\n",
+                "* Classes are analogous to abstract data types because a user of a class only sees the state and the behavior of a data item.\n",
+                "* Data items are called **objects** in the object-oriented paradigm.\n",
+                "* An object is an instance of a class."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 1.4.1.1. Built-in Atomic data types\n",
+                "**numeric classes**\n",
+                "\n",
+                "* Python has 2 main built-in numeric classes, interger and floating point data types, called int and float.\n",
+                "* The standard arithmetic operations ```+```, ```-```, ```*```, ```/```, and ```**``` (exponentiation), can be used with parentheses, forcing the order of operations away from normal operator precedence.\n",
+                "* Other very useful operations are the remainder (modulo) operator, ```%```, and integer division, ```//```.\n",
+                "* When 2 intergers are divided, the result is a floating point.\n",
+                "* The integer division operator ```//``` returns the integer portion of the quotient by truncating any fractional part."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "6/3"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "3//6"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**bool class**\n",
+                "* The boolean data type is implemented as the Python bool class\n",
+                "* For repesenting truth values.\n",
+                "* The possible state values for a boolean object are **True** and **False**\n",
+                "* The standard boolean operators are ```and```, ```or```, ```not```.\n",
+                "* Boolean objects are also used as results for comparison operators such as equality ```==``` and greater than```>```.\n",
+                "* In addition, relational operators and logical operators can be combined together to form complex logical questions."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**Identifiers / Names**\n",
+                "* Identifiers are used in programming languages as names. \n",
+                "* In python, identifiers started with a letter or an underscore ```_```, and **case-sensitive**.\n",
+                "* Assignment statements ```=``` provide a way to associate a name with a value.\n",
+                "* The python variable is created when a name is used for the first time on the left-hand side of an assignment.\n",
+                "* A Python variable will hold a **_reference_** to a piece of data, not the data itself.\n",
+                "* In general, the right-hand side of the assignment statement is evaluated, and a reference to the resulting data object is \"assigned\" to the name on the left-hand side.\n",
+                "* The same variable can refer to many different types of data.\n",
+                "\n",
+                "key point :\n",
+                ">The assignment statement changes the reference being held by the variable, which is a **dynamic** characteristic of Python.\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "|name|assignment statement|value|\n",
+                "|:--:|:--:|:--:|\n",
+                "|The python variable is created when a name is used for the first time|$\\xLeftarrow {a\\ reference}$|evaluated|"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "#### 1.4.1.2. Built-in Collection Data types \n",
+                "\n",
+                "|method|ordered|mutable|\n",
+                "|:---:|:---:|:---:|\n",
+                "|list|Sequentially|Y|\n",
+                "|string|Sequentially|N|\n",
+                "|tuple|Sequentially|N|\n",
+                "|set|N|Y|\n",
+                "|dictionary|Insertion(from Python 3.7+)|Y|"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "$\\Longrightarrow$ \n",
+                "\n",
+                "**operations on any sequence in python**\n",
+                "|Name|Notion|\n",
+                "|----|----|\n",
+                "|indexing|[ ]|\n",
+                "|concatenation|\\+|\n",
+                "|repetition|\\*|\n",
+                "|membership|in|\n",
+                "|length|len|\n",
+                "|slicing|[ : ]|\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**List**\n",
+                "* is an ordered collection of zero or more **references**.\n",
+                "* is heterogeneous, meaning that the data objects need not all be from the same class and the collection can be assigned to a variable.\n",
+                "\n",
+                "tips:\n",
+                "> When Python evaluates a list, the list itself is returned. To remember the returned one for later processing, its reference needs to be assigned to a variable."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 32,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# List is written as comma-delimited values enclosed in square brackets.\n",
+                "l1 = []\n",
+                "l2 = list()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Operations for **list**\n",
+                "\n",
+                "* The slice operation,take myList[1:3] as example,returns a list of items starting with 2nd item,and not including the item indexed by 3"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Lists could be quickly initialized by repetition.\n",
+                "myList = [0]*6\n",
+                "myList"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# The result is a repetition of references \n",
+                "myList = [1,2,3,4]\n",
+                "A = [myList] * 3\n",
+                "print(A)\n",
+                "print('**********************')\n",
+                "myList[2] = 45\n",
+                "print(A)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**Methods provided by list in python**\n",
+                "| Method | List Changed | Reference Changed | Returned |\n",
+                "|-----|:-----------:|:----------:|:--------:|\n",
+                "| alist.sort() | Y | N | None |\n",
+                "| sorted(alist) | N | N | Sorted List |\n",
+                "| alist.reverse() | Y | N | None |\n",
+                "| reversed(alist) | N | N | Iterator |\n",
+                "| alist.pop() | Y | N | Last Item |\n",
+                "| alist.pop(i) | Y | N | Item at ```i``` |\n",
+                "| del alist[i] | Y | N | None |\n",
+                "| alist.insert(i,item) | Y | N | None |\n",
+                "| alist.append(item) | Y | N | None |\n",
+                "| alist.index(item) | N | N | Index ```i``` |\n",
+                "| alist.count(item) | N | N | Integer |\n",
+                "| alist.remove(item) | Y | N | None |\n",
+                "|alist.clear()|Y|N|None|\n",
+                "|alist.extend(blist)|alist|N|None|\n",
+                "|alist + blist|N|N|New List|\n",
+                "\n",
+                "* It would be better to name the new list returned by ```sorted``` or```reversed```.\n",
+                "* There is another reference for the result of ```alist.extend(blist)```, while the alist could be used as the result of extention.\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "help(id)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# Return the identity of an object."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.sort())\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# Return the identity of an object."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(sorted(alist))\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {
+                "scrolled": true
+            },
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.reverse())#through print None,the list still changed.\n",
+                "print(alist)\n",
+                "print(id(alist))#id did not changed"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(reversed(alist))#it creates something new.\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#hexadecimal\n",
+                "hex_add = f\"0x{id(alist):016X}\"# Automatically handles the uppercase conversion with X format specifier\n",
+                "print(hex_add)\n",
+                "#Python reversed() method returns an iterator that accesses the given sequence in the reverse order.\n",
+                "blist = reversed(alist)\n",
+                "print(blist)#It turns out to be a NEW reference."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(list(blist))# the returned item changed\n",
+                "print(id(list(blist)))#id changed\n",
+                "print(f\"0x{id(list(blist)):016X}\")# the returned Iterator also has different id from the list you make"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "$\\Longrightarrow$ So you should name the list returned by 'reversed'."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.pop())\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.pop(3))\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "del alist[2]"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.insert(6,'badApple'))\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.append(7))\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.index(3))\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.count(3))\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = [1,2,3,4,1,9,7,5,3]\n",
+                "id(alist)# renew"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.remove(3))\n",
+                "print(alist)#remove the first 3\n",
+                "print(id(alist))#not changed"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist.clear())\n",
+                "print(alist)\n",
+                "print(id(alist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = ['apple', 'banana', 'cherry']\n",
+                "blist = (1, 4, 5, 9)#tuple\n",
+                "\n",
+                "print(id(alist))\n",
+                "print(id(blist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#clist = alist.extend(blist)#there must be another id\n",
+                "print(alist.extend(blist))\n",
+                "print(id(alist.extend(blist)))#exrenf blist 2 times"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist)\n",
+                "print(id(alist))\n",
+                "print(blist)\n",
+                "print(id(blist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = ['apple', 'banana', 'cherry']\n",
+                "blist = [1, 4, 5, 9]\n",
+                "\n",
+                "print(id(alist))\n",
+                "print(id(blist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(alist + blist)\n",
+                "print(alist)\n",
+                "print(id(alist))\n",
+                "print(blist)\n",
+                "print(id(blist))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "alist = ['apple', 'banana', 'cherry']\n",
+                "blist = [1, 4, 5, 9]\n",
+                "\n",
+                "print(id(alist))\n",
+                "print(id(blist))\n",
+                "print(id(alist + blist))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The dot notion is asking for an object to invoke a method. Even if it is integer."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 1,
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {
+                        "text/plain": [
+                            "86"
+                        ]
+                    },
+                    "execution_count": 1,
+                    "metadata": {},
+                    "output_type": "execute_result"
+                }
+            ],
+            "source": [
+                "(54).__add__(32)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The another common python function conjunction with ```list``` is the ```range```, who produces a range object that represents a sequence of values."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 6,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "range(0, 10)\n",
+                        "[5, 6, 7, 8, 9]\n",
+                        "[1, 3, 5, 7, 9]\n"
+                    ]
+                }
+            ],
+            "source": [
+                "print(range(0,10))\n",
+                "print(list(range(5,10)))\n",
+                "print(list(range(1,10,2)))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**String**\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "MyName = \"David\"\n",
+                "MyName[0] = 'x'"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 1.4. tuple [unalterable]\n",
+                "Tuples, like sequences, allow any of the operations previously described"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "t1 = ()\n",
+                "t2 = tuple()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Tuples VS Lists\n",
+                "* :: Lists or tuples are heterogeneous\n",
+                "* :: Subscripts are continuous from zero\n",
+                "* :: Addition and multiplication\n",
+                "* len()\n",
+                "* Index alis[n] or atuple[n]. The result obtained can be used as a name on the left side of the assignment statement [tuples cannot be reassigned], or of course on the right side.\n",
+                "* 切片alist[start:end:step]；atuple[star:end:step]]\n",
+                "* in\n",
+                "* index\n",
+                "* count\n",
+                "* sum\n",
+                "* min/max\n",
+                "\n",
+                "Different:\n",
+                "* :: Tuples are not modifiable, lists are modifiable\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {
+                "scrolled": true
+            },
+            "outputs": [],
+            "source": [
+                "MyTuple = (2,True,4.96)\n",
+                "MyTuple[1] = False"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Unordered collection\n",
+                "* set\n",
+                "* dictionary"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 2. Unordered sets"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 2.1. collection [unchangeable]\n",
+                "\n",
+                "or set, is an unordered collection of zero or more unmodifiable Python data objects that does not allow duplicate elements and is heterogeneous\n",
+                "\n",
+                "But it also supports some of the previous operations\n",
+                "\n",
+                "|method name|usage|\n",
+                "|:--:|:--:|\n",
+                "|query element|in|\n",
+                "|length|len|\n",
+                "|并集|aset \\| otherset|\n",
+                "|交集|aset&otherset|\n",
+                "|差集|aset - otherset|\n",
+                "|whether subset|aset <= otherset|\n",
+                "\n",
+                "The special operations of set are\n",
+                "\n",
+                "|method name|usage|\n",
+                "|:--:|:--:|\n",
+                "|并集|aset.union(otherset)|\n",
+                "|交集|aset.intersection(otherset)|\n",
+                "|差集|aset.difference(otherset)|\n",
+                "|是否子集|aset.issubset(otherset)|\n",
+                "|element add|aset.add(item)|\n",
+                "|elementRemove|aset.remove(item)|\n",
+                "|randomize deletion|aset.pop()|\n",
+                "|elements all clear|aset.clear()|"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 2.2. Dictionary [subject to change]"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: Dictionaries are labeled data. The set of pairs of label key and data value is called a dictionary\n",
+                "* Indexes data by tags or keywords, as opposed to lists or tuples which are indexed by consecutive integers.\n",
+                "* :: Adding a new value is also done with the key\n",
+                "* :: Is unorganized. The position of the key is determined by the hash\n",
+                "* :: Is of variable type and can be added deleted or replaced"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "student = {}\n",
+                "student = dict()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext = {'david':1410,\"brad\":1137}\n",
+                "phoneext"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext.keys()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext.values()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "list(phoneext.values())"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext.items()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "list(phoneext.items())"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext.get(\"kent\", \"no entry\")# If not, return no entry"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext['david']"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "phoneext.update(friends = [\"a\",\"b\"])\n",
+                "phoneext"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Data item (item)\n",
+                "* :: Include key and value, concatenated with a colon\n",
+                "* value has no order and can be of any type, even a dictionary\n",
+                "* [key can only be immutable type]: numeric value, string and tuple. For example, tuples are used as coordinates, index elements."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Dictionary updating program\n",
+                "\n",
+                "* :: Merge dictionaries: overwrite the same key, add a key where none exists\n",
+                "\n",
+                "* :: Growing dictionaries:\n",
+                "\n",
+                "1) ```dic[key]=value```\n",
+                "\n",
+                "2) ```dic.update(friends = [\"a\",\"b\"])```\n",
+                "\n",
+                "* :: Dictionary reduction.\n",
+                "  \n",
+                "1) ```del student['age']```\n",
+                "\n",
+                "2) ```student.pop('course')```\n",
+                "\n",
+                "3) ```student.popitem()``` [randomly removes and returns a data item, good for traversing dictionaries]\n",
+                "\n",
+                "4) Clear the dictionary clear\n",
+                "\n",
+                "* :: Dictionary size len\n",
+                "\n",
+                "* :: Tag indexing\n",
+                "\n",
+                "1)```dict[key]```\n",
+                "\n",
+                "2)```student.get(key)```\n",
+                "\n",
+                "* The keys function returns all the tags in the dictionary.\n",
+                "* :: The values function returns all the data values in the dictionary\n",
+                "* :: items returns a binary set of data items as key-value pairs\n",
+                "* :: Determining whether a label exists: the in operation\n",
+                "* :: Determining the existence of values: the in + values operation"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "student.update(friends = [\"a\", \"b\"])# No double quotes!\n",
+                "#student.pop('friends')\n",
+                "print(student)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 2.3. Inputs and outputs\n",
+                "Format the string as follows"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(\"Hello\",\"World\",sep = \"***\")\n",
+                "print('Hello','World',end = '***')"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "aName = 'Lily'\n",
+                "age = 27\n",
+                "print(\"%s is %d years old.\"%(aName,age))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Type declarations available for formatting strings\n",
+                "\n",
+                "|Characters|Output Format|\n",
+                "|:--:|:--|\n",
+                "|d,i| integer|\n",
+                "|u|unsigned integers|\n",
+                "|f|m.dddd format floating point numbers|\n",
+                "|e|m.dddde+/-xx format floating point number|\n",
+                "|E|m.ddddE+/-xx format floating point number|\n",
+                "|g| Use %e for indices less than -4 or greater than 5, otherwise %f|.\n",
+                "|c|single character|\n",
+                "|s| string or any python object that can be converted to a string by str|.\n",
+                "|%|Insert a constant symbol|"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "price = 24\n",
+                "item = \"banana\"\n",
+                "\n",
+                "print(\"The %+10s costs %5.2f cents.\"%(item,price))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "itemdict = {\"item\":\"banana\",\"cost\":24}\n",
+                "print(\"The %(item)s costs %(cost)7.1f cents.\"%itemdict)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 2.4. control structure\n",
+                "\n",
+                "The two most important control structures in the algorithm are:\n",
+                "\n",
+                "***Iteration**\n",
+                "\n",
+                "**Branch**\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 2.4.1. Iterative structure"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Use while\n",
+                "counter = 1\n",
+                "while counter <= 5:\n",
+                "    print(\"Hello World!\")\n",
+                "    counter += 1\n",
+                "    print(counter)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Use for\n",
+                "for item in list(range(1,10,2)):\n",
+                "    print(item)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "wordlist = ['cat','dog','rabbit']\n",
+                "letterlist = list()\n",
+                "for aword in wordlist:\n",
+                "    for aletter in aword:\n",
+                "        letterlist.append(aletter)\n",
+                "\n",
+                "print(letterlist)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 2.4.2. Branching statements\n",
+                "Nesting is supported, using the if end or elif keywords. However, when using elif, the final else is still needed to handle the case where all the branching conditions are not satisfied."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "score = 30\n",
+                "if score >= 90:\n",
+                "    print(\"A\")\n",
+                "elif score >= 80:\n",
+                "    print(\"B\")\n",
+                "elif score >= 70:\n",
+                "    print(\"C\")\n",
+                "elif score >= 60:\n",
+                "    print(\"D\")\n",
+                "else:\n",
+                "    print(\"F\")\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 2.4.3. List resolving equations\n",
+                "\n",
+                "Creating lists via iterative or branching structures"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Complicated version\n",
+                "sqlist = []\n",
+                "for x in range(1,11):\n",
+                "    sqlist.append(x*x)\n",
+                "print(sqlist)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Simple version\n",
+                "sqlist = [x*x for x in range(1,11)]\n",
+                "print(sqlist)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Advanced\n",
+                "sqlist = [x*x for x in range(1,11) if x%2 == 0]\n",
+                "print(sqlist)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 3. Exception handling\n",
+                "The following types of errors may be encountered while programming:\n",
+                "\n",
+                "* :: Syntax error. Compiler error.\n",
+                "\n",
+                "* :: Logic error. Can be executed but returns an incorrect result.\n",
+                "\n",
+                "Some logic errors can cause runtime errors that can cause a program to terminate. These errors are often referred to as \"exceptions\". Programmers can create exceptions themselves if they detect a problem with program execution."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Use try statements to handle thrown exceptions\n",
+                "import math\n",
+                "anumber = int(input(\"please enter an integer\"))\n",
+                "try:\n",
+                "    print(math.sqrt(anumber))\n",
+                "except:\n",
+                "    print(\"Bad Value for square root.\")\n",
+                "    print(\"Using absolute value instead.\")\n",
+                "    print(math.sqrt(abs(anumber)))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Triggering runtime exceptions with raise statements\n",
+                "import math\n",
+                "anumber = 23\n",
+                "if anumber < 0:\n",
+                "    raise RuntimeError(\"you can't use a negative number.\")\n",
+                "else:\n",
+                "    print(math.sqrt(anumber))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 4. Defining functions\n",
+                "After defining a function, the details of the computation can be hidden to simplify the code and can be reused.\n",
+                "\n",
+                "Defining a function requires a function name, a set of parameters, and a function body. Functions can also explicitly return a value"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def squareroot(n):\n",
+                "    root = n/2\n",
+                "    for k in range(20):\n",
+                "        root = (1/2)*(root + (n/root))\n",
+                "    return root"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 5. Object-oriented programming\n",
+                "\n",
+                "* :: One of the most powerful features of object-oriented programming languages is that they allow programmers (problem solvers) to create entirely new classes to model the data needed to solve a problem\n",
+                "\n",
+                "* :: Abstract data types have previously been used to provide a logical description of the state and behavior of data objects\n",
+                "\n",
+                "* :: By constructing classes that implement abstract data types, the abstraction process can be utilized while providing the details necessary to actually apply the abstraction in the program\n",
+                "\n",
+                "* :: New classes can be created whenever an abstract data type needs to be implemented"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 5.1. basic concepts\n",
+                "Everything in Python exists as an object.\n",
+                "* :: An object represents a concrete thing in the problem space of the objective world and a fundamental thing in the solution space of a software system.\n",
+                "* :: Objects = properties + methods\n",
+                "* :: An object is identified by an id, contains data (attributes), code (methods), and is a special instance of a specific class of things"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "id(1)#View Objects"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "type(1)# View the class to which the object belongs."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "dir(1)#View attributes and methods"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "id(abs)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: An object is an instance of a class, the basic unit of a program\n",
+                "* :: To create a new object, you must first define a class\n",
+                "* :: Objects of the same class have the same properties and methods, but different property values and ids\n",
+                "* :: Objects can have multiple names, but only one id\n",
+                "* :: Objects realize encapsulation of properties and methods, a data abstraction mechanism"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* Reference form: <object name>. <property name>.\n",
+                "* :: If it is a single attribute name, it can be used in assignment statements and expressions as if it were a normal variable\n",
+                "* :: It's also easy to call functions of this class, remembering the parentheses\n",
+                "* python is a dynamic language, in addition to variables that can be dynamically generated, objects can have attributes or methods added or removed at any time. For example: <object name>. <property name> = 3.6\n",
+                "* :: Object-oriented programming is a programming paradigm as well as a program development methodology"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 5.2. class construction [emphasis added].\n",
+                "\n",
+                "Using the Fraction class as a case\n",
+                "\n",
+                "Request:\n",
+                "\n",
+                "* :: Be able to add, subtract, multiply and divide fractions\n",
+                "\n",
+                "* :: Ability to display scores with a standardized slash\n",
+                "\n",
+                "* :: The simplest form of the result should be returned\n",
+                "\n",
+                "Programs:\n",
+                "\n",
+                "* :: Provide a class name\n",
+                "\n",
+                "* :: Provide a full set of method definitions with syntax similar to that of function definitions\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class Fraction:\n",
+                "    #Define constructor methods\n",
+                "    def __init__(self,top,bottom):#self is a special parameter that points to the object itself, must be the first formal parameter, and does not need to be supplied with the corresponding actual parameter when calling the method\n",
+                "        # Need state data for both numerator and denominator components\n",
+                "        self.num = top\n",
+                "        self.den = bottom\n",
+                "\n",
+                "myfraction = Fraction(3,5)# Create an instance of the class\n",
+                "print(myfraction)# prints the actual reference (the address itself)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: Constructor methods define how data objects are created\n",
+                "\n",
+                "* :: To create an instance of a class, you must call the constructor method. Just use the class name and pass in the actual value of the state, do not call ```__init__``` directly."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Printing itself instead of quoting\n",
+                "class Fraction:\n",
+                "    def __init__(self,top,bottom):\n",
+                "        self.num = top\n",
+                "        self.den = bottom\n",
+                "\n",
+                "    def show(self):\n",
+                "        print(self.num,\"/\",self.den)# have to call the method before printing, not good, want to rewrite the method provided by python\n",
+                "        \n",
+                "myfraction = Fraction(3,5)# Create an instance of the class\n",
+                "print(type(myfraction.show()))#<class 'NoneType'>\n",
+                "print(myfraction)# not using this method, then the actual reference (the address itself) is printed"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "And all of python's classes provide a standard set of methods. One can look at the method ```__str__`` which converts an object to a string. The method defaults: it returns the address string as before. Then override the default implementation, or redefine the behavior of the method. The following code is important to show that the classes change in different places\n",
+                "\n",
+                "**KEY**"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Rewrite the original implementation\n",
+                "#Note the category change that occurs, in the str section it is str, but the printed instance is the self-defined Fraction, and the direct presentation of the variable is the actual reference\n",
+                "class Fraction:\n",
+                "    def __init__(self,top,bottom):\n",
+                "        self.num = top\n",
+                "        self.den = bottom\n",
+                "\n",
+                "    def __str__(self):\n",
+                "        print(type(str(self.num) + \"/\" + str(self.den)))#这里是<class 'str'>\n",
+                "        return str(self.num) + \"/\" + str(self.den)\n",
+                "        #return (self.num,\"/\",self.den)#Syntax error, you can't write it like this or you'll get an error __str__ returned non-string (type NoneType)\n",
+                "    \n",
+                "myfraction = Fraction(3,5)# Create an instance of the class\n",
+                "\n",
+                "print(myfraction)\n",
+                "\n",
+                "print(type(myfraction))# The printed data class is <class '__main__.Fraction'>\n",
+                "\n",
+                "myfraction# returns the actual reference (the address itself) to <__main__.Fraction at 0x256c2689850>; it's not the same as the address of the instance in the previous entry"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Rewritten calls 1\n",
+                "myfraction.__str__()# prints str"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Rewritten call 2\n",
+                "str(myfraction)#Prints str"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Think about how to define the addition of this class"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def __add__(self,otherfraction):# note the name of the second argument\n",
+                "    newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
+                "    newden = sel.den * otherfraction.den\n",
+                "    print(Fraction(newnum,newden))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Merge back into the original class definition\n",
+                "\n",
+                "class Fraction:\n",
+                "    def __init__(self,top,bottom):\n",
+                "        self.num = top\n",
+                "        self.den = bottom\n",
+                "\n",
+                "    def __str__(self):\n",
+                "        return str(self.num) + \"/\" + str(self.den)\n",
+                "\n",
+                "    def __add__(self,otherfraction):# note the name of the second argument\n",
+                "        newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
+                "        newden = self.den * otherfraction.den\n",
+                "        return(Fraction(newnum,newden))# If you use print here, it will cause the last print to be None.\n",
+                "\n",
+                "myfra = Fraction(3,5)# create instance of class\n",
+                "myfrb = Fraction(1,4)\n",
+                "print(myfra + myfrb)#Testing with other scores will result in a result that may not be the shortest possible score"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "To compute the simplest fraction, you first need to find the greatest common factor of m and n using the method of division by rolling over (Euclid's algorithm). For example, find the greatest common factor of 105 and 252. 252/105 = 2...42, so the greatest common factor of these two numbers is also 42. .42, then the greatest common factor of these two numbers is also 42, the greatest common factor of 105 (eliminating the parts that agree with each other and leaving the ones that don't, which are the important factors that affect the greatest common factor). The purpose of this algorithm is to reduce the numbers for easier calculation.\n",
+                "\n",
+                "Continuing with the same calculations reduces the two numbers until the remainder is zero. At that point, the remaining number that has not yet become zero is the greatest common divisor of the two numbers. If 105/42 = 2.... . 21, then it is the greatest common factor of 21 and 42, 21.\n",
+                "\n",
+                "It can also be deduced from the method of division by rotation that the greatest common divisor of two numbers can be expressed by adding the integer multiples of the two numbers (Pei Shu's theorem), e.g. $21 = 5\\times 42 + (-2) \\times 252$."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Calculate the simplest fraction\n",
+                "\n",
+                "def gcd(m,n):\n",
+                "    while m%n !=0:\n",
+                "        oldm = m\n",
+                "        oldn = n\n",
+                "        \n",
+                "        m = oldn#Note that it ends in n, because the original divisor is necessarily larger compared to the remainder.\n",
+                "        n = oldm%oldn#取余数\n",
+                "    return n\n",
+                "gcd(105,252)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Expand the calculation above and note that the divisor this time is the divisor next time. gcd's two arguments do not need to be ordered by size, because the\n",
+                "\n",
+                "[m = oldn will update the unchanged ones.]\n",
+                "\n",
+                "252%105 != 0\n",
+                "\n",
+                "oldm = 252\n",
+                "\n",
+                "oldn = 105\n",
+                "\n",
+                "m = 105\n",
+                "\n",
+                "n = 42\n",
+                "***\n",
+                "\n",
+                "105%42 != 0\n",
+                "\n",
+                "oldm = 105\n",
+                "\n",
+                "oldn = 42\n",
+                "\n",
+                "m = 42\n",
+                "\n",
+                "n = 21"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Improved version add\n",
+                "def __add__(self,otherfraction):\n",
+                "    newnum = self.num * otherfraction.den + self.den * otherfraction.num\n",
+                "    newden = self.den * otherfraction.den\n",
+                "    common = gcd(newden,newnum)\n",
+                "    return Fraction(newnum/common,newden/common)#Single slash here can divide cleanly, but it will cause the numerator and denominator numbers to carry decimal points"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Merged into the definition of the class\n",
+                "\n",
+                "class Fraction:\n",
+                "    def __init__(self,top,bottom):\n",
+                "        self.num = top\n",
+                "        self.den = bottom\n",
+                "\n",
+                "    def __str__(self):\n",
+                "        return str(self.num) + \"/\" + str(self.den)#记住写法\n",
+                "    \n",
+                "    def gcd(m,n):\n",
+                "        while m%n !=0:\n",
+                "            oldm = m\n",
+                "            oldn = n\n",
+                "            \n",
+                "            m = oldn\n",
+                "            n = oldm%oldn#取余数\n",
+                "        return n\n",
+                "\n",
+                "    def __add__(self,otherfraction):\n",
+                "        newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
+                "        newden = self.den * otherfraction.den\n",
+                "        common = gcd(newden,newnum)\n",
+                "        #return str(newnum//common) + '/' + str(newden//common) #There's a double slash here, this returns str\n",
+                "        return Fraction(newnum//common,newden//common)#这里返回的是<class '__main__.Fraction'>\n",
+                "\n",
+                "myfra = Fraction(3,5)# create instance of class\n",
+                "myfrb = Fraction(1,4)\n",
+                "print(type(myfra + myfrb))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Shallow Equivalent and Deep Equivalent\n",
+                "\n",
+                "* :: Shallow equality: references to the same object will work\n",
+                "\n",
+                "* :: Equal depth: consistent values are sufficient\n",
+                "\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Rewrite the __eq__ method\n",
+                "def __eq__(self,other):\n",
+                "    firstnum = self.num * other.den\n",
+                "    secondnum = self.den * other.num\n",
+                "    return firstnum == secondnum"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Rewrite the __le__ method\n",
+                "def __le__(self,other):\n",
+                "    firstnum = self.num * other.den\n",
+                "    secondnum = self.den * other.num\n",
+                "    return firstnum < secondnum"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "Full implementation of class #\n",
+                "class Fraction:\n",
+                "    def __init__(self,top,bottom):\n",
+                "        self.num = top\n",
+                "        self.den = bottom\n",
+                "\n",
+                "    def __str__(self):\n",
+                "        return str(self.num) + \"/\" + str(self.den)#记住写法\n",
+                "    \n",
+                "    def gcd(m,n):\n",
+                "        while m%n !=0:\n",
+                "            oldm = m\n",
+                "            oldn = n\n",
+                "            \n",
+                "            m = oldn\n",
+                "            n = oldm%oldn#取余数\n",
+                "        return n\n",
+                "\n",
+                "    def __add__(self,otherfraction):\n",
+                "        newnum = self.num * otherfraction.den + otherfraction.num * self.den\n",
+                "        newden = self.den * otherfraction.den\n",
+                "        common = gcd(newden,newnum)\n",
+                "        #return str(newnum//common) + '/' + str(newden//common) #There's a double slash here, this returns str\n",
+                "        return Fraction(newnum//common,newden//common)#这里返回的是<class '__main__.Fraction'>\n",
+                "    \n",
+                "    # Rewrite the __eq__ method\n",
+                "    def __eq__(self,other):\n",
+                "        firstnum = self.num * other.den\n",
+                "        secondnum = self.den * other.num\n",
+                "        return firstnum == secondnum\n",
+                "    \n",
+                "    def __le__(self,other):\n",
+                "        firstnum = self.num * other.den\n",
+                "        secondnum = self.den * other.num\n",
+                "        return firstnum < secondnum\n",
+                "    "
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 5.3. Class Inheritance [Difficult].\n",
+                "\n",
+                "Inheritance relates one class to another. Subclasses inherit features from their parent class, which is also called a superclass\n",
+                "\n",
+                "By organizing classes into inheritance hierarchies:\n",
+                "\n",
+                "* :: Object-oriented programming languages enable previously written code to be extended to new application scenarios\n",
+                "\n",
+                "* :: Better understanding of relationships and more efficient construction of abstract representations\n",
+                "\n",
+                "Use the circuits for examples. Explanation of with, or, and non gates is omitted\n",
+                "\n",
+                "Thoughts:\n",
+                "\n",
+                "1. Generalized characteristics of the most basic logic gates: names and outputs of logic gates\n",
+                "\n",
+                "2. Characteristics of the logic gates inherited for the first time: whether there is one input or two inputs (also called \"pins\", pin).\n",
+                "\n",
+                "3. Characterization of the logic gates inherited for the second time: writing by specificity\n",
+                "\n",
+                "It also needs to be able to give the user access to the labels of the logic gates, and also be able to perform logical calculations"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Superclass LogicGate\n",
+                "class LogicGate:\n",
+                "    def __init__(self,n):#n is label name\n",
+                "        self.label = n\n",
+                "        self.output = None#Initially it's nothing.\n",
+                "    def getLabel(self):\n",
+                "        return self.label#获取标签\n",
+                "    def getOutput(self):\n",
+                "        self.output = self.performGateLogic()# create a method and implement no details, wait for inheritance and then write specific functions to facilitate code reuse\n",
+                "        return self.output"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Introduction to functions commonly used for inheritance: [super](https://www.runoob.com/python/python-func-super.html)\n",
+                "\n",
+                "1. The super() function is used to call a method of a parent class (superclass). The syntax is as follows ```super(type[, object-or-type])``` The former is the class. The latter is also a class, usually self\n",
+                "2. One difference between Python 3.x and Python 2.x is that Python 3 can use ``super().xxx`` directly instead of ``super(Class, self).xxx``.\n",
+                "3. The constructor method of the subclass needs to call the constructor method of the parent class first, and then initialize its own unique data.\n",
+                "4. Model codes"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class A:\n",
+                "     def add(self, x):\n",
+                "         y = x+1\n",
+                "         print(y)\n",
+                "class B(A):\n",
+                "    def add(self, x):# Define the add function in a subclass with the same function name, and the same argument form\n",
+                "        super().add(x) # from the add function in the parent class\n",
+                "b = B()\n",
+                "b.add(2)  # 3"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#1 pin (input) gates\n",
+                "#Inheritance!\n",
+                "class UnaryGate(LogicGate):\n",
+                "    def __init__(self,n):\n",
+                "        super(). __init__(n)# inherits init from the parent class, and is written in the same way as calling the function\n",
+                "        self.pin = None\n",
+                "    def getPin(self):\n",
+                "        return int(input(\"Enter pin input for gate \" + self.getLabel() + \"-->\"))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#2 pin gate\n",
+                "class BinaryGate(LogicGate):\n",
+                "    def __init__(self,n):\n",
+                "        super().__init__(n)\n",
+                "        self.pinA = None\n",
+                "        self.pinB = None\n",
+                "    \n",
+                "    def getPinA(self):\n",
+                "        return int(input(\"Enter pin A input for gate \" + self.getLabel() + \"-->\"))\n",
+                "\n",
+                "    def getPinB(self):\n",
+                "        return int(input(\"Enter pin B input for gate \" + self.getLabel() + \"-->\"))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Further define the concrete class by simply adding the Boolean operation"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# and doors\n",
+                "class AndGate(BinaryGate):\n",
+                "    def __init__(self,n):\n",
+                "        super().__init__(n)\n",
+                "    def performGateLogic(self):\n",
+                "        a = self.getPinA()\n",
+                "        b = self.getPinB()\n",
+                "        if a == 1 and b == 1:\n",
+                "            return 1\n",
+                "        elif a*b == 0:\n",
+                "            return 0\n",
+                "        else:\n",
+                "            return 'Error Input!'"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Create objects!\n",
+                "g1 = AndGate(\"G1\")\n",
+                "g1.getOutput()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class NotGate(UnaryGate):\n",
+                "    def __init__(self,n):\n",
+                "        super().__init__(n)\n",
+                "    def performGateLogic(self):\n",
+                "        a = self.getPin()\n",
+                "        if a == 0:\n",
+                "            return 1\n",
+                "        elif a == 1:\n",
+                "            return 0\n",
+                "        else:\n",
+                "            return 'Error Input!'"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "g2 = NotGate(\"G2\")\n",
+                "g2.getOutput()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class OrGate(BinaryGate):\n",
+                "    def __init__(self,n):\n",
+                "        super().__init__(n)\n",
+                "    def performGateLogic(self):\n",
+                "        a = self.getPinA()\n",
+                "        b = self.getPinB()\n",
+                "        if a == 0 and b == 0 :\n",
+                "            return 0\n",
+                "        else:\n",
+                "            return 1"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "g3 = OrGate(\"g3\")\n",
+                "g3.getOutput()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Logic gates have been created, and now the objects need to be connected. The output of the former is the input of the latter (data values \"flow\" from the output of this gate to the input of the other gate). So create a new class Connector\n",
+                "\n",
+                "Note that the Connector is not in the inheritance hierarchy of these Gates, but it will use that structure -- there is a logical gate on both ends of each Connector object\n",
+                "\n",
+                "This is the HAS-A relationship: the Connector object contains instances of the LogicGate class internally, but not in the inheritance hierarchy.Connector has a LogicGate\n",
+                "\n",
+                "When pre-designing classes, it is important to distinguish between IS-A (inheritance required), HAS-A (no inheritance required) relationships"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class Connector:\n",
+                "    def __init__(self,fgate,tgate):\n",
+                "        self.fromgate = fgate\n",
+                "        self.togate = tgate\n",
+                "        \n",
+                "        tgate.setNextPin(self)\n",
+                "        \n",
+                "    def getFrom(self):\n",
+                "        return self.fromgate\n",
+                "    \n",
+                "    def getTo(self):\n",
+                "        return self.togate"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The setNextPin can be seen as belonging to the logic gate, and needs to be added in, **enabling each togate to select the appropriate input**. But in the BinaryGate class, there are 2 inputs, might as well default to choosing pinA, not work before choosing pinB, if it doesn't work then you can't connect the logic gate.\n",
+                "\n",
+                "==> Now there are two types of input sources:\n",
+                "\n",
+                "* :: From external sources\n",
+                "* Output from previous logic gate\n",
+                "\n",
+                "Using AndGate as an example, there is:\n",
+                "\n",
+                "1. if the input is not connected to any logic gate, then the user is asked to enter the\n",
+                "\n",
+                "2. if there is a connection, access the connection in order to get the output of the fromgate\n",
+                "\n",
+                "3. The processing logic for fromgate is triggered at step 2.\n",
+                "\n",
+                "4. The process continues until each input that affects the final output value is obtained\n",
+                "\n",
+                "In a sense, the circuit works in reverse to get the required inputs before calculating the final result"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Modified and doors\n",
+                "class AndGate(BinaryGate):\n",
+                "    def __init__(self,n):\n",
+                "        super().__init__(n)\n",
+                "    def setNextPin(self,source):\n",
+                "        if self.pinA == None:\n",
+                "            self.pinA = source\n",
+                "        elif self.pinB == None:\n",
+                "            self.pinB == source\n",
+                "        else:\n",
+                "            raise RuntimeError(\"Error:No Empty Pins\")\n",
+                "    def performGateLogic(self):\n",
+                "        a = self.getPinA()\n",
+                "        b = self.getPinB()\n",
+                "        if a == 1 and b == 1:\n",
+                "            return 1\n",
+                "        elif a*b == 0:\n",
+                "            return 0\n",
+                "        else:\n",
+                "            return 'Error Input!'\n",
+                "    def getPinA(self):\n",
+                "        if self.pinA == None:\n",
+                "            return int(input(\"ENTER PIN A FOR GATE \" + \\\n",
+                "                         self.getLabel() + \"-->\"))\n",
+                "        else:\n",
+                "            return self.pinA.getFrom().getOutPut() # setNextPin sets PinA to the linker source, so it can call the getFrom() function\n",
+                "    def getPinB(self):\n",
+                "        if self.pinB == None:\n",
+                "            return int(input(\"ENTER PIN B FOR GATE \" + \\\n",
+                "                         self.getLabel() + \"-->\"))\n",
+                "        else:\n",
+                "            return self.pinB.getFrom().getOutPut()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class OrGate(BinaryGate):\n",
+                "    def __init__(self, n) -> None:\n",
+                "        super().__init__(n)\n",
+                "    def performGateLogic(self):\n",
+                "        a = self.getPinA()\n",
+                "        b = self.getPinB()\n",
+                "        if a == 1 or b == 1:\n",
+                "            return 1 \n",
+                "        else:\n",
+                "            return 0\n",
+                "    def setNextPin(self,source):\n",
+                "        if self.pinA == None:\n",
+                "            self.pinA = source\n",
+                "        else:\n",
+                "            if self.pinB == None:\n",
+                "                self.pinB = source\n",
+                "            else:\n",
+                "                raise RuntimeError(\"Error:no empty pins\")\n",
+                "    def getPinA(self):\n",
+                "        if self.pinA == None:\n",
+                "            return int(input(\"ENTER PIN A FOR GATE \" + \\\n",
+                "                         self.getLabel() + \"-->\"))\n",
+                "        else:\n",
+                "            return self.pinA.getFrom().getOutPut()\n",
+                "    def getPinB(self):\n",
+                "        if self.pinB == None:\n",
+                "            return int(input(\"ENTER PIN B FOR GATE \" + \\\n",
+                "                         self.getLabel() + \"-->\"))\n",
+                "        else:\n",
+                "            return self.pinB.getFrom().getOutPut()"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class NotGate(UnaryGate):\n",
+                "    def __init__(self, n) -> None:\n",
+                "        super().__init__(n)\n",
+                "    def performGateLogic(self):\n",
+                "        a = self.getPin()\n",
+                "        if a == 1 :\n",
+                "            return 0 \n",
+                "        else:\n",
+                "            return 1\n",
+                "    def setNextPin(self,source):\n",
+                "        if self.pin == None:\n",
+                "            self.pin = source#Set the linker\n",
+                "        else:\n",
+                "            raise RuntimeError(\"Error:no empty pins\")\n",
+                "    def getPin(self):\n",
+                "        if self.pin == None:\n",
+                "            return int(input(\"ENTER PIN FOR GATE\" + \\\n",
+                "                         self.getLabel() + \"-->\"))\n",
+                "        else:\n",
+                "            return self.pin.getFrom().getOutPut()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "******"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# [Supplemental]"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 6. Definition and invocation of classes"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 6.1. Definition of classes\n",
+                "* :: Classes are templates for objects that encapsulate the properties and behaviors of the corresponding real entities\n",
+                "* :: Instance objects are concretizations of classes\n",
+                "* :: The class is the mold and the object is the part made by the mold\n",
+                "* :: The emergence of classes provides a means of realizing three of the most important characteristics of object-oriented programming: encapsulation, inheritance, and polymorphism [the same piece of code can handle different objects, even of different types].\n",
+                "* :: Custom classes, starting with an uppercase letter. Functions start with a lowercase letter. This is because classes and functions are used in exactly the same form at the time of use\n",
+                "* :: Define class: class<class name>.\n",
+                "* :: Class initialization:\n",
+                "    class<class name>.\n",
+                "        def __init__(self,<parameter list>).\n",
+                "* The first argument to a function of a class is always self, and in a method of a class, self refers to the object instance itself.\n",
+                "* :: Call: <class name> (<argument>)\n",
+                "* :: Addition returns the object of the regenerated force"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 6.2. Special Methods in Class Definitions"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* Special methods are also known as magic methods. Implementing special methods in class definitions makes it easy to use built-in operations in python.\n",
+                "* :: All special methods begin and end with two underscores\n",
+                "* :: Object constructor: __init__(sekf,[])\n",
+                "* :: Analyzer: __del(self, [])"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "from os.path import join\n",
+                "class FileObject:\n",
+                "    def __init__(self,filepath = '~',filename = 'sample.txt') -> None:\n",
+                "        self.file = open(join(filepath,filename),'r4')\n",
+                "    def __del__(self):\n",
+                "        self.file.close()\n",
+                "        del self.file"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "from manim import *\n",
+                "\n",
+                "config.media_width = \"75%\"\n",
+                "config.verbosity = \"WARNING\""
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "%%manim -qm CircleToSquare\n",
+                "\n",
+                "class CircleToSquare(Scene):\n",
+                "    def construct(self):\n",
+                "        blue_circle = Circle(color=BLUE, fill_opacity=0.5)\n",
+                "        green_square = Square(color=GREEN, fill_opacity=0.8)\n",
+                "        self.play(Create(blue_circle))\n",
+                "        self.wait()\n",
+                "        \n",
+                "        self.play(Transform(blue_circle, green_square))\n",
+                "        self.wait()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* Arithmetic operator:\n",
+                "  1) __add__(self,other)\n",
+                "  2) __sub__(self,other)\n",
+                "  3) __mul__(self,other)\n",
+                "  4) __div__(self,other)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: Inverse operation: self as right operand\n",
+                "  1) __radd__(self,other)\n",
+                "  2) __rsub__(self,other)\n",
+                "  3) __rmul__(self,other)\n",
+                "  4) __rdiv__(self,other)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: Size comparisons\n",
+                "1) __eq__(self,other)\n",
+                "2) __ne__(self,other)\n",
+                "3) __lt__(self,other):<\n",
+                "4) __gt__(self,other):>\n",
+                "5) __le__(self,other):<=\n",
+                "6) __ge__(self,other):>="
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: If the special function itself already meets the requirements, then just underline __special method__ = special method"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: String manipulation\n",
+                "  1) __str__(self)#Automatically convert to string\n",
+                "  2) __repr__(self)# Formal expression of the object\n",
+                "  3) __len__(self)# Returns the number of elements."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 7. Sorting of custom objects"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 7.1. list sorting"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: The list method sort(), which sorts by content, changes the contents of the original list.\n",
+                "* :: Defaults to ascending order if all are numbers\n",
+                "* :: If the elements are all strings, they are sorted alphabetically\n",
+                "* :: sorted(): return sorted, original list content unchanged\n",
+                "* :: sort() and sorted() only work properly if the list elements are of the same type. Because of the __lt__ special method based: the method should return True"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 8. Class inheritance"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: Inheritance facilitates code reuse\n",
+                "* class <subclass name> (<parent class name>).\n",
+                "      def <redefine method>(self,...) :\n",
+                "* That's overriding override\n",
+                "* It is also possible to add methods and properties that are not present in the parent class:"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class Car:\n",
+                "    def __init__(self,name) -> str:# -> type: doesn't affect original type\n",
+                "        self.name = name\n",
+                "        self.remain_mile = 0\n",
+                "\n",
+                "class GasCar(Car):\n",
+                "    def __init__(self, name,capacity) -> None:\n",
+                "        super(). __init__(name)# parent class initialization method, name only\n",
+                "        # In __init__(name), only Name is reinitialized because only the name parameter is used in Car's initialization.\n",
+                "        self.remain_mile = 70\n",
+                "        self.capacity = capacity#新添加方法\n",
+                "\n",
+                "a = Car('BMW')\n",
+                "print(type(a))\n",
+                "\n",
+                "b = GasCar('BMW',60)\n",
+                "print(b.remain_mile)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* :: The role of self: inside the class, all data passed in during instantiation are given to this variable\n",
+                "* :: This variable is not related to the class, it is a separate instance variable\n",
+                "* :: self represents an object instance\n",
+                "* :: gcar.run(200.0) is equivalent to GasCar.run(gcar,200.0)"
+            ]
+        }
+    ],
+    "metadata": {
+        "kernelspec": {
+            "display_name": "base",
+            "language": "python",
+            "name": "python3"
+        },
+        "language_info": {
+            "codemirror_mode": {
+                "name": "ipython",
+                "version": 3
+            },
+            "file_extension": ".py",
+            "mimetype": "text/x-python",
+            "name": "python",
+            "nbconvert_exporter": "python",
+            "pygments_lexer": "ipython3",
+            "version": "3.12.7"
+        },
+        "toc": {
+            "base_numbering": 1,
+            "nav_menu": {},
+            "number_sections": false,
+            "sideBar": false,
+            "skip_h1_title": false,
+            "title_cell": "Table of Contents",
+            "title_sidebar": "Contents",
+            "toc_cell": true,
+            "toc_position": {
+                "height": "392.4px",
+                "left": "120px",
+                "top": "110.525px",
+                "width": "266px"
+            },
+            "toc_section_display": true,
+            "toc_window_display": true
+        }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 2
 }

@@ -1,1046 +1,1046 @@
 {
- "cells": [
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "【本周思路】本周通过进一步学习递归算法，引入动态规划的知识\n",
-    "* 408 引入分治策略的概念\n",
-    "* 409 介绍优化问题，和解决优化问题的贪心策略\n",
-    "* 410 找零问题【递归版本】\n",
-    "* 411 找零问题【动态规划版本】\n",
-    "\n",
-    "请注意：上面是一个问题讲了两节（一个解法占一节），下面是把一个问题的两种解法在一节课里讲完\n",
-    "\n",
-    "* 412 0/1背包问题的动态规划/递归解法\n",
-    "* 413 这两周的总结"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**Table of contents**<a id='toc0_'></a>    \n",
-    "- [408 分治策略](#toc1_)    \n",
-    "  - [1. 分治策略：分而治之](#toc1_1_)    \n",
-    "  - [2. 递归算法与分治策略](#toc1_2_)    \n",
-    "- [409 优化问题和贪心策略](#toc2_)    \n",
-    "  - [1. 优化问题](#toc2_1_)    \n",
-    "  - [2. 贪心策略【每次都试图解决问题的尽量大的一部分】](#toc2_2_)    \n",
-    "- [410 找零问题【递归版】](#toc3_)    \n",
-    "- [411 找零问题【动态规划版】](#toc4_)    \n",
-    "- [412 0/1背包问题【递归与动态规划两个角度解决】](#toc5_)    \n",
-    "\n",
-    "<!-- vscode-jupyter-toc-config\n",
-    "\tnumbering=false\n",
-    "\tanchor=true\n",
-    "\tflat=false\n",
-    "\tminLevel=1\n",
-    "\tmaxLevel=6\n",
-    "\t/vscode-jupyter-toc-config -->\n",
-    "<!-- THIS CELL WILL BE REPLACED ON TOC UPDATE. DO NOT WRITE YOUR TEXT IN THIS CELL -->"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc1_'></a>[408 分治策略](#toc0_)\n",
-    "## <a id='toc1_1_'></a>[1. 分治策略：分而治之](#toc0_)\n",
-    "当面临一个又大又复杂的问题，可以采用这个策略：\n",
-    "* 将问题分为若干更小规模的部分\n",
-    "* 通过解决每个小规模部分问题，并将结果汇总得到原问题的解\n",
-    "\n",
-    "即："
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "<img src=\"./img/408.png\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc1_2_'></a>[2. 递归算法与分治策略](#toc0_)\n",
-    "\n",
-    "* 递归算法是分治策略的一种【递归算法需要调用自身】，具体体现有：\n",
-    "    * 问题解决依赖于若干缩小了规模的问题\n",
-    "    * 汇总得到原问题的解\n",
-    "* 分治策略有广泛的应用【而且大多都是用递归算法来解决的】：\n",
-    "    * 排序\n",
-    "    * 查找\n",
-    "    * 遍历\n",
-    "    * 求值等"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc2_'></a>[409 优化问题和贪心策略](#toc0_)\n",
-    "这一节重点：\n",
-    "* 什么是优化问题？\n",
-    "* 什么是贪心策略？"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc2_1_'></a>[1. 优化问题](#toc0_)\n",
-    "计算机科学中许多算法都是为了找到某些问题的最优解，典型问题就是**兑换最少个数的硬币**:\n",
-    "\n",
-    "假设你为一家自动售货机厂家编程序，要求自动售货机要每次找给顾客最少数量硬币\n",
-    "\n",
-    "例如某次顾客投进$1纸币,买了ȼ37的东西,要找ȼ63,那么最少数量就是:2个quarter(ȼ25)，1个dime(ȼ10)和3个penny(ȼ1)，一共6枚\n",
-    "\n",
-    "怎么算出来的？"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "$\\implies$\n",
-    "\n",
-    "## <a id='toc2_2_'></a>[2. 贪心策略【每次都试图解决问题的尽量大的一部分】](#toc0_)\n",
-    "\n",
-    "* 从最大面值的硬币开始，用尽量多的最大面值\n",
-    "* 有余额的，再到下一最大面值的硬币，还用尽量多的这一面值，一直到penny（ȼ1）为止\n",
-    "\n",
-    "也就是每次以**最**多数量的**最**大面值硬币来**最**快减少找零面值\n",
-    "\n",
-    "但是！！这一策略在特殊情况下会翻车\n",
-    "\n",
-    "$\\implies$每一步都是最优的，并不代表结果是最优的"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "补充：\n",
-    "\n",
-    "贪心策略能保证得到最优解的条件（需要同时满足）：\n",
-    "* 贪心选择性质： 问题的全局最优解可以通过一系列局部最优（贪心）选择来达到。这意味着做出局部最优选择后，剩下的子问题可以独立求解，且这个选择不会被后面的选择推翻\n",
-    "* 最优子结构： 问题的最优解包含了其子问题的最优解。也就是说，可以通过子问题的最优解来构造原问题的最优解（这是动态规划也需要的性质）\n",
-    "\n",
-    "如果一个问题只满足最优子结构，但不满足贪心选择性质，那么贪心策略不能保证得到最优解（可能得到次优解），通常需要使用动态规划等其他方法（例如经典的0-1背包问题）"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#使用贪心算法计算正常情况下的找零问题\n",
-    "lis = [1,5,20,50]\n",
-    "def change(lis,num):\n",
-    "    changelis = []\n",
-    "    for i in lis[::-1]:#按从后向前的顺序遍历列表，适用小规模，对大规模数据适合用reversed(lis)\n",
-    "        a = num // i\n",
-    "        num = num % i\n",
-    "        changelis.append(a)\n",
-    "    return changelis\n",
-    "print(change(lis,63))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc3_'></a>[410 找零问题【递归版】](#toc0_)\n",
-    "\n",
-    "使用递归算法的思路来分析\n",
-    "\n",
-    "1. 基本结束条件：\n",
-    "* 需要兑换的找零，其面值正好等于某种硬币，也就是1个硬币就能解决\n",
-    "* 当剩余金额小于0时：表示当前选择无效，返回特殊标记（如Infinity或-1）\n",
-    "\n",
-    "优化说明：补充了金额小于0的边界条件，确保所有有效路径都能终止\n",
-    "\n",
-    "2. 减小规模 & 调用自身\n",
-    "* 遍历每种硬币：对每个可用面额 ```coin```\n",
-    "* 减小规模：计算子问题金额 ```amount - coin```\n",
-    "* 调用自身：递归求解 ```minCoins(amount - coin)```\n",
-    "* 合并结果：取所有路径的最小值 ```min(1 + 递归结果)```\n",
-    "\n",
-    "请注意：\n",
-    "* 递归调用的目的是获取子问题解\n",
-    "* 强调结果合并逻辑\n",
-    "* 每走一步都要计算把整个硬币体系刷一遍，还有大量的重复计算，极！其！低！效！"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def recMC(coinValueList,change):\n",
-    "    minCoins = change #假设最多的硬币情况\n",
-    "    #排除有现成的情况【基本结束条件】\n",
-    "    if change in coinValueList:\n",
-    "        minCoins = 1\n",
-    "    else:\n",
-    "        for c in coinValueList:\n",
-    "            if c <= change:#去掉比余额大的硬币面额\n",
-    "                numCoins = 1 + recMC(coinValueList,change - c) \n",
-    "                if numCoins < minCoins:\n",
-    "                    minCoins = numCoins\n",
-    "    return minCoins"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(recMC([1,5,10,25],63))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "出现了大量重复计算，可以进行优化\n",
-    "\n",
-    "$\\implies$ 记录算过的面额的数据\n",
-    "\n",
-    "<img src=\"./img/410.png\">"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def recMCB(coinValueList,change,knownResult):\n",
-    "    #knownResult = {}#不能这么干，不然每次递归都会把这个字典新建了\n",
-    "    #教案实际上使用的是列表，也挺好\n",
-    "    \n",
-    "    minCoins = change\n",
-    "    if change in coinValueList:\n",
-    "        knownResult[change] = 1 #记录最优解；在这种情况下也不是一锤子买卖\n",
-    "        return 1#这个不能注释，会降低可读性【为啥不当场返回，还要依赖下面的elif】；也多了一次条件判断\n",
-    "    elif knownResult[change] > 0:\n",
-    "        return knownResult[change]\n",
-    "    else:\n",
-    "        for i in [c for c in coinValueList if c <= change]:\n",
-    "            numCoins = 1 + recMCB(coinValueList, change - i,knownResult)\n",
-    "            if numCoins < minCoins:\n",
-    "                minCoins = numCoins\n",
-    "                knownResult[change] = minCoins\n",
-    "    return minCoins"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(recMCB([1,5,10,25],63,[0]*64))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "进一步优化代码，有"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def recMCB(coinValueList, change, knownResult):\n",
-    "    # 边界条件：金额为0时返回0\n",
-    "    if change == 0:\n",
-    "        return 0\n",
-    "        \n",
-    "    # 1. 直接命中硬币面值\n",
-    "    if change in coinValueList:\n",
-    "        knownResult[change] = 1  # 记录最优解\n",
-    "        return 1  # 必须返回！\n",
-    "    \n",
-    "    # 2. 命中备忘录\n",
-    "    elif knownResult[change] > 0:\n",
-    "        return knownResult[change]\n",
-    "    \n",
-    "    # 3. 需要递归计算\n",
-    "    else:\n",
-    "        minCoins = change\n",
-    "        # 使用生成器表达式更高效\n",
-    "        for coin in (c for c in coinValueList if c <= change):\n",
-    "            numCoins = 1 + recMCB(coinValueList, change - coin, knownResult)\n",
-    "            if numCoins < minCoins:\n",
-    "                minCoins = numCoins\n",
-    "                knownResult[change] = minCoins  # 更新备忘录\n",
-    "        return minCoins"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "coins = [1, 5, 10, 25]\n",
-    "memo = [0]*64\n",
-    "print(recMCB(coins, 36, memo))  # 输出：3 (25+10+1)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "使用字典数据来缓存，有"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def recMCC(coinValueList, change, knownResult):\n",
-    "    # 边界条件：金额为0时返回0\n",
-    "    if change == 0:\n",
-    "        knownResult[0] = 0  # 记录0金额的解\n",
-    "        return 0\n",
-    "    \n",
-    "    # 检查备忘录是否已有结果\n",
-    "    if change in knownResult:\n",
-    "        return knownResult[change]\n",
-    "    \n",
-    "    # 直接命中硬币面值\n",
-    "    if change in coinValueList:\n",
-    "        knownResult[change] = 1  # 记录最优解\n",
-    "        return 1\n",
-    "    \n",
-    "    # 递归计算部分\n",
-    "    minCoins = change  # 可以使用float('inf')处理硬币体系不包含1的情况\n",
-    "    \n",
-    "    # 使用生成器表达式优化内存\n",
-    "    for coin in (c for c in coinValueList if c <= change):\n",
-    "        # 递归调用计算子问题\n",
-    "        numCoins = 1 + recMCC(coinValueList, change - coin, knownResult)\n",
-    "        \n",
-    "        # 更新最小硬币数\n",
-    "        if numCoins < minCoins:\n",
-    "            minCoins = numCoins\n",
-    "    \n",
-    "    # 记录结果到备忘录\n",
-    "    knownResult[change] = minCoins\n",
-    "    return minCoins"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# 初始化备忘录（字典）\n",
-    "memo = {}\n",
-    "\n",
-    "# 硬币面值列表\n",
-    "coins = [1, 5, 10, 25]\n",
-    "\n",
-    "# 测试不同找零金额\n",
-    "print(recMCC(coins, 6, memo))    # 输出：2 (5+1)\n",
-    "print(recMCC(coins, 11, memo))   # 输出：2 (10+1)\n",
-    "print(recMCC(coins, 26, memo))   # 输出：2 (25+1)\n",
-    "print(recMCC(coins, 31, memo))   # 输出：3 (25+5+1)\n",
-    "\n",
-    "# 查看备忘录内容\n",
-    "#print(memo)\n",
-    "\n",
-    "#用21分找零63的结果也是正确的"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 以上是采取自顶向下的思路\n",
-    "* 但还算不上是动态规划，而是叫做memoization（记忆化/函数值缓存）\n",
-    "* DP的三大特征：最优子结构、重叠子问题、状态转移方程。特别是重叠子问题这点，正是递归改DP的关键判断依据\n",
-    "\n",
-    "“带备忘录的递归”是从“想清楚怎么做”到“高效解决问题”的过渡方案，是自顶向下的动态规划，而不是全部的DP。它是连接递归思维和动态规划实现的桥梁"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "| 类型   | 实现方式        | 解释              |\n",
-    "| ---- | ----------- | --------------- |\n",
-    "| 自顶向下 | 递归 + 备忘录    | “带备忘录的递归” |\n",
-    "| 自底向上 | for 循环 + 表格 | 用数组/表格从小到大填答案   |"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc4_'></a>[411 找零问题【动态规划版】](#toc0_)\n",
-    "动态规划算法采用了一种更有条理的方式来得到问题的解\n",
-    "* 找零兑换的动态规划算法从最简单的“1分钱找零”的最优解开始，逐步递加上去，直到我们需要的找零钱数【自底向上】\n",
-    "* 在找零递加的过程中，设法保持每一分钱的递加都是最优解，一直加到求解找零钱数，自然得到最优解\n",
-    "\n",
-    "请注意：\n",
-    "* 递加的过程能保持最优解的关键是，其依赖于更少钱数最优解的简单计算，而更少钱数的最优解已经得到了【重叠子问题】\n",
-    "* 最优化问题能够用动态规划策略解决的必要条件：整个大问题的最优解，包含了更小问题的子问题的最优解【最优子结构】\n",
-    "\n",
-    "$\\implies$ DP的必要条件是：“重叠子问题 + 最优子结构”\n",
-    "\n",
-    "1. 重叠子问题（Overlapping Subproblems）：\n",
-    "   \n",
-    "   在求解大问题时会反复用到相同的子问题答案，这样通过缓存（记忆化或表格存储）避免重复计算\n",
-    "\n",
-    "2. 最优子结构（Optimal Substructure）：\n",
-    "   大问题的最优解能够通过其子问题的最优解递推得到，这是动态规划算法能正确工作的根本保证\n",
-    "\n",
-    "**能拆能复用，DP才出众**【有表可查对DP是多么重要】\n",
-    "\n",
-    "410递归中的这张图还可以再参考\n",
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "<img src=\"./img/411.png\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "以下是真实动态规划与递归的区别。动态规划的精髓是查表【复用】，递归的精髓是调用自身"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "首先制作动态规划的表格\n",
-    "\n",
-    "<img src=\"./img/411_1.png\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "查表，有\n",
-    "\n",
-    "<img src=\"./img/411_2.png\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "算法完成，开始实现！"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def dpMakeChange(coinValueList,change,minCoins):\n",
-    "    for cents in range(change + 1):#制表，预测每个可能需要的找零面额\n",
-    "        #记录对应的最大硬币数量\n",
-    "        coinCount = cents\n",
-    "        for j in [c for c in coinValueList if c <= cents]:#确定会用到的每个零钱面额\n",
-    "            if coinCount > 1 + minCoins[cents - j]:#对表里的每个找零面额，都进行比较与计算\n",
-    "                coinCount = 1 + minCoins[cents - j]#统计，每次比较与更新\n",
-    "        minCoins[cents] = coinCount#结果进表\n",
-    "    return minCoins[change]"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "dpMakeChange([1,5,10,21,25],63,[0]*64)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "思考如何优化代码。可以返回硬币组合吗？\n",
-    "\n",
-    "可以。只需要在生成最优解列表同时跟踪记录所选择的那个硬币币值即可"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def dpMakeChange(coinValueList,change,minCoins,coinsUsed):\n",
-    "    minCoins[0] = 0\n",
-    "    for cents in range(change + 1):\n",
-    "        coinCount = cents\n",
-    "        newCoin = 1\n",
-    "        for j in [c for c in coinValueList if c <= cents]:\n",
-    "            if minCoins[cents - j] + 1 < coinCount:\n",
-    "                coinCount = minCoins[cents - j] + 1\n",
-    "                newCoin = j\n",
-    "        minCoins[cents] = coinCount\n",
-    "        coinsUsed[cents] = newCoin#每一步都必然只加了一个硬币\n",
-    "    return minCoins[change]\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def printCoins(coinsUsed,change):\n",
-    "    coin = change\n",
-    "    while coin > 0:\n",
-    "        thisCoin = coinsUsed[coin]\n",
-    "        print(thisCoin)\n",
-    "        coin = coin - thisCoin"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 3,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "最少硬币数: 3\n",
-      "硬币组合:\n",
-      "21\n",
-      "21\n",
-      "21\n"
-     ]
-    }
-   ],
-   "source": [
-    "amnt = 63\n",
-    "clist = [1,5,10,21,25]\n",
-    "coinsUsed = [0]*(amnt+1)  # 存储硬币面值\n",
-    "coinsCount = [0]*(amnt+1)  # 存储硬币数量\n",
-    "\n",
-    "# 执行计算\n",
-    "min_coins = dpMakeChange(clist, amnt, coinsCount, coinsUsed)\n",
-    "print(f\"最少硬币数: {min_coins}\")  # 应输出 3\n",
-    "\n",
-    "# 回溯硬币组合\n",
-    "print(\"硬币组合:\")\n",
-    "printCoins(coinsUsed, amnt)  # 应输出 21,21,21"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "在这个问题中，带备忘录的递归和DP算法均基于最优子结构（每个金额的解依赖子问题解）\n",
-    "\n",
-    "也就是使用状态转移方程\n",
-    "\n",
-    "$$minCoins[i] = min(minCoins[i], minCoins[i - coin] + 1)$$"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "DP最主要的思想是\n",
-    "* 从最简单的情况开始，达到所需找零的循环【课件认可自底向上】\n",
-    "* 每一步都依靠以前的最优解来得到本步骤的最优解，直到得到答案\n",
-    "\n",
-    "请注意所有DP都能改写成记忆化递归，但递归不一定能DP优化"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "AI提出另一种理解角度，而不是只认可自底向上\n",
-    "\n",
-    "* 递归 + 备忘录 = 自顶向下的 DP： 从大问题开始，分解成小问题，递归求解并缓存结果\n",
-    "* 迭代 + DP 表 = 自底向上的 DP： 从小问题开始，迭代求解并逐步构建大问题的解\n",
-    "\n",
-    "两者都是动态规划的有效实现方法，都利用了“存储子问题解以避免重复计算”的核心思想。选择哪种方式取决于具体问题和个人偏好。自顶向下更“自然”，自底向上通常更高效（尤其是在空间优化后）。\n",
-    "\n",
-    "许多问题可以同时用两种方式实现，斐波那契数列、背包问题、最长公共子序列等都是经典的例子。理解这两种视角对于掌握动态规划至关重要"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc5_'></a>[412 0/1背包问题【递归与动态规划两个角度解决】](#toc0_)\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "<img src=\"./img/2.png\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "贪心策略明显不行了，先从动态规划角度解决\n",
-    "\n",
-    "从数学上，不妨当作求解函数最优解，那么设计函数有：\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "<img src=\"./img/3.png\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "* 状态转移公式是基于上一步考虑的，也就是完成i-1以后，第i件东西加不加。可能等于$m(i-1,W)$是因为第i件没加进去，重量也没变；可能等于$m(i-1,W - W_i)+v_i$，因为加号左边是上一步的价值，右边是这一步的价值。这是描述限制条件（物品情况，重量）中，到手价值最大的函数\n",
-    "* 为什么$w_i > W$就不加了？因为这个函数描述的就是整体组合重量不超过W的情况，超过了就绝对加不进来\n",
-    "* i并不是物品编号，而是前i个，是可以改变的\n",
-    "* 适合由底到顶的思路"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "列出来表格有\n",
-    "\n",
-    "请注意每个格依赖的都跟左边或者上边的有依赖关系\n",
-    "\n",
-    "<img src=\"./img/4.png\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "举例： $m(5,5)$的递推公式\n",
-    "\n",
-    "* $i = 5$的时候，重量为9，超过$W= 5$的限制，肯定不选，因此它等于$m(4,5)$【这个物品超重了，其他的都扔掉也选不了它】\n",
-    "* $m(4,5)$时，第4件的重量为5，没有超过限制，因此第4件可以进入选择【有，或者没有】它等于$max(m(3，5),m(3,0)+8)$。前者是不选这玩意儿，后者是要选这玩意儿的话，上一步该把背包倒成啥样\n",
-    "\n",
-    "\n",
-    "理论描述完毕，开始实现"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]#None是用来占位的\n",
-    "\n",
-    "max_w = 20"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 3,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\"\"\"\"\n",
-    "dp\n",
-    "\n",
-    "\"\"\"\n",
-    "#制表\n",
-    "m = {(i,w):0  for i in range(len(tr)) for w in range(max_w + 1)}#有趣的初始化写法；这个东西其实是价值函数;key是元组\n",
-    "\n",
-    "#填表\n",
-    "for i in range(len(tr)):\n",
-    "    for w in range(max_w + 1):\n",
-    "        if i == 0 or w == 0:#不判断也不要紧，毕竟生成表格的时候就是0了\n",
-    "            m[(i,w)] = 0\n",
-    "        elif tr[i]['w'] > w:#第i件超重的话\n",
-    "            m[(i,w)] = m[(i-1,w)]\n",
-    "        else:\n",
-    "            m[(i,w)] = max(m[(i-1,w)],m[(i-1,w-tr[i]['w'])]+tr[i]['v'])"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 4,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "29\n",
-      "i: 5, w: 20\n"
-     ]
-    }
-   ],
-   "source": [
-    "max_value = max(m.values())\n",
-    "print(max_value)\n",
-    "# 获取所有达到最大值的键（可能有多个）\n",
-    "max_keys = [key for key, value in m.items() if value == max_value]\n",
-    "\n",
-    "# 遍历并输出每个最大键对应的 i 和 w\n",
-    "for (i, w) in max_keys:\n",
-    "    print(f\"i: {i}, w: {w}\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "29\n"
-     ]
-    }
-   ],
-   "source": [
-    "#dp\n",
-    "#without function\n",
-    "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]\n",
-    "\n",
-    "max_w = 20\n",
-    "\n",
-    "m = {(i,w):0 for i in range(len(tr))\n",
-    "                for w in range(max_w + 1)}\n",
-    "#print(m.items())\n",
-    "for i in range(1,len(tr)):\n",
-    "    for w in range(1,max_w + 1):\n",
-    "        if tr[i]['w'] > w:\n",
-    "            m[(i,w)] = m[(i-1,w)]\n",
-    "        else:\n",
-    "            m[(i,w)] = max(\n",
-    "                m[(i-1,w)],\n",
-    "                m[(i-1,w-tr[i]['w'])] + tr[i]['v']\n",
-    "            )\n",
-    "\n",
-    "print(m[(len(tr)-1,max_w)])#这个必然是最大的，很巧妙"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "现在把递归的方式搞了，要点是：\n",
-    "* 基本结束情况\n",
-    "* 减小规模【干脆从列表中踢出去，backwards】\n",
-    "* 调用自身\n",
-    "\n",
-    "也就是每选一步，都要看看上一步干的啥。这是自顶向底的思路\n",
-    "\n",
-    "记得递归必须回原点！"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "29\n"
-     ]
-    }
-   ],
-   "source": [
-    "def knapsack(i, w):#表示从第 1~i 个物品中选择，且背包剩余容量为 w 时,最大可获得的价值\n",
-    "    if i == 0 or w == 0:\n",
-    "        return 0\n",
-    "    if tr[i]['w'] > w:\n",
-    "        return knapsack(i-1, w)\n",
-    "    else:\n",
-    "        return max(knapsack(i-1, w), knapsack(i-1, w - tr[i]['w']) + tr[i]['v'])\n",
-    "\n",
-    "# 示例调用\n",
-    "print(knapsack(len(tr) - 1, 20))  # 输出最大价值\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "加上备忘录，那么有："
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 9,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "17\n"
-     ]
-    }
-   ],
-   "source": [
-    "# 假设 tr 是一个列表，表示每个物品的重量和价值，如：\n",
-    "# tr = [{'w': 2, 'v': 3}, {'w': 3, 'v': 4}, {'w': 4, 'v': 5}, {'w': 5, 'v': 8}]\n",
-    "\n",
-    "# 创建备忘录字典\n",
-    "memo = {}\n",
-    "\n",
-    "def knapsack(i, w):\n",
-    "    # 检查备忘录中是否已经计算过\n",
-    "    if (i, w) in memo:\n",
-    "        return memo[(i, w)]\n",
-    "    \n",
-    "    # 基本情况\n",
-    "    if i == 0 or w == 0:\n",
-    "        res = 0\n",
-    "    elif tr[i]['w'] > w:\n",
-    "        res = knapsack(i - 1, w)\n",
-    "    else:\n",
-    "        res = max(knapsack(i - 1, w),\n",
-    "                  knapsack(i - 1, w - tr[i]['w']) + tr[i]['v'])\n",
-    "    \n",
-    "    # 存入备忘录\n",
-    "    memo[(i, w)] = res\n",
-    "    return res\n",
-    "\n",
-    "# 示例物品列表\n",
-    "tr = [{'w': 2, 'v': 3}, {'w': 3, 'v': 4}, {'w': 4, 'v': 5}, {'w': 5, 'v': 8}]\n",
-    "\n",
-    "# 示例调用：背包容量为 20，考虑 0~3 号物品\n",
-    "print(knapsack(len(tr) - 1, 20))  # 输出最大价值\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "29\n"
-     ]
-    }
-   ],
-   "source": [
-    "# 课堂代码，递归+备忘录\n",
-    "# 背包问题的重点是选哪些物品，而不是物品的顺序，因此无序的描述物品方式也不干扰递归结果\n",
-    "# 上一条可以理解最初的tr顺序打乱，也不影响最终的结果\n",
-    "tr = {(2,3),(3,4),(4,8),(5,8),(9,10)}#这玩意儿是元组的集合，是无序 的，全靠转成元组描述是啥物品，而不是序号\n",
-    "max_w = 20\n",
-    "\n",
-    "m = {}#集合\n",
-    "\n",
-    "def thief(tr,w):#tr用backwards处理，w是最大负重重量\n",
-    "    if tr == set() or w == 0:#基本结束条件\n",
-    "        m[(tuple(tr),w)] = 0#字典填写\n",
-    "        #(tuple(tr),w)是元组，不可变类型，因此符合字典的键的要求\n",
-    "        return 0#这里返回了0\n",
-    "    \n",
-    "    elif (tuple(tr),w) in m:#查字典里有没有这个键\n",
-    "        return m[(tuple(tr),w)]#有的话就返回值\n",
-    "    \n",
-    "    else:\n",
-    "        vmax = 0#forwards处理价值函数\n",
-    "        for t in tr:#虽然集合没有顺序，但踢掉了已经选择的物品\n",
-    "            if t[0] <= w:#t[0]是重量，t[1]是价值\n",
-    "                v = thief(tr - {t},w - t[0]) + t[1]#w在这里更新了，因为递归调用\n",
-    "                #v描述的是：还能装啥\n",
-    "                vmax = max(vmax,v)\n",
-    "        m[(tuple(tr),w)] = vmax\n",
-    "        return vmax\n",
-    "print(thief(tr,max_w))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "9\n",
-      "2\n",
-      "3\n",
-      "4\n",
-      "5\n"
-     ]
-    }
-   ],
-   "source": [
-    "tr = {(2,3),(3,4),(4,8),(5,8),(9,10)}\n",
-    "for t in tr:\n",
-    "    print(t[0])"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "假设当前状态：\n",
-    "\n",
-    "* 物品集合 tr = {(3,4), (4,8)}（重量,价值）\n",
-    "* 剩余承重 w = 5\n",
-    "\n",
-    "那么计算过程有\n",
-    "\n",
-    "1. 取物品 t = (3,4)（重量3≤5，可选）：\n",
-    "        递归计算子问题：thief({(4,8)}, 5-3=2)\n",
-    "        子问题：重量限制2，只能选 (4,8)？但4>2，无法选择 → 返回0\n",
-    "        v = 0 + 4 = 4\n",
-    "        更新 vmax = max(0, 4) = 4\n",
-    "\n",
-    "2. 取物品 t = (4,8)（重量4≤5，可选）：\n",
-    "        递归计算子问题：thief({(3,4)}, 5-4=1)\n",
-    "        子问题：重量限制1，无法选 (3,4)（3>1） → 返回0\n",
-    "        v = 0 + 8 = 8\n",
-    "        更新 vmax = max(4, 8) = 8\n",
-    "\n",
-    "所以最终返回 vmax = 8（选择物品 (4,8) 是最优解）\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "函数 ```thief(tr, w)``` 是通过循环```for t in tr```遍历每个物品 t：\n",
-    "对于每个物品 t，如果其重量 ```t[0] <= w```，它递归计算选择 t 后的价值\n",
-    "```thief(tr - {t}, w - t[0]) + t[1]```（即移除 t 并减少重量）。\n",
-    "然后，通过 vmax = max(vmax, v) 比较所有可能的选择，保留最大值。\n",
-    "这相当于枚举所有子集"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "10\n",
-      "3\n",
-      "4\n",
-      "8\n",
-      "8\n"
-     ]
-    }
-   ],
-   "source": [
-    "for t in tr:\n",
-    "    print(t[1])"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]#None是用来占位的\n",
-    "\n",
-    "max_w = 20"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#递归写法加备忘录\n",
-    "m = {}#跟dp换了个方式；备忘录\n",
-    "def thief(tr,w):#dp没定义函数\n",
-    "    if tr == set() or w==0:#前面\n",
-    "        m[tuple(tr)]"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "在一些情况下，递归+备忘录能完成的比动态规划计算量小。因为后者自底向上，会有些不必要的计算"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# 413 递归小结\n",
-    "* 在解决一些自相似性的问题时可以考虑递归\n",
-    "* 递归算法三定律：\n",
-    "    * 基本结束条件\n",
-    "    * 减小规模。例如排序问题，需要让参与排序的数越来越少\n",
-    "    * 调用自身\n",
-    "* 某些情况下，递归可以代替迭代循环，也就是不用for 或者while\n",
-    "* 递归算法通常能跟问题的表达自然契合，也符合思考问题的流程\n",
-    "* 但递归不会总是最合适的算法，有可能存在巨量的重复计算【自顶向下】\n",
-    "* 使用记忆化/函数值缓存可以减少\n",
-    "* 如果一个问题最优解包括规模更小的相同问题最优解，可以用动态规划来解决\n",
-    "* 试试斐波那契数列"
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "base",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.12.7"
-  },
-  "orig_nbformat": 2
- },
- "nbformat": 4,
- "nbformat_minor": 2
+    "cells": [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "【本周思路】本周通过进一步学习递归算法，引入动态规划的知识\n",
+                "* 408 引入分治策略的概念\n",
+                "* 409 介绍优化问题，和解决优化问题的贪心策略\n",
+                "* 410 找零问题【递归版本】\n",
+                "* 411 找零问题【动态规划版本】\n",
+                "\n",
+                "请注意：上面是一个问题讲了两节（一个解法占一节），下面是把一个问题的两种解法在一节课里讲完\n",
+                "\n",
+                "* 412 0/1背包问题的动态规划/递归解法\n",
+                "* 413 这两周的总结"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**Table of contents**<a id='toc0_'></a>    \n",
+                "- [408 分治策略](#toc1_)    \n",
+                "  - [1. 分治策略：分而治之](#toc1_1_)    \n",
+                "  - [2. 递归算法与分治策略](#toc1_2_)    \n",
+                "- [409 优化问题和贪心策略](#toc2_)    \n",
+                "  - [1. 优化问题](#toc2_1_)    \n",
+                "  - [2. 贪心策略【每次都试图解决问题的尽量大的一部分】](#toc2_2_)    \n",
+                "- [410 找零问题【递归版】](#toc3_)    \n",
+                "- [411 找零问题【动态规划版】](#toc4_)    \n",
+                "- [412 0/1背包问题【递归与动态规划两个角度解决】](#toc5_)    \n",
+                "\n",
+                "<!-- vscode-jupyter-toc-config\n",
+                "\tnumbering=false\n",
+                "\tanchor=true\n",
+                "\tflat=false\n",
+                "\tminLevel=1\n",
+                "\tmaxLevel=6\n",
+                "\t/vscode-jupyter-toc-config -->\n",
+                "<!-- THIS CELL WILL BE REPLACED ON TOC UPDATE. DO NOT WRITE YOUR TEXT IN THIS CELL -->"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc1_'></a>[408 分治策略](#toc0_)\n",
+                "## <a id='toc1_1_'></a>[1. 分治策略：分而治之](#toc0_)\n",
+                "当面临一个又大又复杂的问题，可以采用这个策略：\n",
+                "* 将问题分为若干更小规模的部分\n",
+                "* 通过解决每个小规模部分问题，并将结果汇总得到原问题的解\n",
+                "\n",
+                "即："
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/408.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc1_2_'></a>[2. 递归算法与分治策略](#toc0_)\n",
+                "\n",
+                "* 递归算法是分治策略的一种【递归算法需要调用自身】，具体体现有：\n",
+                "    * 问题解决依赖于若干缩小了规模的问题\n",
+                "    * 汇总得到原问题的解\n",
+                "* 分治策略有广泛的应用【而且大多都是用递归算法来解决的】：\n",
+                "    * 排序\n",
+                "    * 查找\n",
+                "    * 遍历\n",
+                "    * 求值等"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc2_'></a>[409 优化问题和贪心策略](#toc0_)\n",
+                "这一节重点：\n",
+                "* 什么是优化问题？\n",
+                "* 什么是贪心策略？"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc2_1_'></a>[1. 优化问题](#toc0_)\n",
+                "计算机科学中许多算法都是为了找到某些问题的最优解，典型问题就是**兑换最少个数的硬币**:\n",
+                "\n",
+                "假设你为一家自动售货机厂家编程序，要求自动售货机要每次找给顾客最少数量硬币\n",
+                "\n",
+                "例如某次顾客投进$1纸币,买了ȼ37的东西,要找ȼ63,那么最少数量就是:2个quarter(ȼ25)，1个dime(ȼ10)和3个penny(ȼ1)，一共6枚\n",
+                "\n",
+                "怎么算出来的？"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "$\\implies$\n",
+                "\n",
+                "## <a id='toc2_2_'></a>[2. 贪心策略【每次都试图解决问题的尽量大的一部分】](#toc0_)\n",
+                "\n",
+                "* 从最大面值的硬币开始，用尽量多的最大面值\n",
+                "* 有余额的，再到下一最大面值的硬币，还用尽量多的这一面值，一直到penny（ȼ1）为止\n",
+                "\n",
+                "也就是每次以**最**多数量的**最**大面值硬币来**最**快减少找零面值\n",
+                "\n",
+                "但是！！这一策略在特殊情况下会翻车\n",
+                "\n",
+                "$\\implies$每一步都是最优的，并不代表结果是最优的"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "补充：\n",
+                "\n",
+                "贪心策略能保证得到最优解的条件（需要同时满足）：\n",
+                "* 贪心选择性质： 问题的全局最优解可以通过一系列局部最优（贪心）选择来达到。这意味着做出局部最优选择后，剩下的子问题可以独立求解，且这个选择不会被后面的选择推翻\n",
+                "* 最优子结构： 问题的最优解包含了其子问题的最优解。也就是说，可以通过子问题的最优解来构造原问题的最优解（这是动态规划也需要的性质）\n",
+                "\n",
+                "如果一个问题只满足最优子结构，但不满足贪心选择性质，那么贪心策略不能保证得到最优解（可能得到次优解），通常需要使用动态规划等其他方法（例如经典的0-1背包问题）"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#使用贪心算法计算正常情况下的找零问题\n",
+                "lis = [1,5,20,50]\n",
+                "def change(lis,num):\n",
+                "    changelis = []\n",
+                "    for i in lis[::-1]:#按从后向前的顺序遍历列表，适用小规模，对大规模数据适合用reversed(lis)\n",
+                "        a = num // i\n",
+                "        num = num % i\n",
+                "        changelis.append(a)\n",
+                "    return changelis\n",
+                "print(change(lis,63))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc3_'></a>[410 找零问题【递归版】](#toc0_)\n",
+                "\n",
+                "使用递归算法的思路来分析\n",
+                "\n",
+                "1. 基本结束条件：\n",
+                "* 需要兑换的找零，其面值正好等于某种硬币，也就是1个硬币就能解决\n",
+                "* 当剩余金额小于0时：表示当前选择无效，返回特殊标记（如Infinity或-1）\n",
+                "\n",
+                "优化说明：补充了金额小于0的边界条件，确保所有有效路径都能终止\n",
+                "\n",
+                "2. 减小规模 & 调用自身\n",
+                "* 遍历每种硬币：对每个可用面额 ```coin```\n",
+                "* 减小规模：计算子问题金额 ```amount - coin```\n",
+                "* 调用自身：递归求解 ```minCoins(amount - coin)```\n",
+                "* 合并结果：取所有路径的最小值 ```min(1 + 递归结果)```\n",
+                "\n",
+                "请注意：\n",
+                "* 递归调用的目的是获取子问题解\n",
+                "* 强调结果合并逻辑\n",
+                "* 每走一步都要计算把整个硬币体系刷一遍，还有大量的重复计算，极！其！低！效！"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMC(coinValueList,change):\n",
+                "    minCoins = change #假设最多的硬币情况\n",
+                "    #排除有现成的情况【基本结束条件】\n",
+                "    if change in coinValueList:\n",
+                "        minCoins = 1\n",
+                "    else:\n",
+                "        for c in coinValueList:\n",
+                "            if c <= change:#去掉比余额大的硬币面额\n",
+                "                numCoins = 1 + recMC(coinValueList,change - c) \n",
+                "                if numCoins < minCoins:\n",
+                "                    minCoins = numCoins\n",
+                "    return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(recMC([1,5,10,25],63))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "出现了大量重复计算，可以进行优化\n",
+                "\n",
+                "$\\implies$ 记录算过的面额的数据\n",
+                "\n",
+                "<img src=\"./img/410.png\">"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMCB(coinValueList,change,knownResult):\n",
+                "    #knownResult = {}#不能这么干，不然每次递归都会把这个字典新建了\n",
+                "    #教案实际上使用的是列表，也挺好\n",
+                "    \n",
+                "    minCoins = change\n",
+                "    if change in coinValueList:\n",
+                "        knownResult[change] = 1 #记录最优解；在这种情况下也不是一锤子买卖\n",
+                "        return 1#这个不能注释，会降低可读性【为啥不当场返回，还要依赖下面的elif】；也多了一次条件判断\n",
+                "    elif knownResult[change] > 0:\n",
+                "        return knownResult[change]\n",
+                "    else:\n",
+                "        for i in [c for c in coinValueList if c <= change]:\n",
+                "            numCoins = 1 + recMCB(coinValueList, change - i,knownResult)\n",
+                "            if numCoins < minCoins:\n",
+                "                minCoins = numCoins\n",
+                "                knownResult[change] = minCoins\n",
+                "    return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(recMCB([1,5,10,25],63,[0]*64))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "进一步优化代码，有"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMCB(coinValueList, change, knownResult):\n",
+                "    # 边界条件：金额为0时返回0\n",
+                "    if change == 0:\n",
+                "        return 0\n",
+                "        \n",
+                "    # 1. 直接命中硬币面值\n",
+                "    if change in coinValueList:\n",
+                "        knownResult[change] = 1  # 记录最优解\n",
+                "        return 1  # 必须返回！\n",
+                "    \n",
+                "    # 2. 命中备忘录\n",
+                "    elif knownResult[change] > 0:\n",
+                "        return knownResult[change]\n",
+                "    \n",
+                "    # 3. 需要递归计算\n",
+                "    else:\n",
+                "        minCoins = change\n",
+                "        # 使用生成器表达式更高效\n",
+                "        for coin in (c for c in coinValueList if c <= change):\n",
+                "            numCoins = 1 + recMCB(coinValueList, change - coin, knownResult)\n",
+                "            if numCoins < minCoins:\n",
+                "                minCoins = numCoins\n",
+                "                knownResult[change] = minCoins  # 更新备忘录\n",
+                "        return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "coins = [1, 5, 10, 25]\n",
+                "memo = [0]*64\n",
+                "print(recMCB(coins, 36, memo))  # 输出：3 (25+10+1)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "使用字典数据来缓存，有"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def recMCC(coinValueList, change, knownResult):\n",
+                "    # 边界条件：金额为0时返回0\n",
+                "    if change == 0:\n",
+                "        knownResult[0] = 0  # 记录0金额的解\n",
+                "        return 0\n",
+                "    \n",
+                "    # 检查备忘录是否已有结果\n",
+                "    if change in knownResult:\n",
+                "        return knownResult[change]\n",
+                "    \n",
+                "    # 直接命中硬币面值\n",
+                "    if change in coinValueList:\n",
+                "        knownResult[change] = 1  # 记录最优解\n",
+                "        return 1\n",
+                "    \n",
+                "    # 递归计算部分\n",
+                "    minCoins = change  # 可以使用float('inf')处理硬币体系不包含1的情况\n",
+                "    \n",
+                "    # 使用生成器表达式优化内存\n",
+                "    for coin in (c for c in coinValueList if c <= change):\n",
+                "        # 递归调用计算子问题\n",
+                "        numCoins = 1 + recMCC(coinValueList, change - coin, knownResult)\n",
+                "        \n",
+                "        # 更新最小硬币数\n",
+                "        if numCoins < minCoins:\n",
+                "            minCoins = numCoins\n",
+                "    \n",
+                "    # 记录结果到备忘录\n",
+                "    knownResult[change] = minCoins\n",
+                "    return minCoins"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# 初始化备忘录（字典）\n",
+                "memo = {}\n",
+                "\n",
+                "# 硬币面值列表\n",
+                "coins = [1, 5, 10, 25]\n",
+                "\n",
+                "# 测试不同找零金额\n",
+                "print(recMCC(coins, 6, memo))    # 输出：2 (5+1)\n",
+                "print(recMCC(coins, 11, memo))   # 输出：2 (10+1)\n",
+                "print(recMCC(coins, 26, memo))   # 输出：2 (25+1)\n",
+                "print(recMCC(coins, 31, memo))   # 输出：3 (25+5+1)\n",
+                "\n",
+                "# 查看备忘录内容\n",
+                "#print(memo)\n",
+                "\n",
+                "#用21分找零63的结果也是正确的"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* 以上是采取自顶向下的思路\n",
+                "* 但还算不上是动态规划，而是叫做memoization（记忆化/函数值缓存）\n",
+                "* DP的三大特征：最优子结构、重叠子问题、状态转移方程。特别是重叠子问题这点，正是递归改DP的关键判断依据\n",
+                "\n",
+                "“带备忘录的递归”是从“想清楚怎么做”到“高效解决问题”的过渡方案，是自顶向下的动态规划，而不是全部的DP。它是连接递归思维和动态规划实现的桥梁"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "| 类型   | 实现方式        | 解释              |\n",
+                "| ---- | ----------- | --------------- |\n",
+                "| 自顶向下 | 递归 + 备忘录    | “带备忘录的递归” |\n",
+                "| 自底向上 | for 循环 + 表格 | 用数组/表格从小到大填答案   |"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc4_'></a>[411 找零问题【动态规划版】](#toc0_)\n",
+                "动态规划算法采用了一种更有条理的方式来得到问题的解\n",
+                "* 找零兑换的动态规划算法从最简单的“1分钱找零”的最优解开始，逐步递加上去，直到我们需要的找零钱数【自底向上】\n",
+                "* 在找零递加的过程中，设法保持每一分钱的递加都是最优解，一直加到求解找零钱数，自然得到最优解\n",
+                "\n",
+                "请注意：\n",
+                "* 递加的过程能保持最优解的关键是，其依赖于更少钱数最优解的简单计算，而更少钱数的最优解已经得到了【重叠子问题】\n",
+                "* 最优化问题能够用动态规划策略解决的必要条件：整个大问题的最优解，包含了更小问题的子问题的最优解【最优子结构】\n",
+                "\n",
+                "$\\implies$ DP的必要条件是：“重叠子问题 + 最优子结构”\n",
+                "\n",
+                "1. 重叠子问题（Overlapping Subproblems）：\n",
+                "   \n",
+                "   在求解大问题时会反复用到相同的子问题答案，这样通过缓存（记忆化或表格存储）避免重复计算\n",
+                "\n",
+                "2. 最优子结构（Optimal Substructure）：\n",
+                "   大问题的最优解能够通过其子问题的最优解递推得到，这是动态规划算法能正确工作的根本保证\n",
+                "\n",
+                "**能拆能复用，DP才出众**【有表可查对DP是多么重要】\n",
+                "\n",
+                "410递归中的这张图还可以再参考\n",
+                "\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/411.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "以下是真实动态规划与递归的区别。动态规划的精髓是查表【复用】，递归的精髓是调用自身"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "首先制作动态规划的表格\n",
+                "\n",
+                "<img src=\"./img/411_1.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "查表，有\n",
+                "\n",
+                "<img src=\"./img/411_2.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "算法完成，开始实现！"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def dpMakeChange(coinValueList,change,minCoins):\n",
+                "    for cents in range(change + 1):#制表，预测每个可能需要的找零面额\n",
+                "        #记录对应的最大硬币数量\n",
+                "        coinCount = cents\n",
+                "        for j in [c for c in coinValueList if c <= cents]:#确定会用到的每个零钱面额\n",
+                "            if coinCount > 1 + minCoins[cents - j]:#对表里的每个找零面额，都进行比较与计算\n",
+                "                coinCount = 1 + minCoins[cents - j]#统计，每次比较与更新\n",
+                "        minCoins[cents] = coinCount#结果进表\n",
+                "    return minCoins[change]"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "dpMakeChange([1,5,10,21,25],63,[0]*64)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "思考如何优化代码。可以返回硬币组合吗？\n",
+                "\n",
+                "可以。只需要在生成最优解列表同时跟踪记录所选择的那个硬币币值即可"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 1,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def dpMakeChange(coinValueList,change,minCoins,coinsUsed):\n",
+                "    minCoins[0] = 0\n",
+                "    for cents in range(change + 1):\n",
+                "        coinCount = cents\n",
+                "        newCoin = 1\n",
+                "        for j in [c for c in coinValueList if c <= cents]:\n",
+                "            if minCoins[cents - j] + 1 < coinCount:\n",
+                "                coinCount = minCoins[cents - j] + 1\n",
+                "                newCoin = j\n",
+                "        minCoins[cents] = coinCount\n",
+                "        coinsUsed[cents] = newCoin#每一步都必然只加了一个硬币\n",
+                "    return minCoins[change]\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 2,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "def printCoins(coinsUsed,change):\n",
+                "    coin = change\n",
+                "    while coin > 0:\n",
+                "        thisCoin = coinsUsed[coin]\n",
+                "        print(thisCoin)\n",
+                "        coin = coin - thisCoin"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 3,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "最少硬币数: 3\n",
+                        "硬币组合:\n",
+                        "21\n",
+                        "21\n",
+                        "21\n"
+                    ]
+                }
+            ],
+            "source": [
+                "amnt = 63\n",
+                "clist = [1,5,10,21,25]\n",
+                "coinsUsed = [0]*(amnt+1)  # 存储硬币面值\n",
+                "coinsCount = [0]*(amnt+1)  # 存储硬币数量\n",
+                "\n",
+                "# 执行计算\n",
+                "min_coins = dpMakeChange(clist, amnt, coinsCount, coinsUsed)\n",
+                "print(f\"最少硬币数: {min_coins}\")  # 应输出 3\n",
+                "\n",
+                "# 回溯硬币组合\n",
+                "print(\"硬币组合:\")\n",
+                "printCoins(coinsUsed, amnt)  # 应输出 21,21,21"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "在这个问题中，带备忘录的递归和DP算法均基于最优子结构（每个金额的解依赖子问题解）\n",
+                "\n",
+                "也就是使用状态转移方程\n",
+                "\n",
+                "$$minCoins[i] = min(minCoins[i], minCoins[i - coin] + 1)$$"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "DP最主要的思想是\n",
+                "* 从最简单的情况开始，达到所需找零的循环【课件认可自底向上】\n",
+                "* 每一步都依靠以前的最优解来得到本步骤的最优解，直到得到答案\n",
+                "\n",
+                "请注意所有DP都能改写成记忆化递归，但递归不一定能DP优化"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "AI提出另一种理解角度，而不是只认可自底向上\n",
+                "\n",
+                "* 递归 + 备忘录 = 自顶向下的 DP： 从大问题开始，分解成小问题，递归求解并缓存结果\n",
+                "* 迭代 + DP 表 = 自底向上的 DP： 从小问题开始，迭代求解并逐步构建大问题的解\n",
+                "\n",
+                "两者都是动态规划的有效实现方法，都利用了“存储子问题解以避免重复计算”的核心思想。选择哪种方式取决于具体问题和个人偏好。自顶向下更“自然”，自底向上通常更高效（尤其是在空间优化后）。\n",
+                "\n",
+                "许多问题可以同时用两种方式实现，斐波那契数列、背包问题、最长公共子序列等都是经典的例子。理解这两种视角对于掌握动态规划至关重要"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc5_'></a>[412 0/1背包问题【递归与动态规划两个角度解决】](#toc0_)\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/2.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "贪心策略明显不行了，先从动态规划角度解决\n",
+                "\n",
+                "从数学上，不妨当作求解函数最优解，那么设计函数有：\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./img/3.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "* 状态转移公式是基于上一步考虑的，也就是完成i-1以后，第i件东西加不加。可能等于$m(i-1,W)$是因为第i件没加进去，重量也没变；可能等于$m(i-1,W - W_i)+v_i$，因为加号左边是上一步的价值，右边是这一步的价值。这是描述限制条件（物品情况，重量）中，到手价值最大的函数\n",
+                "* 为什么$w_i > W$就不加了？因为这个函数描述的就是整体组合重量不超过W的情况，超过了就绝对加不进来\n",
+                "* i并不是物品编号，而是前i个，是可以改变的\n",
+                "* 适合由底到顶的思路"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "列出来表格有\n",
+                "\n",
+                "请注意每个格依赖的都跟左边或者上边的有依赖关系\n",
+                "\n",
+                "<img src=\"./img/4.png\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "举例： $m(5,5)$的递推公式\n",
+                "\n",
+                "* $i = 5$的时候，重量为9，超过$W= 5$的限制，肯定不选，因此它等于$m(4,5)$【这个物品超重了，其他的都扔掉也选不了它】\n",
+                "* $m(4,5)$时，第4件的重量为5，没有超过限制，因此第4件可以进入选择【有，或者没有】它等于$max(m(3，5),m(3,0)+8)$。前者是不选这玩意儿，后者是要选这玩意儿的话，上一步该把背包倒成啥样\n",
+                "\n",
+                "\n",
+                "理论描述完毕，开始实现"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 2,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]#None是用来占位的\n",
+                "\n",
+                "max_w = 20"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 3,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "\"\"\"\"\n",
+                "dp\n",
+                "\n",
+                "\"\"\"\n",
+                "#制表\n",
+                "m = {(i,w):0  for i in range(len(tr)) for w in range(max_w + 1)}#有趣的初始化写法；这个东西其实是价值函数;key是元组\n",
+                "\n",
+                "#填表\n",
+                "for i in range(len(tr)):\n",
+                "    for w in range(max_w + 1):\n",
+                "        if i == 0 or w == 0:#不判断也不要紧，毕竟生成表格的时候就是0了\n",
+                "            m[(i,w)] = 0\n",
+                "        elif tr[i]['w'] > w:#第i件超重的话\n",
+                "            m[(i,w)] = m[(i-1,w)]\n",
+                "        else:\n",
+                "            m[(i,w)] = max(m[(i-1,w)],m[(i-1,w-tr[i]['w'])]+tr[i]['v'])"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 4,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n",
+                        "i: 5, w: 20\n"
+                    ]
+                }
+            ],
+            "source": [
+                "max_value = max(m.values())\n",
+                "print(max_value)\n",
+                "# 获取所有达到最大值的键（可能有多个）\n",
+                "max_keys = [key for key, value in m.items() if value == max_value]\n",
+                "\n",
+                "# 遍历并输出每个最大键对应的 i 和 w\n",
+                "for (i, w) in max_keys:\n",
+                "    print(f\"i: {i}, w: {w}\")"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 5,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n"
+                    ]
+                }
+            ],
+            "source": [
+                "#dp\n",
+                "#without function\n",
+                "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]\n",
+                "\n",
+                "max_w = 20\n",
+                "\n",
+                "m = {(i,w):0 for i in range(len(tr))\n",
+                "                for w in range(max_w + 1)}\n",
+                "#print(m.items())\n",
+                "for i in range(1,len(tr)):\n",
+                "    for w in range(1,max_w + 1):\n",
+                "        if tr[i]['w'] > w:\n",
+                "            m[(i,w)] = m[(i-1,w)]\n",
+                "        else:\n",
+                "            m[(i,w)] = max(\n",
+                "                m[(i-1,w)],\n",
+                "                m[(i-1,w-tr[i]['w'])] + tr[i]['v']\n",
+                "            )\n",
+                "\n",
+                "print(m[(len(tr)-1,max_w)])#这个必然是最大的，很巧妙"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "现在把递归的方式搞了，要点是：\n",
+                "* 基本结束情况\n",
+                "* 减小规模【干脆从列表中踢出去，backwards】\n",
+                "* 调用自身\n",
+                "\n",
+                "也就是每选一步，都要看看上一步干的啥。这是自顶向底的思路\n",
+                "\n",
+                "记得递归必须回原点！"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 6,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n"
+                    ]
+                }
+            ],
+            "source": [
+                "def knapsack(i, w):#表示从第 1~i 个物品中选择，且背包剩余容量为 w 时,最大可获得的价值\n",
+                "    if i == 0 or w == 0:\n",
+                "        return 0\n",
+                "    if tr[i]['w'] > w:\n",
+                "        return knapsack(i-1, w)\n",
+                "    else:\n",
+                "        return max(knapsack(i-1, w), knapsack(i-1, w - tr[i]['w']) + tr[i]['v'])\n",
+                "\n",
+                "# 示例调用\n",
+                "print(knapsack(len(tr) - 1, 20))  # 输出最大价值\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "加上备忘录，那么有："
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 9,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "17\n"
+                    ]
+                }
+            ],
+            "source": [
+                "# 假设 tr 是一个列表，表示每个物品的重量和价值，如：\n",
+                "# tr = [{'w': 2, 'v': 3}, {'w': 3, 'v': 4}, {'w': 4, 'v': 5}, {'w': 5, 'v': 8}]\n",
+                "\n",
+                "# 创建备忘录字典\n",
+                "memo = {}\n",
+                "\n",
+                "def knapsack(i, w):\n",
+                "    # 检查备忘录中是否已经计算过\n",
+                "    if (i, w) in memo:\n",
+                "        return memo[(i, w)]\n",
+                "    \n",
+                "    # 基本情况\n",
+                "    if i == 0 or w == 0:\n",
+                "        res = 0\n",
+                "    elif tr[i]['w'] > w:\n",
+                "        res = knapsack(i - 1, w)\n",
+                "    else:\n",
+                "        res = max(knapsack(i - 1, w),\n",
+                "                  knapsack(i - 1, w - tr[i]['w']) + tr[i]['v'])\n",
+                "    \n",
+                "    # 存入备忘录\n",
+                "    memo[(i, w)] = res\n",
+                "    return res\n",
+                "\n",
+                "# 示例物品列表\n",
+                "tr = [{'w': 2, 'v': 3}, {'w': 3, 'v': 4}, {'w': 4, 'v': 5}, {'w': 5, 'v': 8}]\n",
+                "\n",
+                "# 示例调用：背包容量为 20，考虑 0~3 号物品\n",
+                "print(knapsack(len(tr) - 1, 20))  # 输出最大价值\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "29\n"
+                    ]
+                }
+            ],
+            "source": [
+                "# 课堂代码，递归+备忘录\n",
+                "# 背包问题的重点是选哪些物品，而不是物品的顺序，因此无序的描述物品方式也不干扰递归结果\n",
+                "# 上一条可以理解最初的tr顺序打乱，也不影响最终的结果\n",
+                "tr = {(2,3),(3,4),(4,8),(5,8),(9,10)}#这玩意儿是元组的集合，是无序 的，全靠转成元组描述是啥物品，而不是序号\n",
+                "max_w = 20\n",
+                "\n",
+                "m = {}#集合\n",
+                "\n",
+                "def thief(tr,w):#tr用backwards处理，w是最大负重重量\n",
+                "    if tr == set() or w == 0:#基本结束条件\n",
+                "        m[(tuple(tr),w)] = 0#字典填写\n",
+                "        #(tuple(tr),w)是元组，不可变类型，因此符合字典的键的要求\n",
+                "        return 0#这里返回了0\n",
+                "    \n",
+                "    elif (tuple(tr),w) in m:#查字典里有没有这个键\n",
+                "        return m[(tuple(tr),w)]#有的话就返回值\n",
+                "    \n",
+                "    else:\n",
+                "        vmax = 0#forwards处理价值函数\n",
+                "        for t in tr:#虽然集合没有顺序，但踢掉了已经选择的物品\n",
+                "            if t[0] <= w:#t[0]是重量，t[1]是价值\n",
+                "                v = thief(tr - {t},w - t[0]) + t[1]#w在这里更新了，因为递归调用\n",
+                "                #v描述的是：还能装啥\n",
+                "                vmax = max(vmax,v)\n",
+                "        m[(tuple(tr),w)] = vmax\n",
+                "        return vmax\n",
+                "print(thief(tr,max_w))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "9\n",
+                        "2\n",
+                        "3\n",
+                        "4\n",
+                        "5\n"
+                    ]
+                }
+            ],
+            "source": [
+                "tr = {(2,3),(3,4),(4,8),(5,8),(9,10)}\n",
+                "for t in tr:\n",
+                "    print(t[0])"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "假设当前状态：\n",
+                "\n",
+                "* 物品集合 tr = {(3,4), (4,8)}（重量,价值）\n",
+                "* 剩余承重 w = 5\n",
+                "\n",
+                "那么计算过程有\n",
+                "\n",
+                "1. 取物品 t = (3,4)（重量3≤5，可选）：\n",
+                "        递归计算子问题：thief({(4,8)}, 5-3=2)\n",
+                "        子问题：重量限制2，只能选 (4,8)？但4>2，无法选择 → 返回0\n",
+                "        v = 0 + 4 = 4\n",
+                "        更新 vmax = max(0, 4) = 4\n",
+                "\n",
+                "2. 取物品 t = (4,8)（重量4≤5，可选）：\n",
+                "        递归计算子问题：thief({(3,4)}, 5-4=1)\n",
+                "        子问题：重量限制1，无法选 (3,4)（3>1） → 返回0\n",
+                "        v = 0 + 8 = 8\n",
+                "        更新 vmax = max(4, 8) = 8\n",
+                "\n",
+                "所以最终返回 vmax = 8（选择物品 (4,8) 是最优解）\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "函数 ```thief(tr, w)``` 是通过循环```for t in tr```遍历每个物品 t：\n",
+                "对于每个物品 t，如果其重量 ```t[0] <= w```，它递归计算选择 t 后的价值\n",
+                "```thief(tr - {t}, w - t[0]) + t[1]```（即移除 t 并减少重量）。\n",
+                "然后，通过 vmax = max(vmax, v) 比较所有可能的选择，保留最大值。\n",
+                "这相当于枚举所有子集"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "10\n",
+                        "3\n",
+                        "4\n",
+                        "8\n",
+                        "8\n"
+                    ]
+                }
+            ],
+            "source": [
+                "for t in tr:\n",
+                "    print(t[1])"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "tr = [None,{'w':2,'v':3},{'w':3,'v':4},{'w':4,'v':8},{'w':5,'v':8},{'w':9,'v':10}]#None是用来占位的\n",
+                "\n",
+                "max_w = 20"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#递归写法加备忘录\n",
+                "m = {}#跟dp换了个方式；备忘录\n",
+                "def thief(tr,w):#dp没定义函数\n",
+                "    if tr == set() or w==0:#前面\n",
+                "        m[tuple(tr)]"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "在一些情况下，递归+备忘录能完成的比动态规划计算量小。因为后者自底向上，会有些不必要的计算"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# 413 递归小结\n",
+                "* 在解决一些自相似性的问题时可以考虑递归\n",
+                "* 递归算法三定律：\n",
+                "    * 基本结束条件\n",
+                "    * 减小规模。例如排序问题，需要让参与排序的数越来越少\n",
+                "    * 调用自身\n",
+                "* 某些情况下，递归可以代替迭代循环，也就是不用for 或者while\n",
+                "* 递归算法通常能跟问题的表达自然契合，也符合思考问题的流程\n",
+                "* 但递归不会总是最合适的算法，有可能存在巨量的重复计算【自顶向下】\n",
+                "* 使用记忆化/函数值缓存可以减少\n",
+                "* 如果一个问题最优解包括规模更小的相同问题最优解，可以用动态规划来解决\n",
+                "* 试试斐波那契数列"
+            ]
+        }
+    ],
+    "metadata": {
+        "kernelspec": {
+            "display_name": "base",
+            "language": "python",
+            "name": "python3"
+        },
+        "language_info": {
+            "codemirror_mode": {
+                "name": "ipython",
+                "version": 3
+            },
+            "file_extension": ".py",
+            "mimetype": "text/x-python",
+            "name": "python",
+            "nbconvert_exporter": "python",
+            "pygments_lexer": "ipython3",
+            "version": "3.12.7"
+        },
+        "orig_nbformat": 2
+    },
+    "nbformat": 4,
+    "nbformat_minor": 2
 }

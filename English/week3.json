@@ -1,1004 +1,1004 @@
 {
- "cells": [
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "【本周思路】\n",
-    "\n",
-    "本周和下周的课程都是学习线性结构。其中本周学习栈结构，介绍如下：\n",
-    "\n",
-    "* 301 什么是线性结构\n",
-    "\n",
-    "* 302 栈结构介绍\n",
-    "\n",
-    "* 303-307 栈结构的应用\n",
-    "   * 303 简单括号匹配\n",
-    "   * 304 十进制转二进制\n",
-    "   * 305-306 表达式转换\n",
-    "   * 后缀表达式求值"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**Table of contents**<a id='toc0_'></a>    \n",
-    "- [301 什么是线性结构](#toc1_)    \n",
-    "  - [1. 线性结构是一种有序数据项的集合](#toc1_1_)    \n",
-    "  - [2. 线性结构总有两端](#toc1_2_)    \n",
-    "  - [3. 典型线性结构](#toc1_3_)    \n",
-    "- [302 栈抽象数据类型](#toc2_)    \n",
-    "  - [1. 什么是栈](#toc2_1_)    \n",
-    "  - [2. 栈的特性：反转次序](#toc2_2_)    \n",
-    "  - [3. 抽象数据类型Stack](#toc2_3_)    \n",
-    "    - [3.1. ADT Stack的第一种实现](#toc2_3_1_)    \n",
-    "    - [3.2. ADT Stack的第二种实现](#toc2_3_2_)    \n",
-    "- [303 栈的应用：简单括号匹配](#toc3_)    \n",
-    "  - [1. 题目](#toc3_1_)    \n",
-    "  - [2. 算法](#toc3_2_)    \n",
-    "  - [3. 代码实现](#toc3_3_)    \n",
-    "  - [4. 算法改进](#toc3_4_)    \n",
-    "- [304 十进制转换为二进制](#toc4_)    \n",
-    "  - [1. 题目](#toc4_1_)    \n",
-    "  - [2. 算法](#toc4_2_)    \n",
-    "  - [3. 代码实现](#toc4_3_)    \n",
-    "  - [4. 算法改进](#toc4_4_)    \n",
-    "- [305 表达式转换（上）](#toc5_)    \n",
-    "  - [1. 中缀表达式](#toc5_1_)    \n",
-    "  - [2. 前缀和后缀表达式](#toc5_2_)    \n",
-    "  - [3. 转换算法](#toc5_3_)    \n",
-    "- [306 表达式转换（下）](#toc6_)    \n",
-    "  - [1. 题目要求](#toc6_1_)    \n",
-    "  - [2. 算法](#toc6_2_)    \n",
-    "- [307 后缀表达式求值](#toc7_)    \n",
-    "  - [1. 后缀表达式计算思路](#toc7_1_)    \n",
-    "  - [2. 后缀表达式算法细化](#toc7_2_)    \n",
-    "\n",
-    "<!-- vscode-jupyter-toc-config\n",
-    "\tnumbering=false\n",
-    "\tanchor=true\n",
-    "\tflat=false\n",
-    "\tminLevel=1\n",
-    "\tmaxLevel=6\n",
-    "\t/vscode-jupyter-toc-config -->\n",
-    "<!-- THIS CELL WILL BE REPLACED ON TOC UPDATE. DO NOT WRITE YOUR TEXT IN THIS CELL -->"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc1_'></a>[301 什么是线性结构](#toc0_)\n",
-    "## <a id='toc1_1_'></a>[1. 线性结构是一种有序数据项的集合](#toc0_)\n",
-    "其中每个数据项都有唯一的前驱和后继\n",
-    "* 除了第一个没有前驱，最后一个没有后继\n",
-    "* 新的数据项加入到数据集中时，只会加入到原有某个数据项之前或之后\n",
-    "\n",
-    "$\\implies$具有这种性质的数据集，就称为线性结构\n",
-    "\n",
-    "## <a id='toc1_2_'></a>[2. 线性结构总有两端](#toc0_)\n",
-    "在不同的情况下，两端的称呼也不同\n",
-    "* 有时候称为“左”“右”端、“前”“后”端、“顶”“底”端\n",
-    "* 两端的称呼并不是关键，不同线性结构的关键区别在于数据项增减的方式：\n",
-    "    * 有的结构只允许数据项从一端添加\n",
-    "    * 而有的结构则允许数据项从两端移除\n",
-    "    * 有些可以从中间插入\n",
-    "  \n",
-    "    $\\implies$ 请注意仍然保持【加入到原有某个数据项之前或之后】的特点\n",
-    "## <a id='toc1_3_'></a>[3. 典型线性结构](#toc0_)\n",
-    "虽然它们数据项的增减方式不同，但数据项之间只存在着先后的次序关系\n",
-    "* 栈Stack\n",
-    "* 队列Queue\n",
-    "* 双端队列Deque\n",
-    "* 列表List"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "线性结构虽然简单，但是应用广泛，用来解决大量重要的问题"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc2_'></a>[302 栈抽象数据类型](#toc0_)\n",
-    "## <a id='toc2_1_'></a>[1. 什么是栈](#toc0_)\n",
-    "* 是一种线性结构\n",
-    "* 是一种有次序的数据项集合\n",
-    "* 在栈中，数据项的加入和移除都仅发生在同一端。这一端叫栈“顶top”，另一端没有操作，叫栈“底base”\n",
-    "* 最新入栈的数据项最先被移除。这种次序被称为：后进先出LIFO，Last In First Out\n",
-    "* 这是一种基于数据项保存时间的次序，时间越短的离栈顶越近\n",
-    "\n",
-    "## <a id='toc2_2_'></a>[2. 栈的特性：反转次序](#toc0_)\n",
-    "* 也就是进栈和出栈的次序正好相反\n",
-    "* 应用：浏览器的后退按钮；word里的undo\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc2_3_'></a>[3. 抽象数据类型Stack](#toc0_)\n",
-    "* 定义：抽象数据类型“栈”是一个有次序的数据集，每个数据项仅从“栈顶”一端加入到数据集中、从数据集中移除，具有后进先出LIFO的特性\n",
-    "* 定义操作：\n",
-    "   * Stack()【创建栈】\n",
-    "   * push(item)\n",
-    "   * pop()移除栈顶数据项并返回，栈被修改\n",
-    "   * peek()\n",
-    "   * isEmpty()\n",
-    "   * size()\n",
-    "\n",
-    "会写之后，只用调用接口就能用栈的数据结构了\n",
-    "\n",
-    "Python的面向对象机制，可以用来实现用户自定义类型。要求如下：\n",
-    "* 将ADT Stack实现为python的一个class\n",
-    "* 将ADT Stackd的操作实现为class的方法\n",
-    "\n",
-    "由于Stack是一个数据集，所以可以采用python的原生数据集来实现。面对字典和列表，选列表。其中列表也是线性结构\n",
-    "* 可以把列表的任一端(index = 0或者-1)设置为栈顶\n",
-    "* 实际选择列表末端为栈顶，这样可以对应list的append和pop操作"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### <a id='toc2_3_1_'></a>[3.1. ADT Stack的第一种实现](#toc0_)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "class Stack:\n",
-    "    def __init__(self):#attention list&items\n",
-    "        self.items = []\n",
-    "    def push(self,item):\n",
-    "        self.items.append(item)\n",
-    "    def pop(self):#attention return\n",
-    "        return self.items.pop()#using pop\n",
-    "    def peek(self):\n",
-    "        return self.items[-1]#using -1\n",
-    "    def isEmpty(self):\n",
-    "        return self.items == []# attention list\n",
-    "    def size(self):\n",
-    "        return len(self.items)\n",
-    "#push/pop复杂度为O(1)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "python 写类的办法在第一章的课本里，可以看看"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#导入课程代码\n",
-    "from pythonds.basic.stack import Stack#在vscode里使用ctrl+点击stack即可查看对应代码"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "s = Stack()\n",
-    "print(s.isEmpty())\n",
-    "s.push(4)\n",
-    "s.push('dog')\n",
-    "print(s.peek())\n",
-    "s.push(True)\n",
-    "print(s.size())\n",
-    "print(s.isEmpty())\n",
-    "s.push(8.4)\n",
-    "print(s.pop())\n",
-    "print(s.pop())\n",
-    "print(s.size())"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "### <a id='toc2_3_2_'></a>[3.2. ADT Stack的第二种实现](#toc0_)\n",
-    "把另一端当作栈顶。但性能有区别。push/pop复杂度为O(n)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc3_'></a>[303 栈的应用：简单括号匹配](#toc0_)\n",
-    "\n",
-    "## <a id='toc3_1_'></a>[1. 题目](#toc0_)\n",
-    "\n",
-    "* 通常把左边的括号叫做开括号，右边的括号叫做闭括号\n",
-    "* 每个开括号要恰好对应一个闭括号\n",
-    "* 每对开闭括号要正确嵌套\n",
-    "\n",
-    "## <a id='toc3_2_'></a>[2. 算法](#toc0_)\n",
-    "\n",
-    "$\\implies$ 从左到右扫描括号串，最新打开的左括号，应该**匹配最先遇到的右括号**\n",
-    "\n",
-    "$\\implies$ 第一个左括号（最早打开），就应该匹配最后一个右括号（最后遇到）\n",
-    "\n",
-    "$\\implies$ 这种次序反转的识别，符合栈的特性"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "<img src=\"./image/way.PNG\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "简单来说：\n",
-    "* 遇上左括号：未匹配，加入栈\n",
-    "* 遇上右括号：栈非空，就弹出最新的左括号。但要是栈空呢？报错！而且优先检查栈是不是空的\n",
-    "* 扫描完毕，还有左括号，匹配失败"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc3_3_'></a>[3. 代码实现](#toc0_)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#开始代码实现吧！\n",
-    "from pythonds.basic.stack import Stack\n",
-    "\n",
-    "def parChecker(symbolString):\n",
-    "    s = Stack()\n",
-    "    balanced = True\n",
-    "    index = 0\n",
-    "    while index < len(symbolString) and balanced:\n",
-    "        symbol = symbolString[index]\n",
-    "        if symbol == '(':\n",
-    "            s.push(symbol)\n",
-    "        else:\n",
-    "            if s.isEmpty():\n",
-    "                balanced = False\n",
-    "            else:\n",
-    "                s.pop()\n",
-    "        index += 1\n",
-    "    if balanced and s.isEmpty():\n",
-    "        return True\n",
-    "    else:\n",
-    "        return False"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(parChecker(\"((()))\"))\n",
-    "print(parChecker(\"(()\"))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc3_4_'></a>[4. 算法改进](#toc0_)\n",
-    "\n",
-    "更进一步，考虑更多种类的括号，那么代码需要注意：\n",
-    "* 不同的括号混合在一起使用，需要注意各自的开闭匹配情况\n",
-    "\n",
-    "$\\implies$碰到右括号需要判断跟栈顶的左括号是否一致\n",
-    "\n",
-    "不可以每个括号都建栈，因为这样可能不同种类的括号穿插使用了。代码改进如下："
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 49,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "from pythonds.basic.stack import Stack\n",
-    "#以下两个都是函数，不是类\n",
-    "def parChecker(symbolString):\n",
-    "    s = Stack()\n",
-    "    balanced = True\n",
-    "    index = 0\n",
-    "    while balanced and index < len(symbolString):\n",
-    "        symbol = symbolString[index]\n",
-    "        if symbol in \"([{\":#优化\n",
-    "            s.push(symbol)\n",
-    "        else:\n",
-    "            if s.isEmpty():\n",
-    "                balanced = False\n",
-    "            else:\n",
-    "                top = s.pop()\n",
-    "                if not matches(top,symbol):#matches\n",
-    "                    balanced = False\n",
-    "        index += 1\n",
-    "    if balanced and s.isEmpty():\n",
-    "        return True\n",
-    "    else:\n",
-    "        return False\n",
-    "\n",
-    "def matches(open,close):\n",
-    "    opens = \"([{\"\n",
-    "    closes = \")]}\"\n",
-    "    return opens.index(open) == closes.index(close)#位置对得上就能匹配上"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(parChecker('[{()]'))\n",
-    "print(parChecker('{{([][])}()}'))\n",
-    "print(parChecker('([()[]{]}<>)'))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc4_'></a>[304 十进制转换为二进制](#toc0_)\n",
-    "\n",
-    "## <a id='toc4_1_'></a>[1. 题目](#toc0_)\n",
-    "* 逻辑门电路输入输出均为2种状态：0和1\n",
-    "* 但10进制是人类传统文化种最基本的数值概念\n",
-    "$\\implies$如果没有进制转换，人们跟计算机的交互会相当困难\n",
-    "\n",
-    "\n",
-    "## <a id='toc4_2_'></a>[2. 算法](#toc0_)\n",
-    "\n",
-    "转换案例如下：\n",
-    "* $(233)_{10} = 2\\times 10^2 + 3\\times 10^1 + 3 \\times 10^0$ \n",
-    "* $(11101001)_2 = 1\\times 2^7 + 1\\times 2^6 +1\\times 2^5 + 0\\times 2^4 + 1\\times 2^3 +0\\times 2^2 + 0\\times 2^1 +1\\times 2^0$\n",
-    "\n",
-    "通常情况下，十进制转为二进制使用“除以2求余数”的算法：\n",
-    "\n",
-    "将整数不断除以2，得到的余数出现越早，对应的位置越低。而输出是从高到低，所以需要一个栈来反转次序"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "\n",
-    "<img src=\"./image/304.PNG\">"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc4_3_'></a>[3. 代码实现](#toc0_)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#使用代码来实现吧！\n",
-    "from pythonds.basic.stack import Stack\n",
-    "def divideBy2(decNumber):\n",
-    "    remstack = Stack()\n",
-    "\n",
-    "    while decNumber > 0:\n",
-    "        rem = decNumber % 2#取整数商用//\n",
-    "        remstack.push(rem)\n",
-    "        decNumber = decNumber // 2\n",
-    "    binString = \"\"\n",
-    "    while not remstack.isEmpty():\n",
-    "        binString = binString + str(remstack.pop())\n",
-    "    return binString"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "print(divideBy2(35))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc4_4_'></a>[4. 算法改进](#toc0_)\n",
-    "\n",
-    "* 可以将这个算法扩展为转换到任意N进制。常用的是八进制和十六进制。\n",
-    "* 十六进制除了0-9，还有A,B,C,D,E,F"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#十进制转换为十六以下任意进制\n",
-    "def baseConverter(decNumber,base):#base就是目标进制\n",
-    "    digits = \"0123456789ABCDEF\"#列了个表\n",
-    "\n",
-    "    remstack = Stack()\n",
-    "    while decNumber > 0:\n",
-    "        rem = decNumber % base\n",
-    "        remstack.push(rem)\n",
-    "        decNumber = decNumber // base\n",
-    "    \n",
-    "    newString = ''\n",
-    "    while not remstack.isEmpty():\n",
-    "        newString = newString + digits[remstack.pop()]\n",
-    "    \n",
-    "    return newString\n",
-    "print(baseConverter(25,16))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc5_'></a>[305 表达式转换（上）](#toc0_)\n",
-    "这道题比较复杂，所以拆成2小节讲。本节先介绍3种表达式，分别为：\n",
-    "\n",
-    "* 中缀表达式\n",
-    "* 前缀表达式\n",
-    "* 后缀表达式\n",
-    "\n",
-    "然后介绍它们各自的特点。"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc5_1_'></a>[1. 中缀表达式](#toc0_)\n",
-    "* 操作符（operator）介于操作数（operand）中间的表示法，叫做中缀表示法，例如：\n",
-    "\n",
-    "$$B\\times C$$\n",
-    "\n",
-    "* 但有的时候中缀表达式会引起混淆，例如\n",
-    "\n",
-    "$$A+B\\times C$$\n",
-    "\n",
-    "* 为了避免这个问题，人们引入了操作符的优先级来消除混淆，同时引入了括号表示强制优先级：括号的优先级最高，而且在嵌套的括号中，内层的优先级更高\n",
-    "\n",
-    "* 但为了方便计算机理解，就引入了全括号表达式。令操作符的优先级不再重要了。"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc5_2_'></a>[2. 前缀和后缀表达式](#toc0_)\n",
-    "\n",
-    "基于全括号的中缀表达式，将操作符的位置移动\n",
-    "\n",
-    "$\\implies$得到前缀表达式和后缀表达式\n",
-    "\n",
-    "|名称|表达式|\n",
-    "|:---:|:---:|\n",
-    "|前缀表达式|+AB|\n",
-    "|后缀表达式|AB+|\n",
-    "\n",
-    "用**操作符相对于操作数的位置**来定义表达式类型"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "稍微复杂的表达式可以参考如下：\n",
-    "\n",
-    "|中缀表达式|前缀表达式|后缀表达式|\n",
-    "|:---:|:---:|:---:\n",
-    "|A+B|+AB|AB+|\n",
-    "|A+B*C|+A*BC|ABC*+|\n",
-    "\n",
-    "请注意最后一行的前缀表达式，乘法符号在A和BC的中间，因为对应的是B*C。也体现了：\n",
-    "\n",
-    "* 前缀表达式和后缀表达式里，操作符的次序完全决定了运算的次序，不再有混淆\n",
-    "* 离操作数越近的操作符越先运算"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc5_3_'></a>[3. 转换算法](#toc0_)\n",
-    "\n",
-    "如何快速转换？\n",
-    "1. 把中缀表达式改写成全括号的中缀表达式\n",
-    "\n",
-    "$\\implies$ 转为后缀表达式：\n",
-    "   * 看到(B*C)的右括号，把乘法操作符代替右括号，删除左括号，就得到后缀表达式\n",
-    "\n",
-    "$\\implies$ 转为前缀表达式\n",
-    "   * 用操作符代替左括号，删除右括号"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc6_'></a>[306 表达式转换（下）](#toc0_)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "在了解三种表达式和转换算法以后，结合算法，考虑该如何使用数据结构“栈”实现算法"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc6_1_'></a>[1. 题目要求](#toc0_)\n",
-    "\n",
-    "在不需要把中缀表达式改写为全括号的情况下，转换为前缀或者后缀表达式\n",
-    "\n",
-    "下面用转为后缀表达式当例子"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc6_2_'></a>[2. 算法](#toc0_)\n",
-    "* 扫描中缀表达式，是操作数——操作符——操作数，需要**调整顺序**才能变后缀表达式\n",
-    "* 暂存的操作符，由于优先级的规则，可能还有**反转次序**才能输出\n",
-    "\n",
-    "$\\implies$抓到怎么使用栈了"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "考虑到上一节课的算法“全括号”，后缀表达式中操作符应该出现在左括号对应的右括号位置\n",
-    "\n",
-    "以$(A+B)*C$转为后缀表达式$AB+C*$为例。发现由于括号的存在，加号优先级提升，输出早于乘号\n",
-    "\n",
-    "$\\implies$ 遇到左括号：\n",
-    "1. 先标记这个左括号，提升里面操作符的优先级\n",
-    "2. 扫描到对应的右括号，就输出操作符"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "总结起来是：\n",
-    "\n",
-    "* 在从左到右扫描中缀表达式的时候，用一个栈暂存未处理的操作符\n",
-    "* 栈顶的操作符是最近暂存进去的\n",
-    "* 遇到一个新的操作符，跟栈顶的操作符对比优先级，再进行处理：是pop还是push"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "进一步细化流程，优先处理前提条件，如下：\n",
-    "* 约定中缀表达式是由空格隔开的一系列token（编译原理中的一个术语，用于描述最小的词法单位）构成：\n",
-    "     * 操作符单词包括$+-*/()$\n",
-    "     * 操作数则是单字母标识符$A,B,C \\dots$\n",
-    "* 创建空栈opStack用于暂存表达式\n",
-    "* 创建空表postfixList保存后缀表达式\n",
-    "* 将中缀表达式转为token列表，也就是```A+B*C = split => ['A','+','B','*','C']```"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "确定前提条件，开始搭建步骤框架\n",
-    "1. 从左到右扫描中缀表达式单词列表\n",
-    "2. 扫描结束后，把opstack栈中的所有剩余**操作符**依次弹出，添加到输出列表的末尾\n",
-    "3. 输出列表使用join方法合并成后缀表达式字符串\n",
-    "4. 算法结束"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "细化第一步，有：\n",
-    "* token是操作数：直接添加到后缀表达式列表末尾\n",
-    "* token是左括号：压入opstack栈顶\n",
-    "* token是右括号：反复弹出opstack栈顶，直到碰到左括号（重点注意，是多次弹出！）\n",
-    "* token是操作符：压入opstack栈顶，但是！要跟栈顶原有操作符比较优先级"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "$\\implies$在token是操作符时：\n",
-    "* 如果栈顶的操作符优先级高于或者等于它，就反复弹出栈顶操作符，加入到输出列表末尾\n",
-    "* 直到栈顶的操作符优先级比token的低为止"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "调试过程中发现隐藏要点：\n",
-    "* 左括号会被压入栈，但在遇上右括号的时候会被弹出，而且这俩括号必须是匹配的\n",
-    "* token是操作符时，此时栈可能是空的，书写代码需要注意这点"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 30,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#开始实现代码吧！\n",
-    "from pythonds.basic.stack import Stack\n",
-    "\n",
-    "def infixToPostfix(infixexpr):\n",
-    "    prec = {}#用字典设置操作符优先级，需要先弹出的对应数字会更大\n",
-    "    prec[\"*\"] = 3\n",
-    "    prec[\"/\"] = 3\n",
-    "    prec[\"+\"] = 2\n",
-    "    prec[\"-\"] = 2\n",
-    "    prec[\"(\"] = 1\n",
-    "    prec[\")\"] = 0#我自己补一个占位，后面懒得列字母或者数字的单子了\n",
-    "    opStack = Stack()\n",
-    "    postfixList = []\n",
-    "    tokenList = infixexpr.split()#所以输入要用空格分隔token\n",
-    "    \n",
-    "    for token in tokenList:#扫描的步骤\n",
-    "        if token not in prec:\n",
-    "            postfixList.append(token)\n",
-    "        elif token == \"(\":\n",
-    "            opStack.push(token)\n",
-    "\n",
-    "        #elif token == \")\":\n",
-    "        #    while opStack.peek() != \"(\":\n",
-    "        #        postfixList.append(opStack.pop())#这里导致弹出到左括号就不管了，所以是错的\n",
-    "\n",
-    "        elif token == \")\":\n",
-    "            topToken = opStack.pop()#哪怕遇上左括号，也把人家弹出去了\n",
-    "            while topToken != \"(\":\n",
-    "                postfixList.append(topToken)\n",
-    "                topToken = opStack.pop()\n",
-    "\n",
-    "        else:\n",
-    "            while not opStack.isEmpty() and prec[opStack.peek()] >= prec[token]:#所以课上把左括号设为1，优先级最低，不然影响别的操作符弹出咋办。左括号有自己的弹出规则\n",
-    "                postfixList.append(opStack.pop())\n",
-    "            opStack.push(token)\n",
-    "\n",
-    "    while not opStack.isEmpty():\n",
-    "        postfixList.append(opStack.pop())\n",
-    "#        topToken = opStack.pop()#这里试图弥补之前的错，但还是不对劲，因为之前左括号没弹完，下一个右括号又遇上这个左括号了，导致不匹配\n",
-    "#        if topToken != \"(\":\n",
-    "#            postfixList.append(topToken)\n",
-    "\n",
-    "    \n",
-    "    return \" \".join(postfixList)\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 27,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "'A B * 20 C D - * +'"
-      ]
-     },
-     "execution_count": 27,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "#中缀表达式需要使用空格分隔开token\n",
-    "infixToPostfix(\" ( A * B ) + 20 * ( C - D )\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 29,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "A B * 2 C D - * +\n"
-     ]
-    }
-   ],
-   "source": [
-    "#这是课堂标准代码\n",
-    "from pythonds.basic.stack import Stack\n",
-    "def infixToPostfix(infixexpr):\n",
-    "    prec = {\"*\":3,\"/\":3,\"-\":2,\"+\":2,\"(\":1,}\n",
-    "    opStack = Stack()\n",
-    "    postfixList = []\n",
-    "    tokenList = infixexpr.split()\n",
-    "\n",
-    "    for token in tokenList:\n",
-    "        if token in \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\" or token in \"0123456789\":\n",
-    "            postfixList.append(token)\n",
-    "        elif token == \"(\":\n",
-    "            opStack.push(token)\n",
-    "        elif token == \")\":\n",
-    "            topToken = opStack.pop()\n",
-    "            while topToken != \"(\":\n",
-    "                postfixList.append(topToken)\n",
-    "                topToken = opStack.pop()\n",
-    "        else:\n",
-    "            while (not opStack.isEmpty()) and (prec[opStack.peek()] >= prec[token]):\n",
-    "                postfixList.append(opStack.pop())\n",
-    "            opStack.push(token)\n",
-    "    while not opStack.isEmpty():\n",
-    "        postfixList.append(opStack.pop())\n",
-    "    return \" \".join(postfixList)\n",
-    "\n",
-    "print(infixToPostfix(\" ( A * B ) + 2 * ( C - D )\"))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "# <a id='toc7_'></a>[307 后缀表达式求值](#toc0_)\n",
-    "\n",
-    "## <a id='toc7_1_'></a>[1. 后缀表达式计算思路](#toc0_)\n",
-    "\n",
-    "是前面课程的收尾。现在已经能把中缀表达式转为后缀表达式了，在考虑如何输出后缀表达式的计算结果\n",
-    "\n",
-    "* 由于操作符在操作数的后面，所以要暂存操作数\n",
-    "* 在碰到操作符的时候，处理距离最近的两个操作数（pop twice and do math）\n",
-    "\n",
-    "$\\implies$ 最后入栈的最先计算\n",
-    "\n",
-    "而且巧妙的是：\n",
-    "* 先弹出的是右操作数，再弹出左操作数。这对于减法和除法的影响很大\n",
-    "* 把计算出来的中间结果还要再压入栈，继续计算\n",
-    "* 后缀表达式不该有括号\n",
-    "  \n",
-    "  直到栈中只有1个数值，那么就是结果了"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "## <a id='toc7_2_'></a>[2. 后缀表达式算法细化](#toc0_)\n",
-    "\n",
-    "1. 创建空栈operandStack 用于暂存操作数\n",
-    "2. split解析出token列表\n",
-    "3. 从左到右扫描token列表并计算\n",
-    "4. 扫描结束后，栈顶就是最终结果。弹出，结束"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "进一步细化第3步，有：\n",
-    "* 扫描到操作数：转为整数类型压入栈顶\n",
-    "* 扫描到操作符：开始计算求值。弹出右操作数，左操作数，计算后再压入栈"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "from pythonds.basic.stack import Stack\n",
-    "def postfixEval(postfixExpr):\n",
-    "    operandStack = Stack()\n",
-    "    tokenList = postfixExpr.split()\n",
-    "    operaList = ['+','-','*','/']\n",
-    "\n",
-    "    for token in tokenList:\n",
-    "        if token not in operaList:\n",
-    "        #if token in \"0123456789\":\n",
-    "            operandStack.push(int(token))\n",
-    "        else:\n",
-    "            rightOpera = operandStack.pop()\n",
-    "            leftOpera = operandStack.pop()\n",
-    "            result = doMath(leftOpera,rightOpera,token)\n",
-    "            operandStack.push(result)\n",
-    "\n",
-    "    return operandStack.pop()\n",
-    "\n",
-    "def doMath(Ope1,Ope2,token):\n",
-    "    if token == '+':\n",
-    "        return (Ope1 + Ope2)\n",
-    "    elif token == '-':\n",
-    "        return (Ope1 - Ope2)\n",
-    "    elif token == '*':\n",
-    "        return (Ope1 * Ope2)\n",
-    "    else:\n",
-    "        return (Ope1 / Ope2)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 48,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "6"
-      ]
-     },
-     "execution_count": 48,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "postfixEval(\" 2 3 *\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#homework 1\n",
-    "def isValid(s) -> bool:\n",
-    "        dic = {'{': '}',  '[': ']', '(': ')', '?': '?'}\n",
-    "        stack = ['?']\n",
-    "        for c in s:\n",
-    "            if c in dic: \n",
-    "                stack.append(c)\n",
-    "            elif dic[stack.pop()] != c:\n",
-    "                return False \n",
-    "        return len(stack) == 1\n",
-    "s = input()\n",
-    "print(isValid(s))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# homework2\n",
-    "class Stack:\n",
-    "    def __init__(self):#attention list&items\n",
-    "        self.items = []\n",
-    "    def push(self,item):\n",
-    "        self.items.append(item)\n",
-    "    def pop(self):#attention return\n",
-    "        return self.items.pop()\n",
-    "    def peek(self):\n",
-    "        return self.items[-1]\n",
-    "    def isEmpty(self):\n",
-    "        return self.items == []# attention list\n",
-    "    def size(self):\n",
-    "        return len(self.items)\n",
-    "\n",
-    "def xiaoxiaole(Newstring):\n",
-    "    c = Stack()\n",
-    "    c.push('?')\n",
-    "    for i in Newstring:\n",
-    "        if i != c.peek():\n",
-    "            c.push(i)\n",
-    "        else:\n",
-    "            c.pop()\n",
-    "    if c.size() == 1:\n",
-    "        return None\n",
-    "    else:\n",
-    "        clist = []\n",
-    "        for m in range(1,c.size()):\n",
-    "            clist.append(c.pop())\n",
-    "        return clist\n",
-    "\n",
-    "\n",
-    "Newstring = input()\n",
-    "clists = xiaoxiaole(Newstring)\n",
-    "clists = clists[::-1]\n",
-    "print(\"\".join(clists))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# homework3\n",
-    "def OCDBoss(NewString):\n",
-    "    leftList = []\n",
-    "    popList = []\n",
-    "    for i in NewString:\n",
-    "        i = int(i)\n",
-    "        for j in range(i+1):\n",
-    "            if j not in popList:\n",
-    "                if j not in leftList:\n",
-    "                    leftList.append(j)\n",
-    "            if leftList != []:\n",
-    "                if i == leftList[-1]:\n",
-    "                    popList.append(leftList.pop())\n",
-    "    #print(len(leftList))\n",
-    "    if len(leftList) > 0:\n",
-    "        print('No')\n",
-    "    else:\n",
-    "        print('Yes')\n",
-    "NewString = input()\n",
-    "OCDBoss(NewString)"
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "base",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.12.7"
-  },
-  "toc": {
-   "base_numbering": 1,
-   "nav_menu": {},
-   "number_sections": true,
-   "sideBar": true,
-   "skip_h1_title": false,
-   "title_cell": "Table of Contents",
-   "title_sidebar": "Contents",
-   "toc_cell": false,
-   "toc_position": {},
-   "toc_section_display": true,
-   "toc_window_display": false
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 2
+    "cells": [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "[Thought for the week]\n",
+                "\n",
+                "This week's and next week's lessons are all about learning about linear structures. One of them is studying stack structures this week, which are introduced as follows:\n",
+                "\n",
+                "* :: 301 What is a linear structure\n",
+                "\n",
+                "* :: 302 Introduction to stack structure\n",
+                "\n",
+                "* :: 303-307 Application of stack structure\n",
+                "   * :: 303 Simple bracket matching\n",
+                "   * :: 304 Decimal to Binary\n",
+                "   * :: 305-306 Expression conversion\n",
+                "   * :: Suffix expression evaluation"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "**Table of contents**<a id='toc0_'></a>    \n",
+                "- [301 What is a linear structure](#toc1_)\n",
+                "  - [1. A linear structure is an ordered collection of data items] (#toc1_1_)\n",
+                "  - [2. Linear structures always have two ends] (#toc1_2_)\n",
+                "  - [3. Typical linear structure] (#toc1_3_)\n",
+                "- [302 Stack abstract data type] (#toc2_)\n",
+                "  - [1. What is a stack](#toc2_1_)\n",
+                "  - [2. Characteristics of stacks: reversal of order] (#toc2_2_)\n",
+                "  - [3. Abstract data type Stack](#toc2_3_)\n",
+                "    - [3.1. First implementation of ADT Stack](#toc2_3_1_)\n",
+                "    - [3.2. Second implementation of ADT Stack](#toc2_3_2_)\n",
+                "- [303 Application of stacks: simple bracket matching] (#toc3_)\n",
+                "  - [1. Title] (#toc3_1_)\n",
+                "  - [2. Algorithms] (#toc3_2_)\n",
+                "  - [3. Code implementation] (#toc3_3_)\n",
+                "  - [4. Algorithmic improvements] (#toc3_4_)\n",
+                "- [304 decimal to binary conversion](#toc4_)\n",
+                "  - [1. Title] (#toc4_1_)\n",
+                "  - [2. Algorithms] (#toc4_2_)\n",
+                "  - [3. Code implementation] (#toc4_3_)\n",
+                "  - [4. Algorithmic improvements] (#toc4_4_)\n",
+                "- [305 Expression conversion (above)](#toc5_)\n",
+                "  - [1. Medium expression] (#toc5_1_)\n",
+                "  - [2. Prefix and suffix expressions] (#toc5_2_)\n",
+                "  - [3. Conversion algorithms] (#toc5_3_)\n",
+                "- [306 Expression conversion (below)](#toc6_)\n",
+                "  - [1. Title requirements] (#toc6_1_)\n",
+                "  - [2. Algorithms] (#toc6_2_)\n",
+                "- [307 Suffix expression evaluation] (#toc7_)\n",
+                "  - [1. Suffix expression calculation ideas] (#toc7_1_)\n",
+                "  - [2. Suffix expression algorithm refinement] (#toc7_2_)\n",
+                "\n",
+                "<!-- vscode-jupyter-toc-config\n",
+                "\tnumbering=false\n",
+                "\tanchor=true\n",
+                "\tflat=false\n",
+                "\tminLevel=1\n",
+                "\tmaxLevel=6\n",
+                "\t/vscode-jupyter-toc-config -->\n",
+                "<!-- THIS CELL WILL BE REPLACED ON TOC UPDATE. DO NOT WRITE YOUR TEXT IN THIS CELL -->"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc1_'></a>[301 What is a linear structure](#toc0_)\n",
+                "## <a id='toc1_1_'></a> [1. A linear structure is an ordered collection of data items](#toc0_)\n",
+                "where each data item has a unique predecessor and successor\n",
+                "* :: No precursor except for the first, and no successor for the last\n",
+                "* :: When a new data item is added to the data set, it will only be added before or after an existing data item\n",
+                "\n",
+                "A dataset $\\implies$ with this property is called a linear structure\n",
+                "\n",
+                "## <a id='toc1_2_'></a> [2. Linear structures always have two ends](#toc0_)\n",
+                "In different cases, the two ends of the spectrum are referred to differently\n",
+                "* :: Sometimes referred to as \"left\" and \"right\" ends, \"front\" and \"back\" ends, \"top\" and \"bottom\" ends.\n",
+                "* :: The designations at the ends are not critical; the key difference between the different linear structures is the way in which data items are added or subtracted:\n",
+                "    * :: There are structures that allow data items to be added from one end only\n",
+                "    * :: Whereas some structures allow data items to be removed from both ends\n",
+                "    * :: Some can be inserted in the middle\n",
+                "  \n",
+                "    $\\implies$ Please note that the feature [added before or after an existing data item] is still maintained.\n",
+                "## <a id='toc1_3_'></a> [3. Typical linear structure](#toc0_)\n",
+                "Although their data items are added and subtracted in different ways, there is only a sequential order relationship between the data items\n",
+                "* 栈Stack\n",
+                "* :: Queue\n",
+                "* :: Double-ended queue Deque\n",
+                "* :: List List"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Linear structures are simple but widely used to solve a large number of important problems"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc2_'></a>[302 Stack abstract data type](#toc0_)\n",
+                "## <a id='toc2_1_'></a>[1. What is a stack](#toc0_)\n",
+                "* :: Is a linear structure\n",
+                "* :: Is an ordered collection of data items\n",
+                "* :: In a stack, additions and removals of data items occur only at the same end. This end is called the \"top\" of the stack, and the other end, which has no operations, is called the \"bottom\" of the stack.\n",
+                "* :: The newest data item on the stack is removed first. This order is called: Last In First Out LIFO, Last In First Out\n",
+                "* :: This is an order based on how long the data items have been stored, with the shorter time being closer to the top of the stack\n",
+                "\n",
+                "## <a id='toc2_2_'></a> [2. Stack properties: reverse order](#toc0_)\n",
+                "* That is, in and out of the stack in the opposite order.\n",
+                "* :: Applications: back button in browsers; undo in word\n"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc2_3_'></a>[3. abstract data type Stack](#toc0_)\n",
+                "* :: Definition: The abstract data type \"stack\" is a sequential data set in which each data item is added to and removed from the data set only from the \"top of the stack\" end, and has the characteristics of a last-in, first-out LIFO.\n",
+                "* :: Define the operation:\n",
+                "   * :: Stack() [Create Stack]\n",
+                "   * push(item)\n",
+                "   * :: pop() removes the top-of-stack data item and returns, the stack is modified\n",
+                "   * peek()\n",
+                "   * isEmpty()\n",
+                "   * size()\n",
+                "\n",
+                "After you can write it, you can use the stack data structure by just calling the interface\n",
+                "\n",
+                "Python's object-oriented mechanism can be used to implement user-defined types. The requirements are as follows:\n",
+                "* :: Implement ADT Stack as a class in python\n",
+                "* :: Methods for implementing ADT Stackd operations as classes\n",
+                "\n",
+                "Since Stack is a dataset, it can be implemented using python's native dataset. Faced with a dictionary and a list, pick the list. Where lists are also linear structures\n",
+                "* :: Either end of the list (index = 0 or -1) can be set to the top of the stack\n",
+                "* :: The actual selection of the end of the list as the top of the stack, which corresponds to the append and pop operations of the list."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### <a id='toc2_3_1_'></a> [3.1. First implementation of ADT Stack](#toc0_)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "class Stack:\n",
+                "    def __init__(self):#attention list&items\n",
+                "        self.items = []\n",
+                "    def push(self,item):\n",
+                "        self.items.append(item)\n",
+                "    def pop(self):#attention return\n",
+                "        return self.items.pop()#using pop\n",
+                "    def peek(self):\n",
+                "        return self.items[-1]#using -1\n",
+                "    def isEmpty(self):\n",
+                "        return self.items == []# attention list\n",
+                "    def size(self):\n",
+                "        return len(self.items)\n",
+                "#push/pop complexity is O(1)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "The python approach to writing classes is in the first chapter of the textbook, take a look at the"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Import course code\n",
+                "from pythonds.basic.stack import Stack#Use ctrl+click on stack in vscode to see the corresponding code."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "s = Stack()\n",
+                "print(s.isEmpty())\n",
+                "s.push(4)\n",
+                "s.push('dog')\n",
+                "print(s.peek())\n",
+                "s.push(True)\n",
+                "print(s.size())\n",
+                "print(s.isEmpty())\n",
+                "s.push(8.4)\n",
+                "print(s.pop())\n",
+                "print(s.pop())\n",
+                "print(s.size())"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### <a id='toc2_3_2_'></a> [3.2. Second implementation of ADT Stack](#toc0_)\n",
+                "Treat the other end as the top of the stack. But there is a difference in performance. push/pop complexity is O(n)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc3_'></a> [303 Application of stacks: simple bracket matching](#toc0_)\n",
+                "\n",
+                "## <a id='toc3_1_'></a> [1. title](#toc0_)\n",
+                "\n",
+                "* :: It is common to call the left-hand bracket an open bracket and the right-hand bracket a closed bracket\n",
+                "* :: Each open bracket should correspond to exactly one closed bracket\n",
+                "* :: Correct nesting of each pair of opening and closing brackets\n",
+                "\n",
+                "## <a id='toc3_2_'></a> [2. Algorithm](#toc0_)\n",
+                "\n",
+                "$\\implies$ scans the bracket string from left to right; the latest open left bracket should **match the first right bracket encountered**\n",
+                "\n",
+                "$\\implies$ The first left bracket (earliest opened) should match the last right bracket (last encountered)\n",
+                "\n",
+                "$\\implies$ This recognition of order reversal is consistent with the properties of a stack"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "<img src=\"./image/way.PNG\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "In a nutshell:\n",
+                "* :: Left bracket: no match, add to stack\n",
+                "* :: When you encounter a right bracket: the stack is not empty, you pop the latest left bracket. But what if the stack is empty? Report an error! And prioritize checking if the stack is empty\n",
+                "* :: Scan complete, left bracket still present, match failed"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc3_3_'></a>[3. Code implementation](#toc0_)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Start the code to realize it!\n",
+                "from pythonds.basic.stack import Stack\n",
+                "\n",
+                "def parChecker(symbolString):\n",
+                "    s = Stack()\n",
+                "    balanced = True\n",
+                "    index = 0\n",
+                "    while index < len(symbolString) and balanced:\n",
+                "        symbol = symbolString[index]\n",
+                "        if symbol == '(':\n",
+                "            s.push(symbol)\n",
+                "        else:\n",
+                "            if s.isEmpty():\n",
+                "                balanced = False\n",
+                "            else:\n",
+                "                s.pop()\n",
+                "        index += 1\n",
+                "    if balanced and s.isEmpty():\n",
+                "        return True\n",
+                "    else:\n",
+                "        return False"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(parChecker(\"((()))\"))\n",
+                "print(parChecker(\"(()\"))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc3_4_'></a> [4. Algorithmic improvements](#toc0_)\n",
+                "\n",
+                "Going a step further and considering more kinds of brackets, then the code needs attention:\n",
+                "* :: Different brackets are used in combination and care needs to be taken to match the opening and closing of the respective brackets\n",
+                "\n",
+                "When $\\implies$ encounters a right bracket, you need to determine if it matches the left bracket at the top of the stack.\n",
+                "\n",
+                "It's not possible to build a stack for each bracket, because then different kinds of brackets might be interspersed. The code improvement is as follows:"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 49,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "from pythonds.basic.stack import Stack\n",
+                "# Both of the following are functions, not classes\n",
+                "def parChecker(symbolString):\n",
+                "    s = Stack()\n",
+                "    balanced = True\n",
+                "    index = 0\n",
+                "    while balanced and index < len(symbolString):\n",
+                "        symbol = symbolString[index]\n",
+                "        if symbol in \"([{\":#优化\n",
+                "            s.push(symbol)\n",
+                "        else:\n",
+                "            if s.isEmpty():\n",
+                "                balanced = False\n",
+                "            else:\n",
+                "                top = s.pop()\n",
+                "                if not matches(top,symbol):#matches\n",
+                "                    balanced = False\n",
+                "        index += 1\n",
+                "    if balanced and s.isEmpty():\n",
+                "        return True\n",
+                "    else:\n",
+                "        return False\n",
+                "\n",
+                "def matches(open,close):\n",
+                "    opens = \"([{\"\n",
+                "    closes = \")]}\"\n",
+                "    return opens.index(open) == closes.index(close) # match if the position is right"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(parChecker('[{()]'))\n",
+                "print(parChecker('{{([][])}()}'))\n",
+                "print(parChecker('([()[]{]}<>)'))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc4_'></a>[304 decimal to binary conversion](#toc0_)\n",
+                "\n",
+                "## <a id='toc4_1_'></a> [1. title](#toc0_)\n",
+                "* :: Inputs and outputs of logic gate circuits are all in 2 states: 0 and 1\n",
+                "* :: But decimal is the most basic numerical concept in traditional human culture.\n",
+                "$\\implies$ Without conversion, it would be quite difficult for people to interact with computers.\n",
+                "\n",
+                "\n",
+                "## <a id='toc4_2_'></a> [2. Algorithm](#toc0_)\n",
+                "\n",
+                "Conversion cases are listed below:\n",
+                "* $(233)_{10} = 2\\times 10^2 + 3\\times 10^1 + 3 \\times 10^0$ \n",
+                "* $(11101001)_2 = 1\\times 2^7 + 1\\times 2^6 +1\\times 2^5 + 0\\times 2^4 + 1\\times 2^3 +0\\times 2^2 + 0\\times 2^1 +1\\times 2^0$\n",
+                "\n",
+                "Typically, decimal to binary conversion is done using the \"divide by 2 to get the remainder\" algorithm:\n",
+                "\n",
+                "Dividing the integer by 2 over and over again, the earlier the resulting remainder appears, the lower the corresponding position. And the output is from high to low, so a stack is needed to reverse the order"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "\n",
+                "<img src=\"./image/304.PNG\">"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc4_3_'></a>[3. Code implementation](#toc0_)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#Use the code to make it happen!\n",
+                "from pythonds.basic.stack import Stack\n",
+                "def divideBy2(decNumber):\n",
+                "    remstack = Stack()\n",
+                "\n",
+                "    while decNumber > 0:\n",
+                "        rem = decNumber % 2#take integer commercial///\n",
+                "        remstack.push(rem)\n",
+                "        decNumber = decNumber // 2\n",
+                "    binString = \"\"\n",
+                "    while not remstack.isEmpty():\n",
+                "        binString = binString + str(remstack.pop())\n",
+                "    return binString"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print(divideBy2(35))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc4_4_'></a> [4. Algorithmic improvements](#toc0_)\n",
+                "\n",
+                "* It is possible to extend this algorithm to convert to any N-ary. Commonly used are octal and hexadecimal.\n",
+                "* Hexadecimal has A,B,C,D,E,F in addition to 0-9."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Convert decimal to any hexadecimal below\n",
+                "def baseConverter(decNumber,base):#base is the target variable.\n",
+                "    digits = \"0123456789ABCDEF \"# made a list\n",
+                "\n",
+                "    remstack = Stack()\n",
+                "    while decNumber > 0:\n",
+                "        rem = decNumber % base\n",
+                "        remstack.push(rem)\n",
+                "        decNumber = decNumber // base\n",
+                "    \n",
+                "    newString = ''\n",
+                "    while not remstack.isEmpty():\n",
+                "        newString = newString + digits[remstack.pop()]\n",
+                "    \n",
+                "    return newString\n",
+                "print(baseConverter(25,16))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc5_'></a>[305 Expression conversion (above)](#toc0_)\n",
+                "This is a complex problem, so it is split into 2 subsections. This section starts with 3 expressions, which are:\n",
+                "\n",
+                "* :: Interfix expressions\n",
+                "* :: Prefix expressions\n",
+                "* :: Suffix expressions\n",
+                "\n",
+                "They are then introduced to their respective characteristics."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc5_1_'></a>[1. medial expression](#toc0_)\n",
+                "* A representation where the operator is intermediate between the operands is called a medial representation, for example:\n",
+                "\n",
+                "$$B\\times C$$\n",
+                "\n",
+                "* :: But there are times when prefixed expressions can be confusing, for example\n",
+                "\n",
+                "$$A+B\\times C$$\n",
+                "\n",
+                "* :: To avoid this problem, operator precedence was introduced to eliminate confusion, and parentheses were introduced to indicate mandatory precedence: parentheses have the highest precedence and, in nested parentheses, the inner one has higher precedence\n",
+                "\n",
+                "* :: However, to make it easier for computers to understand, full bracket expressions were introduced. It makes the precedence of operators no longer important."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc5_2_'></a> [2. Prefix and suffix expressions](#toc0_)\n",
+                "\n",
+                "Full-bracket based midfix expressions that shift the position of operators\n",
+                "\n",
+                "$\\implies$ to get prefix expressions and suffix expressions\n",
+                "\n",
+                "|name|expression|\n",
+                "|:---:|:---:|\n",
+                "|prefixed expressions|+AB|\n",
+                "|Suffix expressions|AB+|\n",
+                "\n",
+                "Define expression types with **operator position relative to operand**"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Slightly more complex expressions can be found below:\n",
+                "\n",
+                "|medial expressions|prefix expressions|postfix expressions|\n",
+                "|:---:|:---:|:---:\n",
+                "|A+B|+AB|AB+|\n",
+                "|A+B*C|+A*BC|ABC*+|\n",
+                "\n",
+                "Note the prefix expression in the last line, where the multiplication symbol is in the middle of A and BC, as the counterpart is B*C. also embodied:\n",
+                "\n",
+                "* :: In prefix and suffix expressions, the order of operators completely determines the order of operations, and there is no more confusion\n",
+                "* :: Operators closer to the operand operate first"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc5_3_'></a>[3. Conversion algorithm](#toc0_)\n",
+                "\n",
+                "How quickly can I convert?\n",
+                "1. Rewriting of a neutrosophic expression as a fully bracketed neutrosophic expression\n",
+                "\n",
+                "$\\implies$ to a postfix expression:\n",
+                "   * :: Seeing the right parenthesis of (B*C), replacing the right parenthesis with the multiplication operator and removing the left parenthesis gives the suffix expression\n",
+                "\n",
+                "$\\implies$ to prefix expression\n",
+                "   * :: Replacing left parentheses with operators to remove right parentheses"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc6_'></a>[306 Expression conversion (below)](#toc0_)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "After understanding the three expressions and the conversion algorithm, consider how the algorithm can be implemented using the data structure \"stack\" in conjunction with the algorithm."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc6_1_'></a> [1. Title requirement](#toc0_)\n",
+                "\n",
+                "Converting to a prefix or suffix expression without rewriting the midfix expression as a full parenthesis\n",
+                "\n",
+                "Here's an example using the conversion to a postfix expression"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc6_2_'></a> [2. Algorithm](#toc0_)\n",
+                "* Scanning for midfix expressions, which are operand-operator-operator and need to be **reordered** in order to become postfix expressions\n",
+                "* transient operators, which may still have **reverse order** to be output due to priority rules\n",
+                "\n",
+                "$\\implies$ caught how to use the stacks"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Considering the algorithm \"full parentheses\" from the previous lesson, the operator in the postfixed expression should appear in the right parenthesis position corresponding to the left parenthesis\n",
+                "\n",
+                "Take the example of $(A+B)*C$ converted to the suffix expression $AB+C*$. It is found that due to the presence of parentheses, the plus sign is elevated in priority and the output is earlier than the multiplication sign\n",
+                "\n",
+                "$\\implies$ Left brackets are encountered:\n",
+                "1. Mark the left bracket first to raise the priority of the operators inside it.\n",
+                "2. Scan for the corresponding right bracket and output the operator"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "To summarize:\n",
+                "\n",
+                "* :: Use a stack to store unprocessed operators while scanning a medial expression from left to right\n",
+                "* The operators at the top of the stack are the most recently staged. *\n",
+                "* :: When a new operator is encountered, compare the priority with the operator on the top of the stack, and then process it: pop or push."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Further refine the process and prioritize prerequisites as follows:\n",
+                "* A covenant-medial expression is a space-separated series of tokens (a term used in compilation principles to describe the smallest lexical unit):\n",
+                "     * Operator words include $+-*/()$\n",
+                "     * The operands are single-letter identifiers $A,B,C \\dots$.\n",
+                "* :: Create an empty opStack for storing expressions.\n",
+                "* :: Create an empty table, postfixList, to hold postfix expressions\n",
+                "* :: Converts a medial expression into a list of tokens, i.e., ```A+B*C = split => ['A', '+', 'B', '*', 'C'] ```"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Determine the prerequisites and start building the step-by-step framework\n",
+                "1. Scanning the list of words in a medial expression from left to right\n",
+                "2. At the end of the scan, pop all the remaining **operators** in the opstack stack in order and add them to the end of the output list\n",
+                "3. The output list is merged into a postfix expression string using the join method.\n",
+                "4. End of algorithm"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Refine the first step, there:\n",
+                "* :: token is an operand: add it directly to the end of the list of postfix expressions\n",
+                "* :: token is left-bracketed: pressed into opstack top stack\n",
+                "* token is a right bracket: pop the top of the opstack stack repeatedly until it hits the left bracket (emphasis added, multiple times!)\n",
+                "* token is an operator: pressed into the top of the opstack stack, however! To compare priority with the original operator on top of the stack"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "$\\implies$ when token is an operator:\n",
+                "* :: If the operator at the top of the stack has a priority higher than or equal to it, repeatedly pop the top-of-stack operator and add it to the end of the output list\n",
+                "* until the operator at the top of the stack has a lower priority than the token's"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Hidden points were found during debugging:\n",
+                "* Left parentheses are pressed onto the stack, but are ejected when they meet right parentheses, and the two parentheses must match.\n",
+                "* When the token is an operator, the stack may be empty at this point, and the code needs to be written with this in mind."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 30,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Start implementing the code!\n",
+                "from pythonds.basic.stack import Stack\n",
+                "\n",
+                "def infixToPostfix(infixexpr):\n",
+                "    prec = {}# Set the operator priority with a dictionary, the corresponding number that needs to be popped first will be larger\n",
+                "    prec[\"*\"] = 3\n",
+                "    prec[\"/\"] = 3\n",
+                "    prec[\"+\"] = 2\n",
+                "    prec[\"-\"] = 2\n",
+                "    prec[\"(\"] = 1\n",
+                "    prec[\")\"] = 0# I'll make up a placeholder of my own, I'm too lazy to make a list of letters or numbers later on\n",
+                "    opStack = Stack()\n",
+                "    postfixList = []\n",
+                "    tokenList = infixexpr.split()# so input should be separated by spaces token\n",
+                "    \n",
+                "    for token in tokenList:#扫描的步骤\n",
+                "        if token not in prec:\n",
+                "            postfixList.append(token)\n",
+                "        elif token == \"(\":\n",
+                "            opStack.push(token)\n",
+                "\n",
+                "        #elif token == \")\":\n",
+                "        #    while opStack.peek() != \"(\":\n",
+                "        # postfixList.append(opStack.pop()) # This causes the pop to go to the left bracket and leave it alone, so it's wrong\n",
+                "\n",
+                "        elif token == \")\":\n",
+                "            topToken = opStack.pop()#Even if it meets a left bracket, it pops the person out\n",
+                "            while topToken != \"(\":\n",
+                "                postfixList.append(topToken)\n",
+                "                topToken = opStack.pop()\n",
+                "\n",
+                "        else:\n",
+                "            while not opStack.isEmpty() and prec[opStack.peek()] >= prec[token]:# So the lesson is to set the left bracket to 1, the lowest priority, otherwise it affects what other operators pop up. Left brackets have their own popup rules\n",
+                "                postfixList.append(opStack.pop())\n",
+                "            opStack.push(token)\n",
+                "\n",
+                "    while not opStack.isEmpty():\n",
+                "        postfixList.append(opStack.pop())\n",
+                "# topToken = opStack.pop()# Here is an attempt to fix the previous mistake, but it's still not right because the previous left bracket didn't finish popping, and the next right bracket meets this left bracket, resulting in a mismatch\n",
+                "#        if topToken != \"(\":\n",
+                "#            postfixList.append(topToken)\n",
+                "\n",
+                "    \n",
+                "    return \" \".join(postfixList)\n"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 27,
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {
+                        "text/plain": [
+                            "'A B * 20 C D - * +'"
+                        ]
+                    },
+                    "execution_count": 27,
+                    "metadata": {},
+                    "output_type": "execute_result"
+                }
+            ],
+            "source": [
+                "# The token needs to be separated by a space in the mid-expression.\n",
+                "infixToPostfix(\" ( A * B ) + 20 * ( C - D )\")"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 29,
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "A B * 2 C D - * +\n"
+                    ]
+                }
+            ],
+            "source": [
+                "# This is the classroom standard code\n",
+                "from pythonds.basic.stack import Stack\n",
+                "def infixToPostfix(infixexpr):\n",
+                "    prec = {\"*\":3,\"/\":3,\"-\":2,\"+\":2,\"(\":1,}\n",
+                "    opStack = Stack()\n",
+                "    postfixList = []\n",
+                "    tokenList = infixexpr.split()\n",
+                "\n",
+                "    for token in tokenList:\n",
+                "        if token in \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\" or token in \"0123456789\":\n",
+                "            postfixList.append(token)\n",
+                "        elif token == \"(\":\n",
+                "            opStack.push(token)\n",
+                "        elif token == \")\":\n",
+                "            topToken = opStack.pop()\n",
+                "            while topToken != \"(\":\n",
+                "                postfixList.append(topToken)\n",
+                "                topToken = opStack.pop()\n",
+                "        else:\n",
+                "            while (not opStack.isEmpty()) and (prec[opStack.peek()] >= prec[token]):\n",
+                "                postfixList.append(opStack.pop())\n",
+                "            opStack.push(token)\n",
+                "    while not opStack.isEmpty():\n",
+                "        postfixList.append(opStack.pop())\n",
+                "    return \" \".join(postfixList)\n",
+                "\n",
+                "print(infixToPostfix(\" ( A * B ) + 2 * ( C - D )\"))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# <a id='toc7_'></a>[307 Suffix expression evaluation](#toc0_)\n",
+                "\n",
+                "## <a id='toc7_1_'></a>[1. Suffix expression computation idea](#toc0_)\n",
+                "\n",
+                "It's the wrap-up of the previous lessons. Now that you're able to convert a medial expression to a suffix expression, you're thinking about how to output the result of the computation of the suffix expression\n",
+                "\n",
+                "* :: Staging operands because the operator follows the operand\n",
+                "* :: Process the two closest operands when they encounter an operator (pop twice and do math)\n",
+                "\n",
+                "$\\implies$ Last on the stack first to count\n",
+                "\n",
+                "And cleverly so:\n",
+                "* :: The right operand is popped first, then the left operand. This has a big effect on subtraction and division\n",
+                "* :: The intermediate results of the computation have to be pressed onto the stack again to continue the computation.\n",
+                "* :: Suffix expressions should not have parentheses\n",
+                "  \n",
+                "  Until there is only 1 value on the stack, then that's the result"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## <a id='toc7_2_'></a> [2. Suffix expression algorithm refinement](#toc0_)\n",
+                "\n",
+                "1. create an empty stack operandStack for temporary storage of operands\n",
+                "2. split parses the list of tokens\n",
+                "3. Scanning the list of tokens from left to right and calculating the\n",
+                "4. At the end of the scan, the top of the stack is the final result. Eject, end"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Further refinement of step 3, there:\n",
+                "* :: Scan to operand: convert to integer type and press to top of stack\n",
+                "* :: Scan to operator: start computation for value. Pop right operand, left operand, compute then press to stack"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "from pythonds.basic.stack import Stack\n",
+                "def postfixEval(postfixExpr):\n",
+                "    operandStack = Stack()\n",
+                "    tokenList = postfixExpr.split()\n",
+                "    operaList = ['+','-','*','/']\n",
+                "\n",
+                "    for token in tokenList:\n",
+                "        if token not in operaList:\n",
+                "        #if token in \"0123456789\":\n",
+                "            operandStack.push(int(token))\n",
+                "        else:\n",
+                "            rightOpera = operandStack.pop()\n",
+                "            leftOpera = operandStack.pop()\n",
+                "            result = doMath(leftOpera,rightOpera,token)\n",
+                "            operandStack.push(result)\n",
+                "\n",
+                "    return operandStack.pop()\n",
+                "\n",
+                "def doMath(Ope1,Ope2,token):\n",
+                "    if token == '+':\n",
+                "        return (Ope1 + Ope2)\n",
+                "    elif token == '-':\n",
+                "        return (Ope1 - Ope2)\n",
+                "    elif token == '*':\n",
+                "        return (Ope1 * Ope2)\n",
+                "    else:\n",
+                "        return (Ope1 / Ope2)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 48,
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {
+                        "text/plain": [
+                            "6"
+                        ]
+                    },
+                    "execution_count": 48,
+                    "metadata": {},
+                    "output_type": "execute_result"
+                }
+            ],
+            "source": [
+                "postfixEval(\" 2 3 *\")"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "#homework 1\n",
+                "def isValid(s) -> bool:\n",
+                "        dic = {'{': '}',  '[': ']', '(': ')', '?': '?'}\n",
+                "        stack = ['?']\n",
+                "        for c in s:\n",
+                "            if c in dic: \n",
+                "                stack.append(c)\n",
+                "            elif dic[stack.pop()] != c:\n",
+                "                return False \n",
+                "        return len(stack) == 1\n",
+                "s = input()\n",
+                "print(isValid(s))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# homework2\n",
+                "class Stack:\n",
+                "    def __init__(self):#attention list&items\n",
+                "        self.items = []\n",
+                "    def push(self,item):\n",
+                "        self.items.append(item)\n",
+                "    def pop(self):#attention return\n",
+                "        return self.items.pop()\n",
+                "    def peek(self):\n",
+                "        return self.items[-1]\n",
+                "    def isEmpty(self):\n",
+                "        return self.items == []# attention list\n",
+                "    def size(self):\n",
+                "        return len(self.items)\n",
+                "\n",
+                "def xiaoxiaole(Newstring):\n",
+                "    c = Stack()\n",
+                "    c.push('?')\n",
+                "    for i in Newstring:\n",
+                "        if i != c.peek():\n",
+                "            c.push(i)\n",
+                "        else:\n",
+                "            c.pop()\n",
+                "    if c.size() == 1:\n",
+                "        return None\n",
+                "    else:\n",
+                "        clist = []\n",
+                "        for m in range(1,c.size()):\n",
+                "            clist.append(c.pop())\n",
+                "        return clist\n",
+                "\n",
+                "\n",
+                "Newstring = input()\n",
+                "clists = xiaoxiaole(Newstring)\n",
+                "clists = clists[::-1]\n",
+                "print(\"\".join(clists))"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# homework3\n",
+                "def OCDBoss(NewString):\n",
+                "    leftList = []\n",
+                "    popList = []\n",
+                "    for i in NewString:\n",
+                "        i = int(i)\n",
+                "        for j in range(i+1):\n",
+                "            if j not in popList:\n",
+                "                if j not in leftList:\n",
+                "                    leftList.append(j)\n",
+                "            if leftList != []:\n",
+                "                if i == leftList[-1]:\n",
+                "                    popList.append(leftList.pop())\n",
+                "    #print(len(leftList))\n",
+                "    if len(leftList) > 0:\n",
+                "        print('No')\n",
+                "    else:\n",
+                "        print('Yes')\n",
+                "NewString = input()\n",
+                "OCDBoss(NewString)"
+            ]
+        }
+    ],
+    "metadata": {
+        "kernelspec": {
+            "display_name": "base",
+            "language": "python",
+            "name": "python3"
+        },
+        "language_info": {
+            "codemirror_mode": {
+                "name": "ipython",
+                "version": 3
+            },
+            "file_extension": ".py",
+            "mimetype": "text/x-python",
+            "name": "python",
+            "nbconvert_exporter": "python",
+            "pygments_lexer": "ipython3",
+            "version": "3.12.7"
+        },
+        "toc": {
+            "base_numbering": 1,
+            "nav_menu": {},
+            "number_sections": true,
+            "sideBar": true,
+            "skip_h1_title": false,
+            "title_cell": "Table of Contents",
+            "title_sidebar": "Contents",
+            "toc_cell": false,
+            "toc_position": {},
+            "toc_section_display": true,
+            "toc_window_display": false
+        }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 2
 }
